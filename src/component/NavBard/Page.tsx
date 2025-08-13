@@ -10,7 +10,8 @@ const NavBard = () => {
 
       </div>
       <div className='flex  font-bold text-2xl'>
-        <Link href=""> Iniciar secion</Link>
+        <Link href="/authPage/SignInPage"> Iniciar secion</Link>
+                                   
         
        
       </div>
