@@ -35,9 +35,9 @@ export default function RootLayout({
           <NavBard></NavBard>
          </header>
          
-        <main className="flex justify-center w-full max-w-sm mx-auto p-4 sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-6xl overflow-auto">
-        {children}
-        </main>
+  <main className="w-full  overflow-auto">
+  {children}
+  </main>
         
         <footer>
         <FooterComponent></FooterComponent>
