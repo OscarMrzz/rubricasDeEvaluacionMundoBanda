@@ -1,19 +1,23 @@
 import { dataBaseSupabase } from "../supabase";
 // Update the import path to the correct location of the Region interface
-import { Region } from "@/interfaces/interfaces";
+import { regionesInterface } from "@/interfaces/interfaces";
 
-type Interface = Region;
+type Interface = regionesInterface;
 
 
 const tabla = "regiones";
 export default class RegionService {
 
     async get(){
+      
         const {data,error} = await dataBaseSupabase.from(tabla).select("*");
+        
         if(error){
+           
             throw error;
         } 
         else{
+           
             return data;
         }
             
