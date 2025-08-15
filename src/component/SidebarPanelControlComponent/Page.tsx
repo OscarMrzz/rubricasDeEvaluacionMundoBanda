@@ -20,7 +20,7 @@ const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
 
   const links = [
-    { id: 'region', label: 'Región', href: '/PanelControlPage', Icon: MapPinIcon },
+    { id: 'region', label: 'Región', href: '/PanelControlPage/regionHomePage', Icon: MapPinIcon },
     { id: 'categorias', label: 'Categorías', href: '/PanelControlPage', Icon: ClipboardDocumentListIcon },
     { id: 'bandas', label: 'Bandas', href: '/PanelControlPage', Icon: MusicalNoteIcon },
     { id: 'rubricas', label: 'Rúbrica', href: '/PanelControlPage', Icon: ClipboardDocumentCheckIcon },
