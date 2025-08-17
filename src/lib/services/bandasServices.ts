@@ -1,8 +1,8 @@
 import { dataBaseSupabase } from "../supabase";
 // Update the import path to the correct location of the Region interface
-import { Region } from "@/interfaces/interfaces";
+import { regionesInterface } from "@/interfaces/interfaces";
 
-type Interface = Region;
+type Interface = regionesInterface;
 
 
 const tabla = "bandas";
@@ -19,7 +19,7 @@ export default class RegionService {
             
     }
     async getOne(id: string){
-        const {data,error} = await dataBaseSupabase.from(tabla).select("*").eq("id",id).single();
+        const {data,error} = await dataBaseSupabase.from(tabla).select("*").eq("idBanda",id).single();
         if(error){
             throw error;
         } 
@@ -38,7 +38,7 @@ export default class RegionService {
         }
     }
     async update(id: string, dataUpdate: Interface){
-        const {data,error} = await dataBaseSupabase.from(tabla).update(dataUpdate).eq("id",id).select("*").single();
+        const {data,error} = await dataBaseSupabase.from(tabla).update(dataUpdate).eq("idBanda",id).select("*").single();
         if(error){
             throw error;
         } 
@@ -47,7 +47,7 @@ export default class RegionService {
         }
     }
  async delete(id: string) {
-    const { error } = await dataBaseSupabase.from(tabla).delete().eq("id", id);
+    const { error } = await dataBaseSupabase.from(tabla).delete().eq("idBanda", id);
     if (error){
 
         throw error;

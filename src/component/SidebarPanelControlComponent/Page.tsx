@@ -20,17 +20,18 @@ const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
 
   const links = [
+    { id: 'federacion', label: 'Federaciones', href: '/PanelControlPage/federacionesHomePage', Icon: MapPinIcon },
     { id: 'region', label: 'Región', href: '/PanelControlPage/regionHomePage', Icon: MapPinIcon },
-    { id: 'categorias', label: 'Categorías', href: '/PanelControlPage', Icon: ClipboardDocumentListIcon },
-    { id: 'bandas', label: 'Bandas', href: '/PanelControlPage', Icon: MusicalNoteIcon },
-    { id: 'rubricas', label: 'Rúbrica', href: '/PanelControlPage', Icon: ClipboardDocumentCheckIcon },
-    { id: 'criterio', label: 'Criterio', href: '/PanelControlPage', Icon: AdjustmentsHorizontalIcon },
-    { id: 'evento', label: 'Evento', href: '/PanelControlPage', Icon: CalendarDaysIcon },
-    { id: 'usuarios', label: 'Usuarios', href: '/PanelControlPage', Icon: UsersIcon },
-    { id: 'resultados', label: 'Resultados general', href: '/PanelControlPage', Icon: ChartBarSquareIcon },
-    { id: 'ganadores', label: 'Ganadores', href: '/PanelControlPage', Icon: TrophyIcon },
-    { id: 'reporte', label: 'Reporte por banda', href: '/PanelControlPage', Icon: DocumentTextIcon },
-    { id: 'equipo', label: 'Equipo evaluador', href: '/PanelControlPage', Icon: UserGroupIcon },
+    { id: 'categorias', label: 'Categorías', href: '/PanelControlPage/categoriasHomePage', Icon: ClipboardDocumentListIcon },
+    { id: 'bandas', label: 'Bandas', href: '/PanelControlPage/bandasHomePage', Icon: MusicalNoteIcon },
+    { id: 'rubricas', label: 'Rúbrica', href: '/PanelControlPage/rubricaHomePage', Icon: ClipboardDocumentCheckIcon },
+    { id: 'criterio', label: 'Criterio', href: '/PanelControlPage/criteriosHomePage', Icon: AdjustmentsHorizontalIcon },
+    { id: 'evento', label: 'Evento', href: '/PanelControlPage/eventosHomePage', Icon: CalendarDaysIcon },
+    { id: 'usuarios', label: 'Usuarios', href: '/PanelControlPage/usuariosHomePage', Icon: UsersIcon },
+    { id: 'resultados', label: 'Resultados general', href: '/PanelControlPage/resultadosGeneralesHomePege', Icon: ChartBarSquareIcon },
+    { id: 'ganadores', label: 'Ganadores', href: '/PanelControlPage/ganadoresHomePage', Icon: TrophyIcon },
+    { id: 'reporte', label: 'Reporte por banda', href: '/PanelControlPage/reportePorbadaHomePage', Icon: DocumentTextIcon },
+    { id: 'equipo', label: 'Equipo evaluador', href: '/PanelControlPage/equipoEvaluadorHomePage', Icon: UserGroupIcon },
   ];
 
   return (

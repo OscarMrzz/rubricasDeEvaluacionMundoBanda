@@ -1,64 +1,81 @@
 import { dataBaseSupabase } from "../supabase";
-// Update the import path to the correct location of the Region interface
-import { regionesInterface } from "@/interfaces/interfaces";
+import { regionesDatosAmpleosInterface, regionesInterface } from "@/interfaces/interfaces";
 
 type Interface = regionesInterface;
 
-
 const tabla = "regiones";
+
 export default class RegionService {
+    // 🔹 Trae regiones con su federación (join automático)
+    async getDatosAmpleos(): Promise<regionesDatosAmpleosInterface[]> {
+        try {
+            const { data, error } = await dataBaseSupabase
+                .from(tabla)
+                .select(`
+                    *,
+                    federaciones(*)
+                `);
 
-    async get(){
-      
-        const {data,error} = await dataBaseSupabase.from(tabla).select("*");
-        
-        if(error){
-           
+            if (error) {
+                console.error("❌ Error obteniendo regiones con federaciones:", error);
+                throw error;
+            }
+
+            console.log("✅ Regiones con federaciones:", data);
+            return data as regionesDatosAmpleosInterface[];
+        } catch (error) {
+            console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
-        } 
-        else{
-           
-            return data;
-        }
-            
-    }
-    async getOne(id: string){
-        const {data,error} = await dataBaseSupabase.from(tabla).select("*").eq("id",id).single();
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
         }
     }
 
-    async create(dataCreate: Interface){
-        const {data,error} = await dataBaseSupabase.from(tabla).insert(dataCreate).select("*").single();
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
-        }
+    async get() {
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*");
+        if (error) throw error;
+        return data;
     }
-    async update(id: string, dataUpdate: Interface){
-        const {data,error} = await dataBaseSupabase.from(tabla).update(dataUpdate).eq("id",id).select("*").single();
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
-        }
+
+    async getOne(id: string) {
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .select("*")
+            .eq("idRegiones", id)
+            .single();
+
+        if (error) throw error;
+        return data;
     }
- async delete(id: string) {
-    const { error } = await dataBaseSupabase.from(tabla).delete().eq("id", id);
-    if (error){
 
-        throw error;
-    }else{
+    async create(dataCreate: Interface) {
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .insert(dataCreate)
+            .select("*")
+            .single();
 
-        return true; 
+        if (error) throw error;
+        return data;
     }
-}
 
+    async update(id: string, dataUpdate: Interface) {
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .update(dataUpdate)
+            .eq("idRegiones", id)
+            .select("*")
+            .single();
+
+        if (error) throw error;
+        return data;
+    }
+
+    async delete(id: string) {
+        const { error } = await dataBaseSupabase
+            .from(tabla)
+            .delete()
+            .eq("idRegion", id);
+
+        if (error) throw error;
+        return true;
+    }
 }
