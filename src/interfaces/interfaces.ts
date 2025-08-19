@@ -1,43 +1,26 @@
 //-----------BANDAS------------
 export interface bandaInterface{
-    idBanda:string;
+    idBanda: string;
     created_at: string;
-    nombreBanda:string;
-    aliasBanda:string;
-    idForaneaCategoria:string;
-    idForaneaRegion:string;
+    nombreBanda: string;
+    AliasBanda: string; // Corregido: era aliasBanda
+    idForaneaCategoria: string;
+    idForaneaRegion: string;
+    idForaneaFederacion: string;
 }
-export interface bandaDatosAmpleosInterface{
-    idBanda:string;
-
-    nombreBanda:string;
-    aliasBanda:string;
-  
-
-    
-    //categoria
-    idCategoria:string;
-    nombreCategoria:string;
-    detallesCategoria:string;
- 
-
-    //region
-        idRegion:string;
-    created_at: string;
-    nombreRegion:string;
-    idForaneaFederacion:string;
-
-
+export interface bandaDatosAmpleosInterface extends bandaInterface{
+    federaciones: federacionInterface;
+    categorias: categoriaInterface;
+    regiones: regionesInterface;
 }
-
 
 //-----------CATEGORIAS------------
 export interface categoriaInterface{
-    idCategoria:string;
+    idCategoria: string;
     created_at: string;
-    nombreCategoria:string;
-    detallesCategoria:string;
-    idForaneaFederacion:string;
+    nombreCategoria: string;
+    detallesCategoria: string;
+    idForaneaFederacion: string;
 }
 export interface categoriaDatosAmpleosInterface extends categoriaInterface {
     federaciones: federacionInterface;
@@ -45,12 +28,12 @@ export interface categoriaDatosAmpleosInterface extends categoriaInterface {
 
 //-----------CRITERIOS------------
 export interface criterioEvaluacionInterface{
-    idCriterio:string;
+    idCriterio: string;
     created_at: string;
-    nombreCriterio:string;
-    detallesCriterio:string;
-    puntosCriterio:number;
-    idForaneaRubrica:string;
+    nombreCriterio: string;
+    detallesCriterio: string;
+    puntosCriterio: number;
+    idForaneaRubrica: string;
 }
 export interface criterioEvaluacionDatosAmpleosInterface extends criterioEvaluacionInterface {
     rubricas: rubricaInterface;
@@ -58,73 +41,73 @@ export interface criterioEvaluacionDatosAmpleosInterface extends criterioEvaluac
 
 //-----------CUMPLIMIENTOS------------
 export interface cumplimientosInterface{
-    idCumplimiento:string;
+    idCumplimiento: string;
     created_at: string;
-    dateCumplimiento:string;
-    puntosCumplimiento:number;
-    idForaneaCriterio:string;
+    detalleCumplimiento: string; // Corregido: era dateCumplimiento
+    puntosCumplimiento: number;
+    idForaneaCriterio: string;
 }
 export interface cumplimientosDatosAmpleosInterface extends cumplimientosInterface {
-    criterios: criterioEvaluacionInterface;
+    criteriosEvalucion: criterioEvaluacionInterface; // Corregido: nombre de tabla
 }
 
 //-----------FEDERACIONES------------
 export interface federacionInterface{
-    idFederacion:string;
+    idFederacion: string;
     created_at: string;
-    nombreFederacion:string;
+    nombreFederacion: string;
 }
 // No necesita DatosAmpleos
 
 //-----------PENALIZACIONES------------
 export interface penalizacionesInterface{
-    idPenalizacion:string;
+    idPenalizacion: string;
     created_at: string;
-    idForaneaFederacion:string;
-    idForaneaCategoria:string;
-    nombrePenalizacion:string;
-    detallesPenalizacion:string;
-    puntosPenalizacion:number;
+    idForaneaFederacion: string;
+    idForaneaCategoria: string;
+    nombrePenalizacion: string;
+    detallesPenalizacion: string;
+    puntosPenalizacion: number;
+}
+export interface penalizacionesDatosAmpleosInterface extends penalizacionesInterface {
+    federaciones: federacionInterface;
+    categorias: categoriaInterface;
 }
 
 //-----------PERFIL------------
 export interface perfilInterface{
-    idPerfil:string;
+    idPerfil: string;
     created_at: string;
     nombre: string;
     alias: string;
     fechaNacimiento: string;
-    sexo: string;
     genero: string;
     tipoUsuario: string;
+    sexo: string;
     idForaneaFederacion: string;
     identidad: string;
     numeroTelefono: string;
     direccion: string;
-    idForaneaUser:string;
+    idForaneaUser: string;
 }
 export interface perfilDatosAmpleosInterface extends perfilInterface {
     federaciones: federacionInterface;
-    // user: userInterface; // Define si tienes userInterface
 }
 
 //-----------REGIONES------------
 export interface regionesInterface{
-    idRegion:string;
+    idRegion: string;
     created_at: string;
-    nombreRegion:string;
-    idForaneaFederacion:string;
+    nombreRegion: string;
+    idForaneaFederacion: string;
 }
 export interface regionesDatosAmpleosInterface extends regionesInterface {
-  
-  federaciones: federacionInterface;
+    federaciones: federacionInterface;
 }
-   
-
 
 //-----------REGISTRO CUMPLIMIENTO EVALUACION------------
 export interface registroCumplimientoEvaluacionInterface{
-    idRegistroCumplimientoEvaluacion:string;
+    idRegistroCumplimientoEvaluacion: string;
     created_at: string;
     idForaneaEvento: string;
     idForaneaBanda: string;
@@ -133,39 +116,37 @@ export interface registroCumplimientoEvaluacionInterface{
     idForaneaCategoria: string;
     idForaneaRegion: string;
     puntosObtenidos: number;
-    idForaneauser: string;
+    idForaneaUser: string; // Corregido: era idForaneauser
 }
 export interface registroCumplimientoEvaluacionDatosAmpleosInterface extends registroCumplimientoEvaluacionInterface {
-    eventos: RegistroEventoInterface;
+    registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
     bandas: bandaInterface;
-    criterios: criterioEvaluacionInterface;
+    criteriosEvalucion: criterioEvaluacionInterface; // Corregido: nombre de tabla
     cumplimientos: cumplimientosInterface;
     categorias: categoriaInterface;
     regiones: regionesInterface;
-    // user: userInterface;
 }
 
 //-----------REGISTRO EQUIPO EVALUADOR------------
-export interface interfaceRegistroEquipoEvaluador{
-    idRegistroEquipoEvaluador:string;
+export interface registroEquipoEvaluadorInterface{ // Corregido: nombre de interface
+    idRegistroEvaluador: string; // Corregido: nombre de campo
     created_at: string;
     idForaneaFederacion: string;
     idForaneaEvento: string;
-    idForaneaRolEvaluador: string;
     idForaneaUser: string;
+    idForaneaRolEvaluador: string;
 }
-export interface registroEquipoEvaluadorDatosAmpleosInterface extends interfaceRegistroEquipoEvaluador {
+export interface registroEquipoEvaluadorDatosAmpleosInterface extends registroEquipoEvaluadorInterface {
     federaciones: federacionInterface;
-    eventos: RegistroEventoInterface;
-    rolesEvaluador: rolEquipoEvaluadorInterface;
-    // user: userInterface;
+    registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
+    rolesEquipoEvaluador: rolEquipoEvaluadorInterface; // Corregido: nombre de tabla
 }
 
 //-----------REGISTRO EVENTO------------
 export interface RegistroEventoInterface{
-    idRegistroEvento:string;
+    idEvento: string; // Corregido: nombre de campo
     created_at: string;
-    lugarEvento: string;
+    LugarEvento: string; // Mantenido con mayúscula como en DB
     fechaEvento: string;
     idForaneaRegion: string;
     idForaneaFederacion: string;
@@ -177,28 +158,27 @@ export interface registroEventoDatosAmpleosInterface extends RegistroEventoInter
 
 //-----------REGISTRO PENALIZACION------------
 export interface registroPenalizacionInterface{
-    idRegistroPenalizacion:string;
+    idRegistroPenalizacion: string;
     created_at: string;
     idForaneaFederacion: string;
     idForaneaEvento: string;
     idForaneaCategoria: string;
     idForaneaBanda: string;
+    idForaneaUser: string;
     idForaneaPenalizacion: string;
     puntosPenalizacion: number;
-    idForaneaUser: string;
 }
 export interface registroPenalizacionDatosAmpleosInterface extends registroPenalizacionInterface {
     federaciones: federacionInterface;
-    eventos: RegistroEventoInterface;
+    registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
     categorias: categoriaInterface;
     bandas: bandaInterface;
     penalizaciones: penalizacionesInterface;
-    // user: userInterface;
 }
 
 //-----------REGISTRO COMENTARIOS------------
 export interface registroComentariosInterface{
-    idRegistroComentario:string;
+    idRegistroComentario: string;
     created_at: string;
     idForaneaEvento: string;
     idForaneaBanda: string;
@@ -209,21 +189,20 @@ export interface registroComentariosInterface{
     comentario: string;
 }
 export interface registroComentariosDatosAmpleosInterface extends registroComentariosInterface {
-    eventos: RegistroEventoInterface;
+    registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
     bandas: bandaInterface;
-    criterios: criterioEvaluacionInterface;
+    criteriosEvalucion: criterioEvaluacionInterface; // Corregido: nombre de tabla
     categorias: categoriaInterface;
     regiones: regionesInterface;
-    // user: userInterface;
 }
 
 //-----------ROL EQUIPO EVALUADOR------------
 export interface rolEquipoEvaluadorInterface{
-    idRol:string;
+    idRol: string;
     created_at: string;
-    idForaneaFederacion:string;
-    nombreRol:string;
-    detallesRol:string;
+    idForaneaFederacion: string;
+    nombreRol: string;
+    DetallesRol: string; // Mantenido con mayúscula como en DB
 }
 export interface rolEquipoEvaluadorDatosAmpleosInterface extends rolEquipoEvaluadorInterface {
     federaciones: federacionInterface;
@@ -231,13 +210,13 @@ export interface rolEquipoEvaluadorDatosAmpleosInterface extends rolEquipoEvalua
 
 //-----------RUBRICA------------
 export interface rubricaInterface{
-    idRubrica:string;
+    idRubrica: string;
     created_at: string;
-    nombreRubrica:string;
-    detallesRubrica:string;
-    puntosRubrica:number;
-    idForaneaCategoria:string;
-    idForaneaFederacion:string;
+    nombreRubrica: string;
+    datalleRubrica: string; // Mantenido el typo como en DB (debería ser detalleRubrica)
+    puntosRubrica: number;
+    idForaneaCategoria: string;
+    idForaneaFederacion: string;
 }
 export interface rubricaDatosAmpleosInterface extends rubricaInterface {
     categorias: categoriaInterface;

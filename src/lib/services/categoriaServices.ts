@@ -6,7 +6,7 @@ type Interface = categoriaInterface;
 const tabla = "categorias";
 const elId = "idCategoria";
 
-export default class RegionService {
+export default class CategoriasServices {
     // 🔹 Trae regiones con su federación (join automático)
     async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
         try {
@@ -74,7 +74,7 @@ export default class RegionService {
         const { error } = await dataBaseSupabase
             .from(tabla)
             .delete()
-            .eq("idRegion", id);
+            .eq(elId, id);
 
         if (error) throw error;
         return true;

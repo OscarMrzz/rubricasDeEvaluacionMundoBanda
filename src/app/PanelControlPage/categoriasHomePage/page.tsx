@@ -1,56 +1,48 @@
 "use client";
 
-import FederacionesService from "@/lib/services/federacionesServices";
 import { useEffect, useState } from "react";
-import { federacionInterface } from "@/interfaces/interfaces";
+import CategoriasServices from "@/lib/services/categoriaServices";
+import { categoriaInterface } from "@/interfaces/interfaces";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import React from 'react'
-import TablaFederaciones from "@/component/tablaFederacionesComponet/Page";
+import React from "react";
+import TablaCategoriasComponent from "@/component/tablaCategoriasComponent/Page";
 
-const FederacionesHomePage = () => {
- 
-  const [federaciones, setFederaciones] = useState<federacionInterface[]>([]);
+const CategoriasHomePage = () => {
+  const [categorias, setCategorias] = useState<categoriaInterface[]>([]);
   const [loading, setLoading] = useState(true);
 
-
-
   useEffect(() => {
-    
     traerDatosTabla();
-    
   }, []);
 
+  async function traerDatosTabla() {
+    const categoriasServices = new CategoriasServices();
+    try {
+      const categoriasData: categoriaInterface[] =
+        await categoriasServices.get();
+      setCategorias(categoriasData);
+      setLoading(false);
+      console.log("✅ Categorías obtenidas:");
+      console.log(categoriasData);
+    } catch (error) {
+      console.error("❌ Error al obtener las categorías:", error);
+      setLoading(false);
+    }
+  }
 
-   async function traerDatosTabla()  {
-      const federacionesService = new FederacionesService();
-      try {
-       
-        const federacionesData: federacionInterface[] = await federacionesService.get();
-        setFederaciones(federacionesData);
-        setLoading(false);
-        console.log("✅ Federaciones obtenidas:");
-        console.log(federacionesData);
-      } catch (error) {
-        console.error("❌ Error al obtener las federaciones:", error);
-        setLoading(false);
-    
-      } 
-    };
-
-
-
-
-  
   return (
     <div className="px-20">
-            <h1 className="text-2xl font-bold mb-4">Federaciones</h1>
-      {loading ? <SkeletonTabla /> : <TablaFederaciones federaciones={federaciones} onRefresh={traerDatosTabla} />}
-
-
+      <h1 className="text-2xl font-bold mb-4">Categorías</h1>
+      {loading ? (
+        <SkeletonTabla />
+      ) : (
+        <TablaCategoriasComponent
+          categorias={categorias}
+          onRefresh={traerDatosTabla}
+        />
+      )}
     </div>
-   
-  )
-}
+  );
+};
 
-export default FederacionesHomePage
-
+export default CategoriasHomePage;
