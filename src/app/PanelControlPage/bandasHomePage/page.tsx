@@ -8,15 +8,15 @@ import React from "react";
 
 import TablaBandasComponent from "@/component/Tablas/tablaBandasComponet/Page";
 import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
-import FormularioAgregarBandaComonent from "@/component/formularios/formularioAgregarBandaComponent/Page";
+import FormularioAgregarBandaComonent from "@/component/formularios/bandaFormulario/formularioAgregarBandaComponent/Page";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import CategoriasServices from "@/lib/services/categoriaServices";
 
 const BandasHomePage = () => {
   const [bandas, setBandas] = useState<bandaDatosAmpleosInterface[]>([]);
 
-  const [categorias, setCategorias] = useState<categoriaInterface[]>();
-  // Estado para controlar la carga de datos
+  const [categorias, setCategorias] = useState<categoriaInterface[]>([]);
+ 
   const [loading, setLoading] = useState(true);
   const [formularioAgregarHabierto, setFormularioAgregarHabierto] = useState(false);
 

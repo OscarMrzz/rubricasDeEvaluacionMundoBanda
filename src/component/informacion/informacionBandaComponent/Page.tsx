@@ -1,14 +1,17 @@
+import OverleyModalFormulario from '@/component/modales/OverleyModalFormulario/Page';
 import { bandaDatosAmpleosInterface } from '@/interfaces/interfaces'
 import BandasServices from '@/lib/services/bandasServices';
 import React from 'react'
 
 type Props = {
     Banda: bandaDatosAmpleosInterface;
-    onClose?: () => void; // Función para cerrar el modal
-    onRefresh?: () => void; // Función para refrescar los datos
+    onClose?: () => void; 
+    onRefresh?: () => void; 
+    openFormEditar?:() => void; 
 }
 
-const InformacionBandaComponent = ({ Banda, onClose, onRefresh }: Props) => {
+const InformacionBandaComponent = ({ Banda, onClose, onRefresh,openFormEditar }: Props) => {
+
     const eliminarBanda = () => {
         const bandasServices = new BandasServices();
         bandasServices.delete(Banda.idBanda)
@@ -22,8 +25,17 @@ const InformacionBandaComponent = ({ Banda, onClose, onRefresh }: Props) => {
             });
     }
 
+   const onclickEditar = () => {
+
+        openFormEditar?.();
+         onClose?.();
+    }
+
+
+
     return (
         <div>
+           
             <div className='flex p-10 justify-between'>
                 <div>
                     <h2 className='text-2xl font-bold pb-4'>{Banda.nombreBanda}</h2>
@@ -35,7 +47,7 @@ const InformacionBandaComponent = ({ Banda, onClose, onRefresh }: Props) => {
                 </div>
                 <div className='flex flex-col gap-2'>
                     <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer' onClick={eliminarBanda}>Eliminar</button>
-                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>
+                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer' onClick={onclickEditar} >Editar</button>
                 </div>
             </div>
         </div>
