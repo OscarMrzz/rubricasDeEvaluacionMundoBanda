@@ -2,6 +2,8 @@ import { federacionInterface } from '@/interfaces/interfaces';
 import React from 'react'
 import OverleyModal from '../modales/OverleyModal/Page';
 import InformacionFederacionesComponent from '../informacion/informacionFederacionesComponet/Page';
+import OverleyModalFormulario from '../modales/OverleyModalFormulario/Page';
+import FormularioEditarFederacionComponent from '../formularios/formulariosFederaciones/FormularioEditarFederacionComponent/Page';
 
 type Props = {
     federaciones: federacionInterface[];
@@ -38,9 +40,19 @@ const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
           federacion={selectedFederacion} 
           onClose={cerrarModal}
           onRefresh={onRefresh}
+          openFormEditar={abrirModalEditar}
         />
       )}
     </OverleyModal>
+    <OverleyModalFormulario open={openFormEditar} onClose={cerrarModalEditar}>
+      {selectedFederacion && (
+        <FormularioEditarFederacionComponent 
+          federacionAEditar={selectedFederacion}
+          refresacar={onRefresh ?? (() => {})}
+          onClose={cerrarModalEditar}
+        />
+      )}
+    </OverleyModalFormulario>
     
 
     

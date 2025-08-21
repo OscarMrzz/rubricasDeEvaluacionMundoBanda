@@ -58,7 +58,7 @@ const TablaBandasComponent = ({ bandas, categorias, onRefresh }: Props) => {
   const cerrarModalEditar = () => {
     setOpenFormEditar(false);
   };
-
+ 
   return (
     <>
       <div className=" ">
