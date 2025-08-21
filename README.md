@@ -26,4 +26,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
  recomiendo se llame idUser que conecte con auth de supabase
 4. crear una politica que permita a cualquiera crear un usuario y un perfil en la tabla de perfiles
 
+## Para iconos
+npm install @heroicons/react
+
 

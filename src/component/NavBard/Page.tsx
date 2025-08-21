@@ -9,7 +9,8 @@ const NavBard = () => {
       <div>Nombre Federacion</div>
 
       </div>
-      <div className='flex  font-bold text-2xl'>
+      <div className='flex  font-bold text-2xl gap-3.5'>
+        <Link href="/PanelControlPage"> Panel de control</Link>
         <Link href="/authPage/SignInPage"> Iniciar secion</Link>
                                    
         
