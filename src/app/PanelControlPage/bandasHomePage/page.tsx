@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import BandasServices from "@/lib/services/bandasServices";
-import { bandaDatosAmpleosInterface} from "@/interfaces/interfaces";
+import { bandaDatosAmpleosInterface, categoriaInterface} from "@/interfaces/interfaces";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 
@@ -10,9 +10,13 @@ import TablaBandasComponent from "@/component/Tablas/tablaBandasComponet/Page";
 import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
 import FormularioAgregarBandaComonent from "@/component/formularios/formularioAgregarBandaComponent/Page";
 import { PlusIcon } from "@heroicons/react/16/solid";
+import CategoriasServices from "@/lib/services/categoriaServices";
 
 const BandasHomePage = () => {
   const [bandas, setBandas] = useState<bandaDatosAmpleosInterface[]>([]);
+
+  const [categorias, setCategorias] = useState<categoriaInterface[]>();
+  // Estado para controlar la carga de datos
   const [loading, setLoading] = useState(true);
   const [formularioAgregarHabierto, setFormularioAgregarHabierto] = useState(false);
 
@@ -23,10 +27,13 @@ const BandasHomePage = () => {
 
   async function traerDatosTabla() {
     const bandasServices = new BandasServices();
+    const categoriasServices = new CategoriasServices();
     try {
-      const BandasData: bandaDatosAmpleosInterface[] =
-        await bandasServices.getDatosAmpleos();
+      const BandasData: bandaDatosAmpleosInterface[] =await bandasServices.getDatosAmpleos();
+      const categoriasData: categoriaInterface[] = await categoriasServices.get();
+      
       setBandas(BandasData);
+      setCategorias(categoriasData);
       setLoading(false);
       console.log("✅ Bandas obtenidas:");
       console.log(BandasData);
@@ -69,6 +76,7 @@ const BandasHomePage = () => {
        
         <TablaBandasComponent
           bandas={bandas}
+          categorias={categorias}
           onRefresh={traerDatosTabla}
         />
       )}

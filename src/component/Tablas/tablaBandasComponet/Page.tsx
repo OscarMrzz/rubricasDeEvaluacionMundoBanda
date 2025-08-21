@@ -1,40 +1,43 @@
-import { bandaDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { bandaDatosAmpleosInterface, categoriaInterface } from "@/interfaces/interfaces";
 import React from "react";
 import OverleyModal from "@/component/modales/OverleyModal/Page";
 import InformacionBandaComponent from "@/component/informacion/informacionBandaComponent/Page";
 
+
 type Props = {
   bandas: bandaDatosAmpleosInterface[];
+    categorias: categoriaInterface[] // Asumiendo que las categorías tienen un campo nombreCategoria
   onRefresh?: () => void; // Función para refrescar los datos
 };
 
-const TablaBandasComponent = ({ bandas, onRefresh }: Props) => {
+const TablaBandasComponent = ({ bandas, categorias, onRefresh }: Props) => {
   const [open, setOpen] = React.useState(false);
   const [selectedBanda, setSelectedBanda] =
     React.useState<bandaDatosAmpleosInterface | null>(null);
 
   // Orden personalizado: Premier, A, B
-  const categoriaOrden = {
-    Premier: 0,
-    A: 1,
-    B: 2,
-  } as const;
-  const bandasOrdenadas = [...bandas].sort((a, b) => {
-    const bandaA = a.nombreBanda?.toLowerCase() || "";
-    const bandaB = b.nombreBanda?.toLowerCase() || "";
-    if (bandaA < bandaB) return -1;
-    if (bandaA > bandaB) return 1;
-    // Ordenar por categoría personalizada
-    const catA =
-      categoriaOrden[
-        a.categorias?.nombreCategoria as keyof typeof categoriaOrden
-      ] ?? 99;
-    const catB =
-      categoriaOrden[
-        b.categorias?.nombreCategoria as keyof typeof categoriaOrden
-      ] ?? 99;
-    return catA - catB;
-  });
+
+  const bandasOrdenadas = (bandasParaOrdenar:bandaDatosAmpleosInterface[]) => {
+    const listaBandas = [...bandasParaOrdenar];
+   const  bandasPorCategorias: Record<string, bandaDatosAmpleosInterface[]> = {};
+   const listaFinalBandas: bandaDatosAmpleosInterface[] = [];
+   for(const categoria of categorias) {
+      bandasPorCategorias[categoria.nombreCategoria] = listaBandas.filter(
+        (banda) => banda.categorias.nombreCategoria === categoria.nombreCategoria
+      );
+    }
+
+    for (const categoria of categorias) {
+        const bandasCategoria = bandasPorCategorias[categoria.nombreCategoria];
+        for (const banda of bandasCategoria) {
+          listaFinalBandas.push(banda);
+        }
+
+    }
+    return listaFinalBandas.reverse();
+
+ 
+  };
 
   const seleccionarFila = (categoria: bandaDatosAmpleosInterface) => {
     setSelectedBanda(categoria);
@@ -76,7 +79,7 @@ const TablaBandasComponent = ({ bandas, onRefresh }: Props) => {
               </tr>
             </thead>
             <tbody>
-              {bandasOrdenadas.map((banda, index) => (
+              {bandasOrdenadas(bandas).map((banda, index) => (
                 <tr
                   key={banda.idBanda}
                   onDoubleClick={() => seleccionarFila(banda)}
