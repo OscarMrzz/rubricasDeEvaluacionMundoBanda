@@ -1,11 +1,11 @@
 import { dataBaseSupabase } from "../supabase";
 // Update the import path to the correct location of the Region interface
-import { Region } from "@/interfaces/interfaces";
+import { perfilInterface } from "@/interfaces/interfaces";
 
-type Interface = Region;
+type Interface = perfilInterface;
 
 
-const tabla = "Users";
+const tabla = "pefiles";
 export default class RegionService {
 
     async get(){
