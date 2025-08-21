@@ -11,6 +11,7 @@ type Props = {
 
 const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
   const [open, setOpen] = React.useState(false);
+  const [openFormEditar, setOpenFormEditar] = React.useState(false);
   const [selectedFederacion, setSelectedFederacion] = React.useState<federacionInterface | null>(null);
 
   const seleccionarFila = (federacion: federacionInterface) => {
@@ -20,6 +21,13 @@ const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
   const cerrarModal = () => {
     setOpen(false);
   }
+  const abrirModalEditar = () => {
+    setOpenFormEditar(true);
+  };
+
+  const cerrarModalEditar = () => {
+    setOpenFormEditar(false);
+  };
 
   
     return (
@@ -33,6 +41,7 @@ const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
         />
       )}
     </OverleyModal>
+    
 
     
     <div className="">

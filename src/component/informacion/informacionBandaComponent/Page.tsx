@@ -1,11 +1,11 @@
-import OverleyModalFormulario from '@/component/modales/OverleyModalFormulario/Page';
+
 import { bandaDatosAmpleosInterface } from '@/interfaces/interfaces'
 import BandasServices from '@/lib/services/bandasServices';
 import React from 'react'
 
 type Props = {
     Banda: bandaDatosAmpleosInterface;
-    onClose?: () => void; 
+    onClose?: () => void;  
     onRefresh?: () => void; 
     openFormEditar?:() => void; 
 }

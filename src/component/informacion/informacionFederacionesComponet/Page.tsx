@@ -6,9 +6,10 @@ type Props = {
     federacion: federacionInterface;
     onClose?: () => void; // Función para cerrar el modal
     onRefresh?: () => void; // Función para refrescar los datos
+    openFormEditar?: () => void; // Función para abrir el formulario de edición
 }
 
-const InformacionFederacionesComponent = ({ federacion, onClose, onRefresh }: Props) => {
+const InformacionFederacionesComponent = ({ federacion, onClose, onRefresh, openFormEditar }: Props) => {
     const eliminarFederacion = () => {
         const federacionesServices = new FederacionesService();
         federacionesServices.delete(federacion.idFederacion)
@@ -22,6 +23,11 @@ const InformacionFederacionesComponent = ({ federacion, onClose, onRefresh }: Pr
             });
     }
 
+    const onclickEditar = () => {
+        openFormEditar?.();
+        onClose?.();
+    }
+
     return (
         <div>
             <div className='flex p-8 justify-between'>
@@ -32,7 +38,7 @@ const InformacionFederacionesComponent = ({ federacion, onClose, onRefresh }: Pr
                 </div>
                 <div className='flex flex-col gap-2'>
                     <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer' onClick={eliminarFederacion}>Eliminar</button>
-                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>
+                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer' onClick={onclickEditar}>Editar</button>
                 </div>
             </div>
         </div>

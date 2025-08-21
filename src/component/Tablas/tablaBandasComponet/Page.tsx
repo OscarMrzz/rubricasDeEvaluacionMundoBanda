@@ -4,7 +4,7 @@ import OverleyModal from "@/component/modales/OverleyModal/Page";
 import InformacionBandaComponent from "@/component/informacion/informacionBandaComponent/Page";
 import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
 import FormularioEditarBandaComponent from "@/component/formularios/bandaFormulario/formularioEditarBandaComponent/Page";
-
+ 
 
 type Props = {
   bandas: bandaDatosAmpleosInterface[];
@@ -69,7 +69,7 @@ const TablaBandasComponent = ({ bandas, categorias, onRefresh }: Props) => {
               onClose={cerrarModal}
               onRefresh={onRefresh}
               openFormEditar={abrirModalEditar}
-            />
+            /> 
           )}
         </OverleyModal>
 
