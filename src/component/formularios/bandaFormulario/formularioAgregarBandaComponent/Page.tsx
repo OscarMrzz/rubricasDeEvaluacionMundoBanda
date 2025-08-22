@@ -8,7 +8,7 @@ import FederacionesServices from "@/lib/services/federacionesServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
 import RegionesServices from "@/lib/services/regionesServices";
 import {
-  bandaInterface,
+  bandaInterface, 
   federacionInterface,
   categoriaInterface,
   regionesInterface,

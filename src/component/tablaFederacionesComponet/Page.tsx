@@ -2,6 +2,8 @@ import { federacionInterface } from '@/interfaces/interfaces';
 import React from 'react'
 import OverleyModal from '../modales/OverleyModal/Page';
 import InformacionFederacionesComponent from '../informacion/informacionFederacionesComponet/Page';
+import OverleyModalFormulario from '../modales/OverleyModalFormulario/Page';
+import FormularioEditarFederacionComponent from '../formularios/formulariosFederaciones/FormularioEditarFederacionComponent/Page';
 
 type Props = {
     federaciones: federacionInterface[];
@@ -11,6 +13,7 @@ type Props = {
 
 const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
   const [open, setOpen] = React.useState(false);
+  const [openFormEditar, setOpenFormEditar] = React.useState(false);
   const [selectedFederacion, setSelectedFederacion] = React.useState<federacionInterface | null>(null);
 
   const seleccionarFila = (federacion: federacionInterface) => {
@@ -20,6 +23,13 @@ const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
   const cerrarModal = () => {
     setOpen(false);
   }
+  const abrirModalEditar = () => {
+    setOpenFormEditar(true);
+  };
+
+  const cerrarModalEditar = () => {
+    setOpenFormEditar(false);
+  };
 
   
     return (
@@ -30,9 +40,20 @@ const TablaFederaciones = ({federaciones, onRefresh }:Props) => {
           federacion={selectedFederacion} 
           onClose={cerrarModal}
           onRefresh={onRefresh}
+          openFormEditar={abrirModalEditar}
         />
       )}
     </OverleyModal>
+    <OverleyModalFormulario open={openFormEditar} onClose={cerrarModalEditar}>
+      {selectedFederacion && (
+        <FormularioEditarFederacionComponent 
+          federacionAEditar={selectedFederacion}
+          refresacar={onRefresh ?? (() => {})}
+          onClose={cerrarModalEditar}
+        />
+      )}
+    </OverleyModalFormulario>
+    
 
     
     <div className="">
