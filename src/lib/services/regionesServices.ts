@@ -4,6 +4,7 @@ import { regionesDatosAmpleosInterface, regionesInterface } from "@/interfaces/i
 type Interface = regionesInterface;
 
 const tabla = "regiones";
+const elID = "idRegion"
 
 export default class RegionService {
     // 🔹 Trae regiones con su federación (join automático)
@@ -39,7 +40,7 @@ export default class RegionService {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq("idRegiones", id)
+            .eq(elID , id)
             .single();
 
         if (error) throw error;
@@ -61,7 +62,7 @@ export default class RegionService {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .update(dataUpdate)
-            .eq("idRegiones", id)
+            .eq(elID , id)
             .select("*")
             .single();
 

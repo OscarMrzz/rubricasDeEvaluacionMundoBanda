@@ -5,9 +5,10 @@ type Props = {
     region: regionesDatosAmpleosInterface;
     onClose?: () => void; // Función para cerrar el modal
     onRefresh?: () => void; // Función para refrescar los datos
+    openFormEditar?: () => void; // Función para abrir el formulario de edición
 }
 
-const InformacionRegionesComponent = ({ region, onClose, onRefresh }: Props) => {
+const InformacionRegionesComponent = ({ region, onClose, onRefresh ,openFormEditar}: Props) => {
     const eliminarRegion = () => {
         const regionesServices = new RegionService();
         regionesServices.delete(region.idRegion)
@@ -20,6 +21,11 @@ const InformacionRegionesComponent = ({ region, onClose, onRefresh }: Props) => 
                 console.error("❌ Error al eliminar la región:", error);
             });
     }
+       const onclickEditar = () => {
+
+        openFormEditar?.();
+         onClose?.();
+    }
 
     return (
         <div>
@@ -31,7 +37,7 @@ const InformacionRegionesComponent = ({ region, onClose, onRefresh }: Props) => 
                 </div>
                 <div className='flex flex-col gap-2'>
                     <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer  '  onClick={eliminarRegion} >Eliminar</button>
-                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>
+                    <button onClick={onclickEditar}  className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>
                 </div>
             </div>
 

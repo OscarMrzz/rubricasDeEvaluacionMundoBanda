@@ -107,8 +107,7 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose, bandaAEditar }: P
         idForaneaRegion: formData.idForaneaRegion,
         idForaneaFederacion: formData.idForaneaFederacion,
       };
-      console.log("Id para editar: ",bandaAEditar.idBanda)
-      console.log("Datos enviados para editar:", nuevaBanda);
+
     
 
       await bandasServices.update(bandaAEditar.idBanda,nuevaBanda as bandaInterface);
