@@ -2,6 +2,8 @@ import { regionesDatosAmpleosInterface } from '@/interfaces/interfaces';
 import React from 'react'
 import OverleyModal from '../modales/OverleyModal/Page';
 import InformacionRegionesComponent from '../informacion/informacionRegionesComponet/Page';
+import OverleyModalFormulario from '../modales/OverleyModalFormulario/Page';
+import FormularioEditarRegionComponent from '../formularios/FormularioRegiones/FormularioEditarRegion/Page';
 
 type Props = {
     regiones: regionesDatosAmpleosInterface[];
@@ -11,6 +13,7 @@ type Props = {
 
 const TablaRegiones = ({regiones, onRefresh }:Props) => {
   const [open, setOpen] = React.useState(false);
+  const [openFormularioEditar, setOpenFormularioEditar] = React.useState(false);
   const [selectedRegion, setSelectedRegion] = React.useState<regionesDatosAmpleosInterface | null>(null);
 
   const seleccionarFila = (region: regionesDatosAmpleosInterface) => {
@@ -21,6 +24,17 @@ const TablaRegiones = ({regiones, onRefresh }:Props) => {
     setOpen(false);
   }
 
+  const abrirFormularioEditar = () => {
+    setOpenFormularioEditar(true);
+    setOpen(false);
+  }
+
+  const cerrarFormularioEditar = () => {
+    setOpenFormularioEditar(false);
+    setSelectedRegion(null);
+  }
+
+
   
     return (
       <div>
@@ -30,9 +44,20 @@ const TablaRegiones = ({regiones, onRefresh }:Props) => {
           region={selectedRegion} 
           onClose={cerrarModal}
           onRefresh={onRefresh}
+          openFormEditar={abrirFormularioEditar}
         />
       )}
     </OverleyModal>
+    <OverleyModalFormulario open={openFormularioEditar} onClose={cerrarFormularioEditar}>
+     <FormularioEditarRegionComponent
+      regionAEditar={selectedRegion!}
+      onClose={cerrarFormularioEditar}
+      refresacar={() => {
+        onRefresh?.();
+        cerrarFormularioEditar();
+      }}
+     />
+    </OverleyModalFormulario>
 
     
     <div className="">

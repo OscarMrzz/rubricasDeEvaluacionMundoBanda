@@ -10,11 +10,12 @@ import PerfilesServices from "@/lib/services/perfilesServices";
 type Props = {
   refresacar: () => void;
   onClose: () => void;
+  regionAEditar: regionesInterface; // Región a editar, si es necesario
 };
 
 
 
-export default  function FormularioAgregarRegionComponent  ({ refresacar, onClose }: Props)  {
+export default  function FormularioEditarRegionComponent  ({ refresacar, onClose, regionAEditar }: Props)  {
   const [formData, setFormData] = useState({
     nombreRegion: "",
 
@@ -35,7 +36,21 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
 }, []);
 
   useEffect(() => {
+   
+  }, []);
+
+  const CargarDatosFormulario = () => {
+    setFormData({
+      nombreRegion: regionAEditar?.nombreRegion || "",
+      idForaneaFederacion: regionAEditar?.idForaneaFederacion || "",
+    });
+  }
+
+  useEffect(() => {
     cargarDatosIniciales();
+    if (regionAEditar) {
+      CargarDatosFormulario();
+    }
   }, []);
 
   const cargarDatosIniciales = async () => {
@@ -56,7 +71,10 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
     } catch (error) {
       console.error("Error cargando datos iniciales:", error);
     }
-  };
+
+  }
+
+
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -84,7 +102,7 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
         idForaneaFederacion: perfil.idForaneaFederacion
       };
 
-      await regionesServices.create(nuevaRegion as regionesInterface);
+      await regionesServices.update(regionAEditar.idRegion, nuevaRegion as regionesInterface);
 
 
       // Limpiar formulario
@@ -94,7 +112,7 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
       });
     } catch (error) {
       console.error("❌ Error al crear la Federacion:", error);
-      alert("Error al agregar la federacion");
+      alert("Error al editar la federacion");
     } finally {
       setLoading(false);
         refresacar();
@@ -104,7 +122,7 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
 
   return (
     <div className="px-25 ">
-      <h2 className="text-2xl font-bold mb-4">Agregar Region</h2>
+      <h2 className="text-2xl font-bold mb-4">editar Region</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombreRegion">
@@ -133,7 +151,7 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
           disabled={loading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 cursor-pointer"
         >
-          {loading ? "cargado..." : "Agregar"}
+          {loading ? "cargado..." : "editar"}
         </button>
       </form>
     </div>
