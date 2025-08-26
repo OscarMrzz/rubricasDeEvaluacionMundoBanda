@@ -2,6 +2,8 @@ import { categoriaInterface } from '@/interfaces/interfaces';
 import React from 'react'
 import OverleyModal from '../modales/OverleyModal/Page';
 import InformacionCategoriasComponet from '../informacion/informacionCategoriasComponet/Page';
+import OverleyModalFormulario from '../modales/OverleyModalFormulario/Page';
+import FormularioEditarCategoriaComponent from '../formularios/FormulariosCategorias/FormularioEditarCategoriaComponet/Page';
 
 type Props = {
     categorias: categoriaInterface[];
@@ -11,6 +13,8 @@ type Props = {
 
 const TablaCategoriasComponent = ({categorias, onRefresh }:Props) => {
   const [open, setOpen] = React.useState(false);
+  const [openFormularioEditar, setOpenFormularioEditar] = React.useState(false);
+  const [selectedRegion, setSelectedRegion] = React.useState<categoriaInterface | null>(null);
   const [selectedCategoria, setSelectedCategoria] = React.useState<categoriaInterface | null>(null);
 
   const seleccionarFila = (categoria: categoriaInterface) => {
@@ -20,6 +24,15 @@ const TablaCategoriasComponent = ({categorias, onRefresh }:Props) => {
   const cerrarModal = () => {
     setOpen(false);
   }
+  const abrirFormularioEditar = () => {
+    setOpenFormularioEditar(true);
+    setOpen(false);
+  }
+
+  const cerrarFormularioEditar = () => {
+    setOpenFormularioEditar(false);
+    setSelectedRegion(null);
+  }
 
   
     return (
@@ -27,12 +40,27 @@ const TablaCategoriasComponent = ({categorias, onRefresh }:Props) => {
     <OverleyModal open={open} onClose={cerrarModal}>
       {selectedCategoria && (
         <InformacionCategoriasComponet 
-          categoria={selectedCategoria} 
+           categoria={selectedCategoria} 
+
           onClose={cerrarModal}
           onRefresh={onRefresh}
+          openFormEditar={abrirFormularioEditar}
         />
       )}
     </OverleyModal>
+
+     <OverleyModalFormulario open={openFormularioEditar} onClose={cerrarFormularioEditar}>
+     <FormularioEditarCategoriaComponent
+      CategoriaAEditar={selectedCategoria!}
+      onClose={cerrarFormularioEditar}
+      refresacar={() => {
+        onRefresh?.();
+        cerrarFormularioEditar();
+      }}
+     />
+    </OverleyModalFormulario>
+
+    
 
     
     <div className="">
