@@ -34,7 +34,7 @@ const InformacionRegionesComponent = ({ region, onClose, onRefresh ,openFormEdit
                     <h2>{region.nombreRegion}</h2>
                     <p>Federacion: {region.federaciones?.nombreFederacion || 'federacion no encontrada'}</p>
 
-                </div>
+                </div> 
                 <div className='flex flex-col gap-2'>
                     <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer  '  onClick={eliminarRegion} >Eliminar</button>
                     <button onClick={onclickEditar}  className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>

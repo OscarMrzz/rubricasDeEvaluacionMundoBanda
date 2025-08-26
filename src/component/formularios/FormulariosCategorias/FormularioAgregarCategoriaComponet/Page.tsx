@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import FederacionesServices from "@/lib/services/federacionesServices";
-import RegionesServices from "@/lib/services/regionesServices";
-import {federacionInterface,perfilDatosAmpleosInterface,regionesInterface,} from "@/interfaces/interfaces";
+
+
+import {categoriaInterface,  perfilDatosAmpleosInterface,} from "@/interfaces/interfaces";
 import PerfilesServices from "@/lib/services/perfilesServices";
+import CategoriasServices from "@/lib/services/categoriaServices";
 
 
 type Props = {
@@ -13,15 +14,25 @@ type Props = {
 };
 
 
+/* 
+    idCategoria: string;
+    created_at: string;
+    nombreCategoria: string;
+    detallesCategoria: string;
+    idForaneaFederacion: string;
 
-export default  function FormularioAgregarRegionComponent  ({ refresacar, onClose }: Props)  {
+
+*/
+export default  function FormularioAgregarCategoriaComponent  ({ refresacar, onClose }: Props)  {
   const [formData, setFormData] = useState({
-    nombreRegion: "",
+    nombreCategoria: "",
+      detallesCategoria: "",
 
     idForaneaFederacion: "",
+   
   });
 
-  const [federaciones, setFederaciones] = useState<federacionInterface[]>([]);
+ 
   const [loading, setLoading] = useState(false);
   const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
 
@@ -34,29 +45,8 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
   });
 }, []);
 
-  useEffect(() => {
-    cargarDatosIniciales();
-  }, []);
 
-  const cargarDatosIniciales = async () => {
-    try {
-      const federacionesServices = new FederacionesServices();
-   
-  
 
-      const [federacionesData] =
-        await Promise.all([
-          federacionesServices.get(),
-    
-
-        ]);
-
-      setFederaciones(federacionesData);
- 
-    } catch (error) {
-      console.error("Error cargando datos iniciales:", error);
-    }
-  };
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -77,24 +67,26 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
   
 
     try {
-      const regionesServices = new RegionesServices();
-      const nuevaRegion: Omit<regionesInterface, "idRegion" | "created_at"> = {
-        nombreRegion: formData.nombreRegion,
+      const categoriasServices = new CategoriasServices();
+      const nuevaCategoria: Omit<categoriaInterface, "idCategoria" | "created_at"> = {
+        nombreCategoria: formData.nombreCategoria,
+        detallesCategoria: formData.detallesCategoria,
      
         idForaneaFederacion: perfil.idForaneaFederacion
       };
 
-      await regionesServices.create(nuevaRegion as regionesInterface);
+      await categoriasServices.create(nuevaCategoria as categoriaInterface);
 
 
       // Limpiar formulario
       setFormData({
-        nombreRegion: "",
+        nombreCategoria: "",
+        detallesCategoria: "",
         idForaneaFederacion: "",
       });
     } catch (error) {
-      console.error("❌ Error al crear la Federacion:", error);
-      alert("Error al agregar la federacion");
+      console.error("❌ Error al crear la Categoria:", error);
+      alert("Error al agregar la Categoria");
     } finally {
       setLoading(false);
         refresacar();
@@ -104,20 +96,35 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
 
   return (
     <div className="px-25 ">
-      <h2 className="text-2xl font-bold mb-4">Agregar Region</h2>
+      <h2 className="text-2xl font-bold mb-4">Agregar Categroia</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="nombreRegion">
-            Nombre de Region
+          <label className="text-gray-200 mb-1" htmlFor="nombreCategoria">
+            Nombre de Categoria
           </label>
           <input
             type="text"
-            id="nombreRegion"
-            name="nombreRegion"
-            value={formData.nombreRegion}
+            id="nombreCategoria"
+            name="nombreCategoria"
+            value={formData.nombreCategoria}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
-            placeholder="Ingrese nombre de la region"
+            placeholder="Ingrese nombre de la categoria"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-gray-200 mb-1" htmlFor="nombreCategoria">
+            Detalles categoria
+          </label>
+          <input
+            type="text"
+            id="detallesCategoria"
+            name="detallesCategoria"
+            value={formData.detallesCategoria}
+            onChange={handleInputChange}
+            className="border border-gray-200 p-2 rounded"
+            placeholder="Ingrese nombre de la categoria"
             required
           />
         </div>
