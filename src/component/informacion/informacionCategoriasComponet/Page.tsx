@@ -1,25 +1,31 @@
-import { categoriaInterface } from '@/interfaces/interfaces'
+
+import { categoriaDatosAmpleosInterface, categoriaInterface } from '@/interfaces/interfaces';
 import CategoriasServices from '@/lib/services/categoriaServices';
 import React from 'react'
-
 type Props = {
     categoria: categoriaInterface;
-    onClose?: () => void; // Función para cerrar el modal
+    onClose: () => void; // Función para cerrar el modal
     onRefresh?: () => void; // Función para refrescar los datos
+    openFormEditar: () => void; // Función para abrir el formulario de edición
 }
 
-const InformacionCategoriasComponet = ({ categoria, onClose, onRefresh }: Props) => {
-    const eliminarFederacion = () => {
-        const categiriasServices = new CategoriasServices();
-        categiriasServices.delete(categoria.idCategoria)
+const InformacionCategoriaComponent = ({ categoria, onClose, onRefresh ,openFormEditar}: Props) => {
+    const eliminar = () => {
+        const categoriaServices = new CategoriasServices()
+        categoriaServices.delete(categoria.idCategoria)
             .then(() => {
-                console.log("✅ Federación eliminada correctamente");
+                console.log("✅ Región eliminada correctamente");
                 onRefresh?.(); // Refrescar los datos
                 onClose?.(); // Cerrar el modal después de eliminar
             })
-            .catch((error: unknown) => {
-                console.error("❌ Error al eliminar la federación:", error);
+            .catch((error) => {
+                console.error("❌ Error al eliminar la región:", error);
             });
+    }
+       const onclickEditar = () => {
+
+        openFormEditar?.();
+         onClose?.();
     }
 
     return (
@@ -27,16 +33,19 @@ const InformacionCategoriasComponet = ({ categoria, onClose, onRefresh }: Props)
             <div className='flex p-8 justify-between'>
                 <div>
                     <h2>{categoria.nombreCategoria}</h2>
-                    <p>ID: {categoria.idCategoria}</p>
-                    <p>Creado: {new Date(categoria.created_at).toLocaleDateString()}</p>
-                </div>
+                    <p>Detalles: {categoria.detallesCategoria}</p>
+
+                </div> 
                 <div className='flex flex-col gap-2'>
-                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer' onClick={eliminarFederacion}>Eliminar</button>
-                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>
+                    <button className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer  '  onClick={eliminar} >Eliminar</button>
+                    <button onClick={onclickEditar}  className='border-2 border-white w-20 p-1 hover:bg-blue-400 cursor-pointer'>Editar</button>
                 </div>
             </div>
+
+
+
         </div>
     )
 }
 
-export default InformacionCategoriasComponet
+export default InformacionCategoriaComponent
