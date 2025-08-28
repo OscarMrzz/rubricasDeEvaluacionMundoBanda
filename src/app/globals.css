@@ -1,2 +1,24 @@
 @import "tailwindcss";
 
+
+/* Estilo para scrollbars modernas */
+.scrollbar-estetica {
+  scrollbar-width: thin;
+  scrollbar-color: #92b2f7 rgba(0,0,0,0.08); /* thumb color, track color */
+}
+
+/* Para navegadores Webkit (Chrome, Edge, Safari) */
+.scrollbar-estetica::-webkit-scrollbar {
+  width: 8px;
+  background: none;
+}
+
+.scrollbar-estetica::-webkit-scrollbar-thumb {
+  background: #2563eb;
+  border-radius: 8px;
+}
+
+.scrollbar-estetica::-webkit-scrollbar-track {
+  background: #ff8400;
+}
+
