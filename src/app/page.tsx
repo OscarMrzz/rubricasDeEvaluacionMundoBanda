@@ -1,11 +1,11 @@
-import Link from 'next/link'
+
 import React from 'react'
 import HiroComponet from '@/component/HiroCompoent/Page'
 
 const page = () => {
   return (
     <div className="w-full px-80 flex flex-col ">
-     <Link href="/Rubricas/Uniformidad">Uniformidad</Link>
+    
      <HiroComponet />
      <div className='w-full flex flex-col gap-25'>
 
