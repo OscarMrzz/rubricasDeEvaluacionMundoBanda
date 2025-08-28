@@ -25,7 +25,7 @@ const SidebarPanelControlComponent = () => {
     { id: 'categorias', label: 'Categorías', href: '/PanelControlPage/categoriasHomePage', Icon: ClipboardDocumentListIcon },
     { id: 'bandas', label: 'Bandas', href: '/PanelControlPage/bandasHomePage', Icon: MusicalNoteIcon },
     { id: 'rubricas', label: 'Rúbrica', href: '/PanelControlPage/rubricaHomePage', Icon: ClipboardDocumentCheckIcon },
-    { id: 'criterio', label: 'Criterio', href: '/PanelControlPage/criteriosHomePage', Icon: AdjustmentsHorizontalIcon },
+
     { id: 'evento', label: 'Evento', href: '/PanelControlPage/eventosHomePage', Icon: CalendarDaysIcon },
     { id: 'usuarios', label: 'Usuarios', href: '/PanelControlPage/usuariosHomePage', Icon: UsersIcon },
     { id: 'resultados', label: 'Resultados general', href: '/PanelControlPage/resultadosGeneralesHomePege', Icon: ChartBarSquareIcon },
