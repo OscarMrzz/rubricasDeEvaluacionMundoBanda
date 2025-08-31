@@ -14,8 +14,45 @@ import RubricasServices from "@/lib/services/rubricasServices";
 import FormularioAgregarRubricaComponent from "@/component/formularios/FormulariosRubricas/FormularioAgregarRubricaComponent/Page";
 import TablaRubricasComponent from "@/component/Tablas/tablaRubricasComponent/Page";
 import CategoriasServices from "@/lib/services/categoriaServices";
+import FormularioAgregarCriterioComponet from "@/component/formularios/FormularioCriterio/FormularioAgregarCriterioComponent/FormularioAgregarCriterioComponet";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/store";
+import {
+  activarOverleyFormularioAgregarRubrica,
+  activarOverleyFormularioEditarRubrica,
+  desactivarOverleyCriteriosFormularioAgregar,
+  desactivarOverleyFormularioAgregarRubrica,
+  desactivarOverleyFormularioEditarRubrica,
+  desactivarOverleyInformacionRubrica,
+} from "@/feacture/overleys/overleySlice";
+import OverleyModal from "@/component/modales/OverleyModal/Page";
+import InformacionRubricaComponent from "@/component/informacion/informacionRubricaComponent/Page";
+import FormularioEditarRubricaComponent from "@/component/formularios/FormulariosRubricas/FormularioEditarRubricaComponent/Page";
+import { desactivarRefrescarDataRubricas } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 
 export default function RubricaHomePage() {
+  const dispatch = useDispatch();
+  const refrescadorDataRubricas = useSelector(
+    (state: RootState) => state.refrescadorData.RefrescadorDataRubricas
+  );
+  const activarOverleyFormularioAgregarRubricaValue = useSelector(
+    (state: RootState) =>
+      state.overley.activarOverleyFormularioAgregarRubrica
+  );
+  const activadorOverleyFormularioAgregarCriterios = useSelector(
+    (state: RootState) =>
+      state.overley.activadorOverleyFormularioAgregarCriterios
+  );
+
+  const activadorInformacionRubrica = useSelector(
+    (state: RootState) => state.overley.activadorOverleyInformacionRubrica
+  );
+  const activadorOverleyFormularioEditar = useSelector(
+    (state: RootState) => state.overley.activadorOverleyFormularioEditarRubrica
+  );
+  const rubricaSeleccionada = useSelector(
+    (state: RootState) => state.rubrica.RubricaSeleccionada
+  );
   const [rubricas, setRubricas] = useState<rubricaDatosAmpleosInterface[]>([]);
   const [rubricasOriginales, setRubricasOriginales] = useState<
     rubricaDatosAmpleosInterface[]
@@ -30,15 +67,20 @@ export default function RubricaHomePage() {
   const [openFormularioAgregar, setOpenFormularioAgregar] = useState(false);
 
   const abrirFormularioAgregar = () => {
-    setOpenFormularioAgregar(true);
+    dispatch(activarOverleyFormularioAgregarRubrica());
   };
-  const cerrarFormularioAgregar = () => {
-    setOpenFormularioAgregar(false);
-  };
+// Removed duplicate declaration of cerrarFormularioAgregarCriterio
 
   useEffect(() => {
     traerDatosTabla();
   }, []);
+
+  useEffect(() => {
+    if (refrescadorDataRubricas) {
+      traerDatosTabla();
+      dispatch(desactivarRefrescarDataRubricas());
+    }
+  }, [refrescadorDataRubricas]);
 
   async function traerDatosTabla() {
     const rubricasServices = new RubricasServices();
@@ -63,7 +105,6 @@ export default function RubricaHomePage() {
     try {
       const categoriasData = await categoriasServices.get();
       setCategoriasLista(categoriasData);
-
     } catch (error) {
       console.error("❌ Error al obtener las Categorias:", error);
     }
@@ -85,23 +126,82 @@ export default function RubricaHomePage() {
     if (categoriaId === "") {
       setRubricas(rubricasOriginales);
     } else {
-     
       const rubricasFiltradas = rubricasOriginales.filter(
         (rubrica) => rubrica.idForaneaCategoria === categoriaId
       );
       setRubricas(rubricasFiltradas);
     }
   };
+  const cerrarFormularioAgregarRubrica = () => {
+    dispatch(desactivarOverleyFormularioAgregarRubrica());
+  }
+
+  const cerrarFormularioAgregarCriterio = () => {
+    dispatch(desactivarOverleyCriteriosFormularioAgregar());
+  };
+
+  const cerrarInformacionRubrica = () => {
+    dispatch(desactivarOverleyInformacionRubrica());
+  };
+  const cerrarFormularioEditarRubrica = () => {
+    dispatch(desactivarOverleyFormularioEditarRubrica());
+  }
+  const ActivarFormularioEditarRubrica = () => {
+    dispatch(activarOverleyFormularioEditarRubrica());
+  }
 
   return (
     <div className="px-20">
+      {/*---------------01 RURBICA----------------- */}
+      <OverleyModal
+        open={activadorInformacionRubrica}
+        onClose={cerrarInformacionRubrica}
+      >
+        {rubricaSeleccionada && (
+          <InformacionRubricaComponent
+            rubrica={rubricaSeleccionada}
+            onClose={
+              cerrarInformacionRubrica
+            } 
+            onRefresh={() => {}}
+            openFormEditar={ActivarFormularioEditarRubrica}
+            openFormAgregar={abrirFormularioAgregar}
+          />
+        )}
+      </OverleyModal>
       <OverleyModalFormulario
-        open={openFormularioAgregar}
-        onClose={cerrarFormularioAgregar}
+        open={activarOverleyFormularioAgregarRubricaValue}
+        onClose={cerrarFormularioAgregarRubrica}
       >
         <FormularioAgregarRubricaComponent
           refresacar={traerDatosTabla}
-          onClose={cerrarFormularioAgregar}
+          onClose={cerrarFormularioAgregarRubrica}
+        />
+      </OverleyModalFormulario>
+
+      <OverleyModalFormulario
+        open={ activadorOverleyFormularioEditar}
+        onClose={cerrarFormularioEditarRubrica}
+      >
+        <FormularioEditarRubricaComponent
+          rubricaAEditar={rubricaSeleccionada!}
+          //
+
+          onClose={cerrarFormularioEditarRubrica}
+          refresacar={() => {}}
+          
+        />
+      </OverleyModalFormulario>
+        {/*--------------- 02 Criterio ----------------- */}
+
+      <OverleyModalFormulario
+        open={activadorOverleyFormularioAgregarCriterios}
+        onClose={cerrarFormularioAgregarCriterio}
+      >
+        <FormularioAgregarCriterioComponet
+          rubrica={rubricaSeleccionada!}
+          refresacar={() => {}}
+          onClose={cerrarFormularioAgregarCriterio}
         />
       </OverleyModalFormulario>
 
