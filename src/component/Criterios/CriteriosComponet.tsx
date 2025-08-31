@@ -1,30 +1,30 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import {  use, useEffect, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
+
 import { PlusIcon } from "@heroicons/react/16/solid";
 import {
 
   criterioEvaluacionDatosAmpleosInterface,
-  rubricaDatosAmpleosInterface,
+
 } from "@/interfaces/interfaces";
 
-import FormularioAgregarCriterioComponet from "@/component/formularios/FormularioCriterio/FormularioAgregarCriterioComponent/FormularioAgregarCriterioComponet";
 
-import CriteriosServices from "@/lib/services/criteriosServices";
 import TablaCriteriosComponent from "../Tablas/TablaCriteriosComponet/TablaCriteriosComponet";
+import { useDispatch, useSelector } from "react-redux";
+import { activarOverleyCriteriosFormularioAgregar } from "@/feacture/overleys/overleySlice";
+import { RootState } from "@/app/store";
+import CriteriosServices from "@/lib/services/criteriosServices";
+import { desactivarRefrescarDataCriterios } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 
 
-type Props = {
-  rubrica: rubricaDatosAmpleosInterface;
-  
 
-
-};
-
-export default function CriteriosComponent( {rubrica}: Props) {
+export default function CriteriosComponent() {
+  const refrescadorDataCriterios = useSelector(
+    (state: RootState) => state.refrescadorData.RefrescadorDataCriterios
+  );
   const [criterios, setCriterios] = useState<criterioEvaluacionDatosAmpleosInterface[]>([]);
   const [sumaCriterios, setSumaCriterios] = useState<number>(0);
   const [criteriosOriginales, setCriterioscasOriginales] =  useState<criterioEvaluacionDatosAmpleosInterface[]>([]);
@@ -33,22 +33,31 @@ export default function CriteriosComponent( {rubrica}: Props) {
  
  
   const  [idrubricaSeleccionada, setIdRubricaSeleccionada] = useState<string>("");
-  const [openFormularioAgregar, setOpenFormularioAgregar] = useState(false);
+  const dispatch = useDispatch();
+  const rubricaSeleccionada = useSelector(
+    (state: RootState) => state.rubrica.RubricaSeleccionada
+  );
+ 
    useEffect(() => {
-    setIdRubricaSeleccionada(rubrica.idRubrica);
+    setIdRubricaSeleccionada(rubricaSeleccionada.idRubrica);
     traerDatosTabla();
   }, []);
 
   useEffect(() => {
-    sumarCriterios();
-  }, [criterios]);
+    if (refrescadorDataCriterios) {
+      traerDatosTabla();
+        sumarCriterios();
+      dispatch(desactivarRefrescarDataCriterios());
+    }
+  }, [refrescadorDataCriterios]);
+
+
 
   const abrirFormularioAgregar = () => {
-    setOpenFormularioAgregar(true);
+    dispatch(activarOverleyCriteriosFormularioAgregar());
+    
   };
-  const cerrarFormularioAgregar = () => {
-    setOpenFormularioAgregar(false);
-  };
+
 
  
 
@@ -59,7 +68,7 @@ export default function CriteriosComponent( {rubrica}: Props) {
 
  
       const criteriosFiltrados = criteriosData.filter(
-        (criterio) => criterio.idForaneaRubrica === rubrica.idRubrica
+        (criterio) => criterio.idForaneaRubrica === rubricaSeleccionada.idRubrica
       );
       setCriterios(criteriosFiltrados);
   
@@ -106,16 +115,7 @@ export default function CriteriosComponent( {rubrica}: Props) {
 
   return (
     <div className="px-20">
-      <OverleyModalFormulario
-        open={openFormularioAgregar}
-        onClose={cerrarFormularioAgregar}
-      >
-        <FormularioAgregarCriterioComponet
-          rubrica={rubrica}
-          refresacar={traerDatosTabla}
-          onClose={cerrarFormularioAgregar}
-        />
-      </OverleyModalFormulario>
+   
 
       <div>
         <div>

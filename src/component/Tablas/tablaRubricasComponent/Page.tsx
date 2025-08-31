@@ -5,22 +5,35 @@ import OverleyModalFormulario from "../../modales/OverleyModalFormulario/Page";
 import { rubricaDatosAmpleosInterface } from "@/interfaces/interfaces";
 import InformacionRubricaComponent from "@/component/informacion/informacionRubricaComponent/Page";
 import FormularioEditarRubricaComponent from "@/component/formularios/FormulariosRubricas/FormularioEditarRubricaComponent/Page";
+import FormularioAgregarCriterioComponet from "@/component/formularios/FormularioCriterio/FormularioAgregarCriterioComponent/FormularioAgregarCriterioComponet";
+import { useDispatch, useSelector } from "react-redux";
+import { activarOverleyInformacionRubrica, toggleOverleyCriteriosFormularioAgregar } from "@/feacture/overleys/overleySlice";
+import { recetiarRubricaSeleccionada, setRubricaSeleccionada } from "@/feacture/Rubrica/rubricaSlice"; // <-- Import the correct action creator
+// import your actual Redux root state type
+import { RootState } from "@/app/store";
 
 type Props = {
   rubricas: rubricaDatosAmpleosInterface[];
   onRefresh?: () => void; // Función para refrescar los datos
 };
 
+
+
 export default function TablaRubricasComponent({ rubricas, onRefresh }: Props) {
+  const RubricaSeleccionada = useSelector(
+    (state: RootState) => state.rubrica.RubricaSeleccionada
+  );
+      const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [openFormularioEditar, setOpenFormularioEditar] = React.useState(false);
+  
 
-  const [selectedRubrica, setSelectedRubrica] =
-    React.useState<rubricaDatosAmpleosInterface | null>(null);
+ 
 
   const seleccionarFila = (rubrica: rubricaDatosAmpleosInterface) => {
-    setSelectedRubrica(rubrica);
-    setOpen(true);
+
+    dispatch( setRubricaSeleccionada(rubrica));
+    dispatch(activarOverleyInformacionRubrica());
   };
   const cerrarModal = () => {
     setOpen(false);
@@ -30,39 +43,26 @@ export default function TablaRubricasComponent({ rubricas, onRefresh }: Props) {
     setOpen(false);
   };
 
+  
+
   const cerrarFormularioEditar = () => {
     setOpenFormularioEditar(false);
-    setSelectedRubrica(null);
+    dispatch(recetiarRubricaSeleccionada());
   };
+
+  const abrirFormularioAgregar = () => {
+    dispatch(toggleOverleyCriteriosFormularioAgregar());
+  };
+  const cerrarFormularioAgregar = () => {
+   dispatch(toggleOverleyCriteriosFormularioAgregar());
+  }
+
 
   return (
     <div>
-      <OverleyModal open={open} onClose={cerrarModal}>
-        {selectedRubrica && (
-          <InformacionRubricaComponent
-            rubrica={selectedRubrica}
-            onClose={cerrarModal}
-            onRefresh={onRefresh}
-            openFormEditar={abrirFormularioEditar}
-          />
-        )}
-      </OverleyModal>
+ 
 
-      <OverleyModalFormulario
-        open={openFormularioEditar}
-        onClose={cerrarFormularioEditar}
-      >
-        <FormularioEditarRubricaComponent
-          rubricaAEditar={selectedRubrica!}
-          //
-
-          onClose={cerrarFormularioEditar}
-          refresacar={() => {
-            onRefresh?.();
-            cerrarFormularioEditar();
-          }}
-        />
-      </OverleyModalFormulario>
+ 
 
       <div className="">
         <table className="min-w-full border">
@@ -99,3 +99,5 @@ export default function TablaRubricasComponent({ rubricas, onRefresh }: Props) {
     </div>
   );
 }
+
+

@@ -36,7 +36,7 @@ const OverleyModalFormulario = ({
       {open ? (
         <div
           onDoubleClick={onClose}
-          className=" bg-gray-950/50 inset-0 z-100 fixed w-screen h-screen flex justify-center items-center p-4"
+          className=" bg-gray-950/50 inset-0 z-120 fixed w-screen h-screen flex justify-center items-center p-4"
         >
           <div
            onDoubleClick={e => e.stopPropagation()}

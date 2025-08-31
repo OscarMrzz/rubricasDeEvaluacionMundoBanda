@@ -10,10 +10,12 @@ import {
 import PerfilesServices from "@/lib/services/perfilesServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
+import { useDispatch } from "react-redux";
+import { activarRefrescarDataRubricas } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 
 type Props = {
   rubricaAEditar: rubricaInterface;
-  refresacar: () => void;
+  refresacar?: () => void;
   onClose: () => void;
 };
 
@@ -36,6 +38,7 @@ export default function FormularioEditarRubricaComponent({
   const [categoriasList, setCategoriasList] = useState<categoriaInterface[]>(
     []
   );
+  const dispatch = useDispatch();
 
   const [loadingCategorias, setLoadingCategorias] = useState(true);
 
@@ -139,7 +142,8 @@ export default function FormularioEditarRubricaComponent({
       alert("Error al Editar la Rubrica");
     } finally {
       setLoading(false);
-      refresacar();
+   
+      dispatch(activarRefrescarDataRubricas());
       onClose();
     }
   };

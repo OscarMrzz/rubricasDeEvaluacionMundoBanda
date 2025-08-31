@@ -1,14 +1,18 @@
 import CriterioCompoenet from "@/component/Criterios/CriteriosComponet";
+import { activarOverleyFormularioEditarRubrica } from "@/feacture/overleys/overleySlice";
+import { activarRefrescarDataRubricas } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 import { rubricaDatosAmpleosInterface } from "@/interfaces/interfaces";
 import RubricasServices from "@/lib/services/rubricasServices";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import React from "react";
+import { useDispatch } from "react-redux";
 type Props = {
   rubrica: rubricaDatosAmpleosInterface;
   onClose: () => void; // Función para cerrar el modal
   onRefresh?: () => void; // Función para refrescar los datos
   openFormEditar: () => void; // Función para abrir el formulario de edición
+  openFormAgregar: () => void; // Función para abrir el formulario de agregar criterio
 };
 
 export default function InformacionRubricaComponent({
@@ -16,7 +20,9 @@ export default function InformacionRubricaComponent({
   onClose,
   onRefresh,
   openFormEditar,
+  openFormAgregar,
 }: Props) {
+  const dispatch = useDispatch();
   const eliminar = () => {
     const rubricaServices = new RubricasServices();
     rubricaServices
@@ -28,9 +34,14 @@ export default function InformacionRubricaComponent({
       })
       .catch((error) => {
         console.error("❌ Error al eliminar la región:", error);
+      })
+      .finally(() => {
+        dispatch(activarRefrescarDataRubricas());
+        onClose?.(); 
       });
   };
   const onclickEditar = () => {
+
     openFormEditar?.();
     onClose?.();
   };
@@ -67,7 +78,7 @@ export default function InformacionRubricaComponent({
       </div>
       <div>
         <CriterioCompoenet
-             rubrica={rubrica}
+       
         
         
         />

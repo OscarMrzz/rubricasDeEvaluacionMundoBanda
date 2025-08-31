@@ -10,9 +10,11 @@ import {
 import PerfilesServices from "@/lib/services/perfilesServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
+import { useDispatch } from "react-redux";
+import { activarRefrescarDataRubricas } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 
 type Props = {
-  refresacar: () => void;
+  refresacar?: () => void;
   onClose: () => void;
 };
 
@@ -34,6 +36,8 @@ export default function FormularioAgregarRubricaComponent({
   const [categoriasList, setCategoriasList] = useState<categoriaInterface[]>(
     []
   );
+
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     nombreRubrica: "",
@@ -112,7 +116,8 @@ export default function FormularioAgregarRubricaComponent({
       alert("Error al agregar la Rubrica");
     } finally {
       setLoading(false);
-      refresacar();
+      
+      dispatch(activarRefrescarDataRubricas());
       onClose();
     }
   };
