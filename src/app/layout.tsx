@@ -1,24 +1,14 @@
+"use client";
+
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import EncabezadoGeneralCompenet from "@/component/EmcabezadoGeneralComponent/Page";
+
 import NavBard from "@/component/NavBard/Page";
 import FooterComponent from "@/component/FooterComponent/Page";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Provider } from "react-redux";
+import store from "@/app/store"; // 👈 ajusta la ruta según tu proyecto
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Rubrica de competencia",
-  description: "Rubrica de compentencia de bandas de de marcha",
-};
 
 export default function RootLayout({
   children,
@@ -27,21 +17,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-     
       <body
-        className={`bg-[#1d3557]  text-gray-50 grid grid-rows-[75px_1fr_100px] min-h-screen`}>
+        className="bg-[#1d3557] text-gray-50 grid grid-rows-[75px_1fr_100px] min-h-screen"
+      >
+        <Provider store={store}>
+          <header className="flex flex-col sticky top-0 z-50">
+            <NavBard />
+          </header>
 
-         <header className="flex flex-col sticky top-0 z-50">
-          <NavBard></NavBard>
-         </header>
-         
-  <main className="w-full  overflow-auto">
-  {children}
-  </main>
-        
-        <footer>
-        <FooterComponent></FooterComponent>
-        </footer>
+          <main className="w-full overflow-auto">{children}</main>
+
+          <footer>
+            <FooterComponent />
+          </footer>
+        </Provider>
       </body>
     </html>
   );

@@ -1,9 +1,14 @@
+"use client"
 
 import React from 'react'
 import HiroComponet from '@/component/HiroCompoent/Page'
+import { Provider } from 'react-redux'
+
+import store from "./store";
 
 const page = () => {
   return (
+       
     <div className="w-full px-80 flex flex-col ">
     
      <HiroComponet />
@@ -66,6 +71,7 @@ const page = () => {
       
 
     </div>
+   
   )
 }
 
