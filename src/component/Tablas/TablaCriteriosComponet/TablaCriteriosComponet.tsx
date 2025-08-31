@@ -9,12 +9,14 @@ import { criterioEvaluacionDatosAmpleosInterface } from "@/interfaces/interfaces
 import InformacionCriterioComponent from "@/component/informacion/informacionCriterioComponent/InformacionCriterioComponet";
 import FormularioEditarCriterioComponet from "@/component/formularios/FormularioCriterio/FormilarioEditarCriterioComponent/FormularioEditarCirterioComponent";
 
+
 type Props = {
   Criterios: criterioEvaluacionDatosAmpleosInterface[];
   onRefresh?: () => void; // Función para refrescar los datos
 };
 
 export default function TablaCriteriosComponent({ Criterios, onRefresh }: Props) {
+
   const [open, setOpen] = React.useState(false);
   const [openFormularioEditar, setOpenFormularioEditar] = React.useState(false);
 

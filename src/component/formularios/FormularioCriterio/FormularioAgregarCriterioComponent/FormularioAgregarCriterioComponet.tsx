@@ -6,12 +6,14 @@ import React, { useState, useEffect } from "react";
 import {  criterioEvaluacionInterface, perfilDatosAmpleosInterface, rubricaDatosAmpleosInterface,} from "@/interfaces/interfaces";
 import PerfilesServices from "@/lib/services/perfilesServices";
 import CriteriosServices from "@/lib/services/criteriosServices";
+import { useDispatch } from "react-redux";
+import { activarRefrescarDataCriterios } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 
 
 
 type Props = {
   rubrica:rubricaDatosAmpleosInterface;
-  refresacar: () => void;
+  refresacar?: () => void;
   onClose: () => void;
 };
 
@@ -29,6 +31,10 @@ type Props = {
 
 */
 export default  function FormularioAgregarCriterioComponet  ({rubrica, refresacar, onClose }: Props)  {
+  
+  const dispatch = useDispatch();
+
+  
   const [formData, setFormData] = useState({
    nombreCriterio: "",
       detallesCriterio: "",
@@ -95,7 +101,8 @@ export default  function FormularioAgregarCriterioComponet  ({rubrica, refresaca
       alert("Error al agregar la Criterio");
     } finally {
       setLoading(false);
-        refresacar();
+      
+      dispatch(activarRefrescarDataCriterios());
     onClose();
     }
   };
