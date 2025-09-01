@@ -8,6 +8,9 @@ import FormularioEditarRubricaComponent from "@/component/formularios/Formulario
 import { criterioEvaluacionDatosAmpleosInterface } from "@/interfaces/interfaces";
 import InformacionCriterioComponent from "@/component/informacion/informacionCriterioComponent/InformacionCriterioComponet";
 import FormularioEditarCriterioComponet from "@/component/formularios/FormularioCriterio/FormilarioEditarCriterioComponent/FormularioEditarCirterioComponent";
+import { setCriterioSeleccionado } from "@/feacture/Criterios/CriteriosSlice";
+import { activarOverleyInformacionCriterio } from "@/feacture/overleys/overleySlice";
+import { useDispatch } from "react-redux";
 
 
 type Props = {
@@ -16,6 +19,7 @@ type Props = {
 };
 
 export default function TablaCriteriosComponent({ Criterios, onRefresh }: Props) {
+   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
   const [openFormularioEditar, setOpenFormularioEditar] = React.useState(false);
@@ -24,8 +28,8 @@ export default function TablaCriteriosComponent({ Criterios, onRefresh }: Props)
     React.useState<criterioEvaluacionDatosAmpleosInterface | null>(null);
 
   const seleccionarFila = (Criterios: criterioEvaluacionDatosAmpleosInterface) => {
-    setSelectCriterio(Criterios);
-    setOpen(true);
+    dispatch(setCriterioSeleccionado(Criterios));
+    dispatch(activarOverleyInformacionCriterio());
   };
   const cerrarModal = () => {
     setOpen(false);
@@ -42,32 +46,9 @@ export default function TablaCriteriosComponent({ Criterios, onRefresh }: Props)
 
   return (
     <div>
-      <OverleyModal open={open} onClose={cerrarModal}>
-        {selectCriterio && (
-          <InformacionCriterioComponent
-            criterio={selectCriterio}
-            onClose={cerrarModal}
-            onRefresh={onRefresh}
-            openFormEditar={abrirFormularioEditar}
-          />
-        )}
-      </OverleyModal>
 
-      <OverleyModalFormulario
-        open={openFormularioEditar}
-        onClose={cerrarFormularioEditar}
-      >
-        <FormularioEditarCriterioComponet
-          criterioAEditar={selectCriterio!}
-          //
 
-          onClose={cerrarFormularioEditar}
-          refresacar={() => {
-            onRefresh?.();
-            cerrarFormularioEditar();
-          }}
-        />
-      </OverleyModalFormulario>
+  
 
       <div className="">
         <table className="min-w-full border">
@@ -104,3 +85,4 @@ export default function TablaCriteriosComponent({ Criterios, onRefresh }: Props)
     </div>
   );
 }
+

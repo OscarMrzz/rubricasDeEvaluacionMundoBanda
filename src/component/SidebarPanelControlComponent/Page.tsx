@@ -28,10 +28,10 @@ const SidebarPanelControlComponent = () => {
 
     { id: 'evento', label: 'Evento', href: '/PanelControlPage/eventosHomePage', Icon: CalendarDaysIcon },
     { id: 'usuarios', label: 'Usuarios', href: '/PanelControlPage/usuariosHomePage', Icon: UsersIcon },
+    { id: 'equipo', label: 'Equipo evaluador', href: '/PanelControlPage/equipoEvaluadorHomePage', Icon: UserGroupIcon },
     { id: 'resultados', label: 'Resultados general', href: '/PanelControlPage/resultadosGeneralesHomePege', Icon: ChartBarSquareIcon },
     { id: 'ganadores', label: 'Ganadores', href: '/PanelControlPage/ganadoresHomePage', Icon: TrophyIcon },
     { id: 'reporte', label: 'Reporte por banda', href: '/PanelControlPage/reportePorbadaHomePage', Icon: DocumentTextIcon },
-    { id: 'equipo', label: 'Equipo evaluador', href: '/PanelControlPage/equipoEvaluadorHomePage', Icon: UserGroupIcon },
   ];
 
   return (

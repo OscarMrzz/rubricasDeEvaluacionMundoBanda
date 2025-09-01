@@ -4,17 +4,22 @@ import React, { useState, useEffect } from "react";
 import PerfilesServices from "@/lib/services/perfilesServices";
 import { criterioEvaluacionDatosAmpleosInterface, criterioEvaluacionInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
 import CriteriosServices from "@/lib/services/criteriosServices";
+import { useDispatch } from "react-redux";
+import { desactivarOverleyFormularioEditarCriterio } from "@/feacture/overleys/overleySlice";
 
 
 type Props = {
     criterioAEditar: criterioEvaluacionDatosAmpleosInterface;
   refresacar: () => void;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 
 
 export default  function FormularioEditarCriterioComponet  ({criterioAEditar, refresacar, onClose }: Props)  {
+
+  const dispatch = useDispatch();
+  
   const [formData, setFormData] = useState({
   nombreCriterio: "",
       detallesCriterio: "",
@@ -107,26 +112,27 @@ export default  function FormularioEditarCriterioComponet  ({criterioAEditar, re
       });
     } catch (error) {
       console.error("❌ Error al crear la Categoria:", error);
-      alert("Error al agregar la Categoria");
+      alert("Error al editar la Categoria");
     } finally {
       setLoading(false);
         refresacar();
-    onClose();
+        dispatch(desactivarOverleyFormularioEditarCriterio());
+    
     }
   };
 
   return (
     <div className="px-25 ">
-      <h2 className="text-2xl font-bold mb-4">Agregar Criterio</h2>
+      <h2 className="text-2xl font-bold mb-4">editar Criterio</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="nombreCategoria">
+          <label className="text-gray-200 mb-1" htmlFor="nombreCriterio">
             Nombre de Criterio
           </label>
           <input
             type="text"
-            id="nombreCategoria"
-            name="nombreCategoria"
+            id="nombreCriterio"
+            name="nombreCriterio"
             value={formData.nombreCriterio}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
@@ -135,13 +141,13 @@ export default  function FormularioEditarCriterioComponet  ({criterioAEditar, re
           />
         </div>
         <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="nombreCategoria">
+          <label className="text-gray-200 mb-1" htmlFor="detallesCriterio">
             Detalles criterio
           </label>
           <input
             type="text"
-            id="detallesCategoria"
-            name="detallesCategoria"
+            id="detallesCriterio"
+            name="detallesCriterio"
             value={formData.detallesCriterio}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
@@ -161,7 +167,7 @@ export default  function FormularioEditarCriterioComponet  ({criterioAEditar, re
           disabled={loading}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 cursor-pointer"
         >
-          {loading ? "cargado..." : "Agregar"}
+          {loading ? "cargado..." : "Aceptar"}
         </button>
       </form>
     </div>

@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import overleyReducer from "@/feacture/overleys/overleySlice";
 import rubricaReducer from "@/feacture/Rubrica/rubricaSlice";
 import  refrescadorData  from "@/feacture/RefrescadorData/refrescadorDataSlice";
+import criteriosReducer from "@/feacture/Criterios/CriteriosSlice";
 
 
 const store = configureStore({
@@ -10,6 +11,7 @@ const store = configureStore({
         overley: overleyReducer,
         rubrica: rubricaReducer,
          refrescadorData: refrescadorData,
+            criterio: criteriosReducer,
     
     },
 });
