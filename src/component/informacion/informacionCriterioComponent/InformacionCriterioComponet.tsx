@@ -1,4 +1,5 @@
 
+import CumplimientosComponent from "@/component/cumplimientosComponent/CumplimientosComponet";
 import { criterioEvaluacionDatosAmpleosInterface } from "@/interfaces/interfaces";
 import CriteriosServices from "@/lib/services/criteriosServices";
 
@@ -65,6 +66,8 @@ export default function InformacionCriterioComponent({
           </button>
         </div>
       </div>
+      <CumplimientosComponent />
+      
       <div>
        
       </div>

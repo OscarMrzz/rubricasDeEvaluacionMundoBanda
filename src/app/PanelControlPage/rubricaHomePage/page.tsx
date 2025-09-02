@@ -20,12 +20,16 @@ import { RootState } from "@/app/store";
 import {
   activarOverleyFormularioAgregarRubrica,
   activarOverleyFormularioEditarCriterio,
+  activarOverleyFormularioEditarCumplimiento,
   activarOverleyFormularioEditarRubrica,
   desactivarOverleyCriteriosFormularioAgregar,
+  desactivarOverleyCumplimientoFormularioAgregar,
   desactivarOverleyFormularioAgregarRubrica,
   desactivarOverleyFormularioEditarCriterio,
+  desactivarOverleyFormularioEditarCumplimiento,
   desactivarOverleyFormularioEditarRubrica,
   desactivarOverleyInformacionCriterio,
+  desactivarOverleyInformacionCumplimiento,
   desactivarOverleyInformacionRubrica,
 } from "@/feacture/overleys/overleySlice";
 import OverleyModal from "@/component/modales/OverleyModal/Page";
@@ -34,6 +38,9 @@ import FormularioEditarRubricaComponent from "@/component/formularios/Formulario
 import { desactivarRefrescarDataRubricas } from "@/feacture/RefrescadorData/refrescadorDataSlice";
 import InformacionCriterioComponent from "@/component/informacion/informacionCriterioComponent/InformacionCriterioComponet";
 import FormularioEditarCriterioComponet from "@/component/formularios/FormularioCriterio/FormilarioEditarCriterioComponent/FormularioEditarCirterioComponent";
+import InformacionCumplimientoComponent from "@/component/informacion/informacionCumplimientoComponet/InformacionCumplimientoComponent";
+import FormularioAgregarCumplimientoComponet from "@/component/formularios/Cumplimientos/agregar/formularioAgregarCumplimiento";
+import FormularioEditarCumplimientoComponet from "@/component/formularios/Cumplimientos/editar/formularioEditarCumplimientoComponet";
 
 export default function RubricaHomePage() {
   const dispatch = useDispatch();
@@ -68,7 +75,18 @@ export default function RubricaHomePage() {
 
   const criterioSeleccionado = useSelector((state: RootState) => state.criterio.CriterioSeleccionado);
   const activadorFormularioEditarCriterio = useSelector((state: RootState) => state.overley.activadorOverleyFormularioEditarCriterios);
-  /*  ------------------- cumplimiento --------------------- */
+  /*  ------------------- 03 cumplimiento --------------------- */
+  
+  const activadorInformacionCumplimiento = useSelector((state: RootState) => state.overley.activadorOverleyInformacionCumplimiento);
+ 
+  const activadorOverleyFormularioAgregarCumplimiento = useSelector((state: RootState) =>state.overley.activadorOverleyFormularioAgregarCumplimiento);
+
+  const cumplimientoSeleccionado = useSelector((state: RootState) => state.cumplimiento.CumplimientoSeleccionado);
+  const activadorFormularioEditarCumplimiento = useSelector((state: RootState) => state.overley.activadorOverleyFormularioEditarCumplimiento);
+
+
+
+
   const [rubricas, setRubricas] = useState<rubricaDatosAmpleosInterface[]>([]);
   const [rubricasOriginales, setRubricasOriginales] = useState<
     rubricaDatosAmpleosInterface[]
@@ -148,15 +166,12 @@ export default function RubricaHomePage() {
       setRubricas(rubricasFiltradas);
     }
   };
+
+  /* --------------01 Rubricas---------------------- */
   const cerrarFormularioAgregarRubrica = () => {
     dispatch(desactivarOverleyFormularioAgregarRubrica());
   }
-
-  const cerrarFormularioAgregarCriterio = () => {
-    dispatch(desactivarOverleyCriteriosFormularioAgregar());
-  };
-
-  const cerrarInformacionRubrica = () => {
+    const cerrarInformacionRubrica = () => {
     dispatch(desactivarOverleyInformacionRubrica());
   };
   const cerrarFormularioEditarRubrica = () => {
@@ -166,6 +181,12 @@ export default function RubricaHomePage() {
     dispatch(activarOverleyFormularioEditarRubrica());
   }
 
+  /* ---------------- 02 Criterios -------------------- */
+
+  const cerrarFormularioAgregarCriterio = () => {
+    dispatch(desactivarOverleyCriteriosFormularioAgregar());
+  };
+
   const cerrarInformacionCriterio = () => {
     dispatch(desactivarOverleyInformacionCriterio());
   }
@@ -174,6 +195,20 @@ export default function RubricaHomePage() {
   }
   const cerrarFormularioEditarCriterio = () => {
     dispatch(desactivarOverleyFormularioEditarCriterio());
+  }
+
+  /* -------------03 cumplimiento -------------------------- */
+  const cerrarFormularioAgregarCumplimiento = () => {
+    dispatch(desactivarOverleyCumplimientoFormularioAgregar());
+  }
+    const cerrarInformacionCumplimiento = () => {
+    dispatch(desactivarOverleyInformacionCumplimiento());
+  }
+  const activarFormularioEditarCumplimiento = () => {
+    dispatch( activarOverleyFormularioEditarCumplimiento());
+  }
+  const cerrarFormularioEditarCumplimiento = () => {
+    dispatch(desactivarOverleyFormularioEditarCumplimiento());
   }
 
   return (
@@ -253,6 +288,44 @@ export default function RubricaHomePage() {
           refresacar={() => {}}
         />
       </OverleyModalFormulario>
+
+
+      {/* --------------- 03 cumplimiento ------------------- */}
+          <OverleyModal open={activadorInformacionCumplimiento} onClose={cerrarInformacionCumplimiento}>
+        {cumplimientoSeleccionado && (
+          <InformacionCumplimientoComponent
+            cumplimiento={cumplimientoSeleccionado}
+            onClose={cerrarInformacionCumplimiento}
+            onRefresh={()=>{}}
+            openFormEditar={activarFormularioEditarCumplimiento}
+          />
+        )}
+      </OverleyModal>
+
+      <OverleyModalFormulario
+        open={activadorOverleyFormularioAgregarCumplimiento}
+        onClose={cerrarFormularioAgregarCumplimiento}
+      >
+        <FormularioAgregarCumplimientoComponet
+          criterio={criterioSeleccionado!}
+         
+          onClose={cerrarFormularioAgregarCumplimiento}
+        />
+      </OverleyModalFormulario>
+
+          <OverleyModalFormulario
+        open={activadorFormularioEditarCumplimiento}
+        onClose={cerrarFormularioEditarCumplimiento}
+      >
+        <FormularioEditarCumplimientoComponet
+          cumplimientoAEditar={cumplimientoSeleccionado!}
+       
+
+          onClose={cerrarFormularioEditarCumplimiento}
+         
+        />
+      </OverleyModalFormulario>
+
 
       <div>
         <div>
