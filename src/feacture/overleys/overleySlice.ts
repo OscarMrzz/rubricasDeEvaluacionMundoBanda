@@ -68,7 +68,28 @@ const overleySlice = createSlice({
     },
     desactivarOverleyFormularioEditarCriterio: (state) => {
       state.activadorOverleyFormularioEditarCriterios = false;
-    }
+    },
+
+    /* ------------------- 03 Cumplimientos----------------- */
+    activarOverleyInformacionCumplimiento: (state) => {
+      state.activadorOverleyInformacionCumplimiento = true;
+    },
+    desactivarOverleyInformacionCumplimiento: (state) => {
+      state.activadorOverleyInformacionCumplimiento = false;  
+    },
+    activarOverleyCumplimientoFormularioAgregar: (state) => {
+      state.activadorOverleyFormularioAgregarCumplimiento = true;
+    },
+    desactivarOverleyCumplimientoFormularioAgregar: (state) => {
+      state.activadorOverleyFormularioAgregarCumplimiento = false;
+    },
+    activarOverleyFormularioEditarCumplimiento: (state) => {
+      state.activadorOverleyFormularioEditarCumplimiento = true;
+    },
+    desactivarOverleyFormularioEditarCumplimiento: (state) => {
+      state.activadorOverleyFormularioEditarCumplimiento = false;
+    },
+
   }
 
 });
@@ -86,9 +107,16 @@ export const {
     activarOverleyInformacionCriterio,
     desactivarOverleyInformacionCriterio,
     activarOverleyFormularioEditarCriterio,
-    desactivarOverleyFormularioEditarCriterio
+    desactivarOverleyFormularioEditarCriterio,
+    activarOverleyInformacionCumplimiento,
+    desactivarOverleyInformacionCumplimiento,
+    activarOverleyCumplimientoFormularioAgregar,
+    desactivarOverleyCumplimientoFormularioAgregar,
+    activarOverleyFormularioEditarCumplimiento,
+    desactivarOverleyFormularioEditarCumplimiento
+    
 
    } = overleySlice.actions;
 
 export default overleySlice.reducer;
-
+ 
