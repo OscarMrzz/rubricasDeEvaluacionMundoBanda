@@ -4,6 +4,8 @@ import overleyReducer from "@/feacture/overleys/overleySlice";
 import rubricaReducer from "@/feacture/Rubrica/rubricaSlice";
 import  refrescadorData  from "@/feacture/RefrescadorData/refrescadorDataSlice";
 import criteriosReducer from "@/feacture/Criterios/CriteriosSlice";
+import cumplimientosReducer from "@/feacture/cumplimientos/cumplimientosSlice";
+
 
 
 const store = configureStore({
@@ -12,6 +14,7 @@ const store = configureStore({
         rubrica: rubricaReducer,
          refrescadorData: refrescadorData,
             criterio: criteriosReducer,
+            cumplimiento: cumplimientosReducer,
     
     },
 });
