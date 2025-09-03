@@ -23,7 +23,6 @@ export default class RubricasServices {
                 throw error;
             }
 
-            console.log("✅ Regiones con federaciones:", data);
             return data as rubricaDatosAmpleosInterface[];
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);

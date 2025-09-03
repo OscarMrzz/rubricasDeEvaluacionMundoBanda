@@ -57,7 +57,7 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
             throw error;
         }
 
-        console.log("✅ Regiones con federaciones:", data);
+      
         return data as categoriaDatosAmpleosInterface[];
     } catch (error) {
         console.error("❌ Error general en getDatosAmpleos:", error);

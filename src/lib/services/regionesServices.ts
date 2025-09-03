@@ -22,7 +22,7 @@ export default class RegionService {
                 throw error;
             }
 
-            console.log("✅ Regiones con federaciones:", data);
+         
             return data as regionesDatosAmpleosInterface[];
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);

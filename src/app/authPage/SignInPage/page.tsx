@@ -5,8 +5,12 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
+import { useDispatch } from 'react-redux'
+import PerfilesServices from '@/lib/services/perfilesServices';
+import { setPerfilActivo } from '@/feacture/Perfil/PerfilSlice';
 
 const SignInPage = () => {
+  const dispatch = useDispatch();
   const [form, setForm] = useState({ email: "", password: "" });
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,11 +48,27 @@ const SignInPage = () => {
 
     // Si hay sesión, redirige al home
     if (data.session) {
+      await cargarPerfilUsarioActivo();
       router.push("/");
     }
     setLoading(false);
   };
+
+  const cargarPerfilUsarioActivo = async () => {
+    try{
+      const perfilServices  = new PerfilesServices();
+      const perfil = await perfilServices.getUsuarioLogiado();
+      if(perfil){
+        dispatch(setPerfilActivo(perfil));
+      }
+    }
+    catch(error){
+      console.error("❌ Error cargando el perfil del usuario activo:", error);
+    }
+    
  
+  };
+  
 
   
 

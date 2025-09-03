@@ -149,7 +149,7 @@ export interface RegistroEventoInterface{
     LugarEvento: string; // Mantenido con mayúscula como en DB
     fechaEvento: string;
     idForaneaRegion: string;
-    idForaneaFederacion: string;
+    idForaneaFederacion: string; 
 }
 export interface registroEventoDatosAmpleosInterface extends RegistroEventoInterface {
     regiones: regionesInterface;
