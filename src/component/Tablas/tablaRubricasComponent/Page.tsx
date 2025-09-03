@@ -7,7 +7,7 @@ import InformacionRubricaComponent from "@/component/informacion/informacionRubr
 import FormularioEditarRubricaComponent from "@/component/formularios/FormulariosRubricas/FormularioEditarRubricaComponent/Page";
 import FormularioAgregarCriterioComponet from "@/component/formularios/FormularioCriterio/FormularioAgregarCriterioComponent/FormularioAgregarCriterioComponet";
 import { useDispatch, useSelector } from "react-redux";
-import { activarOverleyInformacionRubrica, toggleOverleyCriteriosFormularioAgregar } from "@/feacture/overleys/overleySlice";
+import { activarOverleyInformacionRubrica, activarOverleyCriteriosFormularioAgregar, desactivarOverleyCriteriosFormularioAgregar } from "@/feacture/overleys/overleySlice";
 import { recetiarRubricaSeleccionada, setRubricaSeleccionada } from "@/feacture/Rubrica/rubricaSlice"; // <-- Import the correct action creator
 // import your actual Redux root state type
 import { RootState } from "@/app/store";
@@ -51,10 +51,10 @@ export default function TablaRubricasComponent({ rubricas, onRefresh }: Props) {
   };
 
   const abrirFormularioAgregar = () => {
-    dispatch(toggleOverleyCriteriosFormularioAgregar());
+    dispatch(activarOverleyCriteriosFormularioAgregar());
   };
   const cerrarFormularioAgregar = () => {
-   dispatch(toggleOverleyCriteriosFormularioAgregar());
+   dispatch(desactivarOverleyCriteriosFormularioAgregar());
   }
 
 
