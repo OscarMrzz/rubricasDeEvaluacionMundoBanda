@@ -1,60 +1,77 @@
 import { dataBaseSupabase } from "../supabase";
-// Update the import path to the correct location of the Region interface
-import { perfilInterface } from "@/interfaces/interfaces";
-
-type Interface = perfilInterface;
 
 
-const tabla = "pefiles";
-export default class RegionService {
 
-    async get(){
-        const {data,error} = await dataBaseSupabase.from(tabla).select("*");
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
-        }
-            
-    }
-    async getOne(id: string){
-        const {data,error} = await dataBaseSupabase.from(tabla).select("*").eq("id",id).single();
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
-        }
-    }
+export default class UserServices {
 
-    async create(dataCreate: Interface){
-        const {data,error} = await dataBaseSupabase.from(tabla).insert(dataCreate).select("*").single();
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
-        }
-    }
-    async update(id: string, dataUpdate: Interface){
-        const {data,error} = await dataBaseSupabase.from(tabla).update(dataUpdate).eq("id",id).select("*").single();
-        if(error){
-            throw error;
-        } 
-        else{
-            return data;
-        }
-    }
- async delete(id: string) {
-    const { error } = await dataBaseSupabase.from(tabla).delete().eq("id", id);
-    if (error){
-
+    async getAllAuthUsers() {
+    try {
+        const { data, error } = await dataBaseSupabase.auth.admin.listUsers();
+        if (error) throw error;
+        return data.users; // Array de usuarios de Supabase Auth
+    } catch (error) {
         throw error;
-    }else{
-
-        return true; 
     }
-}
+    }
+
+
+    
+
+    async singUp(email:string, password:string){
+        try {
+          const { data, error } = await  dataBaseSupabase.auth.signUp({
+            email: email,
+            password: password,
+            
+        }); 
+        if (error) {
+          throw error;
+        }else{
+            return data;
+        }
+    
+    }
+        catch (error) {
+          throw error;
+        }
+
+
+    }
+
+  async  singIn(email:string, password:string){
+    try{
+        const {data,error}= await dataBaseSupabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+          });
+            if(error) throw error;
+            return data;
+    }
+         catch(error){
+            throw error;
+        }
+    }
+
+
+
+      async upDataAdmin(id:string, datosActualizados: { email?: string; password?: string; data?: object }) {
+    try {
+      const { data, error } = await dataBaseSupabase.auth.admin.updateUserById(id, datosActualizados);
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+    async delateAdmin(id:string) {
+    try {
+      const { error } = await dataBaseSupabase.auth.admin.deleteUser(id);
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      throw error;
+    }
+  }
 
 }
