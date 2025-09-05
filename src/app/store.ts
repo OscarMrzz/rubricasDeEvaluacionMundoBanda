@@ -6,9 +6,16 @@ import refrescadorData from "@/feacture/RefrescadorData/refrescadorDataSlice";
 import criteriosReducer from "@/feacture/Criterios/CriteriosSlice";
 import cumplimientosReducer from "@/feacture/cumplimientos/cumplimientosSlice";
 import perfilActivo from "@/feacture/Perfil/PerfilSlice";
+import overleyPerfileSlice from "@/feacture/Perfil/overleyPerfil";
+import refrescadorDataPerfiles from "@/feacture/Perfil/refrescadorPerfiles";
 import refrescadorDataEventos from "@/feacture/Eventos/refrescadorDataEventos";
 import OverleyEventos from "@/feacture/Eventos/overleysEventosSlice"
 import EventosReducer from "@/feacture/Eventos/eventosSlice";
+import  PerfilSlice from "@/feacture/Perfil/PerfilSlice";
+
+
+
+
 
 const store = configureStore({
     reducer: {
@@ -18,9 +25,12 @@ const store = configureStore({
         criterio: criteriosReducer,
         cumplimiento: cumplimientosReducer,
         perfilUsuarioActivo: perfilActivo,
+        overleyPerfiles: overleyPerfileSlice,
+        refrescadorDataPerfiles: refrescadorDataPerfiles,
         refrescadorDataEventos: refrescadorDataEventos,
         overleyEventos: OverleyEventos,
         eventos: EventosReducer,
+        perfil: PerfilSlice,
 
     },
 });
