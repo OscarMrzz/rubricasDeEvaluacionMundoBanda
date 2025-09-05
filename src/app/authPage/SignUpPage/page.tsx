@@ -39,7 +39,7 @@ const SignUpPage = () => {
     e.preventDefault();
     setMensaje("");
     setLoading(true);
-
+ 
     if (form.password !== form.password2) {
       setMensaje("Las contraseñas no coinciden.");
       setLoading(false);
@@ -50,7 +50,7 @@ const SignUpPage = () => {
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
-    });
+    }); 
 
     if (error) {
       setMensaje("Error registrando usuario: " + error.message);
