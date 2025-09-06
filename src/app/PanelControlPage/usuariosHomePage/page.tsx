@@ -19,7 +19,7 @@ import FormularioEditarUsuario from "@/component/formularios/Perfil/editar/Formu
 import TablaRegistroPerfilesComponent from "@/component/Tablas/TablaUsuariosComponent/TablaUsuariosComponent";
 
 export default function PerfilesHomePage() {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   const dispatch = useDispatch();
 
   const refrescadorDataPerfiles = useSelector(
@@ -72,8 +72,9 @@ export default function PerfilesHomePage() {
   async function traerDatosTabla() {
     const perfilesServices = new PerfilesServices();
     try {
-      const perfilesData: perfilDatosAmpleosInterface[] =
-        await perfilesServices.getDatosAmpleos();
+      const perfilActivo: perfilDatosAmpleosInterface =await perfilesServices.getUsuarioLogiado();
+
+      const perfilesData: perfilDatosAmpleosInterface[] =await perfilesServices.getDatosAmpleos(perfilActivo.idForaneaFederacion);
 
       setPerfiles(perfilesData);
       setPerfiles(perfilesData);

@@ -7,6 +7,7 @@ const overleyPerfileSlice = createSlice({
     activadorOverleyInformacionPerfiles: false,
     activadorOverleyFormularioAgregarPerfiles: false,
     activadorOverleyFormularioEditarPerfiles: false,
+    activadorOverleyFormularioCambiarPassword: false,
   },
 
   reducers: {
@@ -19,6 +20,9 @@ const overleyPerfileSlice = createSlice({
     activarOverleyFormularioEditarPerfiles: (state) => {state.activadorOverleyFormularioEditarPerfiles = true;},
     desactivarOverleyFormularioEditarPerfiles: (state) => {state.activadorOverleyFormularioEditarPerfiles = false;},
 
+    activarOverleyFormularioCambiarPassword: (state) => {state.activadorOverleyFormularioCambiarPassword = true;},
+    desactivarOverleyFormularioCambiarPassword: (state) => {state.activadorOverleyFormularioCambiarPassword = false;},
+
   }
 
 });
@@ -29,6 +33,8 @@ export const {
   activarOverleyFormularioAgregarPerfiles, desactivarOverleyFormularioAgregarPerfiles,
 
   activarOverleyFormularioEditarPerfiles, desactivarOverleyFormularioEditarPerfiles
+  
+  , activarOverleyFormularioCambiarPassword, desactivarOverleyFormularioCambiarPassword
 
 } = overleyPerfileSlice.actions;
 

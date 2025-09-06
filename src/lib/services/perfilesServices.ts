@@ -4,12 +4,14 @@ import { perfilInterface, perfilDatosAmpleosInterface } from "@/interfaces/inter
 type Interface = perfilInterface;
 
 const tabla = "perfiles";
-const elId = "idPerfile";
+const elId = "idPerfil";
+
+
 
 export default class PerfilesServices {
 
    
-    async getDatosAmpleos(): Promise<perfilDatosAmpleosInterface[]> {
+    async getDatosAmpleos(idFederacion:string): Promise<perfilDatosAmpleosInterface[]> {
         try {
             const { data, error } = await dataBaseSupabase
                 .from(tabla)
@@ -17,7 +19,7 @@ export default class PerfilesServices {
                     *,
                     federaciones(*)
           
-                `);
+                `) .eq("idForaneaFederacion", idFederacion);
 
             if (error) {
                 console.error("❌ Error obteniendo bandas con datos completos:", error);
@@ -93,12 +95,23 @@ export default class PerfilesServices {
         if (error) throw error;
         return data;
     }
+    async EliminarPerfilDeFederacion(id: string, dataUpdate: Interface) {
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .update(dataUpdate)
+            .eq(elId, id)
+            .select("*")
+            .single();
 
-    async delete(id: string) {
+        if (error) throw error;
+        return data;
+    }
+
+    async delete(idForaneaUser: string) {
         const { error } = await dataBaseSupabase
             .from(tabla)
             .delete()
-            .eq(elId, id);
+            .eq("idForaneaUser", idForaneaUser);
 
         if (error) throw error;
         return true;
