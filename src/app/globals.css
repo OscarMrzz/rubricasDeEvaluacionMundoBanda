@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+
+@theme{
+  --color-primario: #00b4d8;
+  --theme-color-secundario: #3d405b;
+  --color-terciario: #f9a18c;
+}
+
 
 
 /* Estilo para scrollbars modernas */
