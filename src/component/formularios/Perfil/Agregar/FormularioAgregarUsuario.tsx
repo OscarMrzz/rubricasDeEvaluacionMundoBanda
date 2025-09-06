@@ -9,6 +9,10 @@ import PerfilesServices from "@/lib/services/perfilesServices";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { dataBaseSupabase } from "@/lib/supabase"; // Import supabase client
+import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
+
+
+
 
 type Props = {
   onClose: () => void;
@@ -83,6 +87,14 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
 
     if (userCreadoId) {
       try {
+
+          if (!perfilActivo || !perfilActivo.idForaneaFederacion) {
+        alert(
+          "El perfil activo o su federación no está disponible. Intenta de nuevo."
+        );
+        setLoading(false);
+        return;
+      }
         const perfilesServices = new PerfilesServices();
 
         const nuevoPerfil: Omit<perfilInterface, "idPerfil" | "created_at"> = {
@@ -91,13 +103,11 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
           fechaNacimiento: formData.fechaNacimiento,
           sexo: formData.sexo,
           genero: formData.genero,
-          idForaneaFederacion:
-            perfilActivo?.idForaneaFederacion ??
-            "3ad8c36d-c54a-4642-bfee-50736e04c991",
+          idForaneaFederacion: perfilActivo.idForaneaFederacion,
           identidad: formData.identidad,
           numeroTelefono: formData.numeroTelefono,
           direccion: formData.direccion,
-          tipoUsuario: "user",
+          tipoUsuario: formData.rolUsuario,
           idForaneaUser: userCreadoId,
         };
 
@@ -123,14 +133,23 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
           numeroTelefono: "",
           direccion: "",
         });
-        dispatch(activarRefrescarDataEventos());
+      dispatch(activarRefrescarDataPerfiles());
         onClose();
       }
     }
   };
 
+  if (!perfilActivo) {
+    return (
+      <div className="px-25 flex items-center justify-center min-h-[200px]">
+    cargado...
+      </div>
+    );
+  }
+
   return (
     <div className="px-25 ">
+  
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
@@ -220,11 +239,21 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             className="border border-gray-200 p-2 rounded"
             required
           >
-            <option className="bg-white text-gray-400" value="">Seleccione un rol</option>
-            <option className="bg-white text-gray-800" value="presidenteJurado">Presidente jurados</option>
-            <option className="bg-white text-gray-800" value="jurado">Jurado</option>
-            <option className="bg-white text-gray-800" value="fiscal">Fiscal</option>
-            <option className="bg-white text-gray-800" value="sinPermisos">Sin permisos</option>
+            <option className="bg-white text-gray-400" value="">
+              Seleccione un rol
+            </option>
+            <option className="bg-white text-gray-800" value="presidenteJurado">
+              Presidente jurados
+            </option>
+            <option className="bg-white text-gray-800" value="jurado">
+              Jurado
+            </option>
+            <option className="bg-white text-gray-800" value="fiscal">
+              Fiscal
+            </option>
+            <option className="bg-white text-gray-800" value="sinPermisos">
+              Sin permisos
+            </option>
           </select>
         </div>
         <div className="flex flex-col">
@@ -320,7 +349,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !perfilActivo.idForaneaFederacion}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 cursor-pointer"
         >
           {loading ? "cargado..." : "Aceptar"}

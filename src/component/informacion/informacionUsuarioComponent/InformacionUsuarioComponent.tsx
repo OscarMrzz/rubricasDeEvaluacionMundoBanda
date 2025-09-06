@@ -1,10 +1,13 @@
 
 
-import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
+import { perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces";
 import PerfilesServices from "@/lib/services/perfilesServices";
+
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import React from "react";
+import { useDispatch } from "react-redux";
 type Props = {
   perfil: perfilDatosAmpleosInterface;
   onClose: () => void; // Función para cerrar el modal
@@ -18,17 +21,43 @@ export default function InformacionUsuarioComponent({
   onRefresh,
   openFormEditar,
 }: Props) {
+
+  const dispatch = useDispatch();
   const eliminar = () => {
-    const perfilServices = new PerfilesServices();
-    perfilServices.delete(perfil.idPerfil)
-      .then(() => {
-        console.log("✅ perfil eliminado correctamente");
-        onRefresh?.(); // Refrescar los datos
-        onClose?.(); // Cerrar el modal después de eliminar
-      })
-      .catch((error) => {
-        console.error("❌ Error al eliminar el perfil:", error);
-      });
+    try {
+      const perfilesServices = new PerfilesServices();
+      const rol="sinPermisos"
+      const  idFederacion ="3ad8c36d-c54a-4642-bfee-50736e04c991"
+      const nuevoEstadoUsuario: perfilInterface ={ 
+        idPerfil:perfil.idPerfil,
+        created_at:perfil.created_at,
+        nombre:perfil.nombre,
+        alias:perfil.alias,
+        tipoUsuario:perfil.tipoUsuario,
+        fechaNacimiento:perfil.fechaNacimiento,
+        sexo:perfil.sexo,
+        genero:perfil.genero,
+        identidad:perfil.identidad,
+        numeroTelefono:perfil.numeroTelefono,
+        direccion:perfil.direccion,
+        idForaneaUser:perfil.idForaneaUser,
+        idForaneaFederacion:perfil.idForaneaFederacion
+
+       };
+      nuevoEstadoUsuario.tipoUsuario=rol
+      nuevoEstadoUsuario.idForaneaFederacion=idFederacion
+   
+      perfilesServices.EliminarPerfilDeFederacion(perfil.idPerfil,nuevoEstadoUsuario);
+     console.log("Perfil eliminado correctamente");
+
+
+    } catch (error) {
+      console.error("❌ Error eliminando el perfil:", error);
+    }finally{
+      dispatch(activarRefrescarDataPerfiles());
+      onClose?.();
+    }
+  
   };
   const onclickEditar = () => {
     openFormEditar?.();

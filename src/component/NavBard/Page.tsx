@@ -117,7 +117,7 @@ const NavBard = () => {
                 style={{ zIndex: 100 }}
               >
                 <li className="hover:bg-[#fb763e] font-medium cursor-pointer">
-                  <Link href="/">Perfil</Link>
+                  <Link href="/miPerfilPage">Perfil</Link>
                 </li>
                 <li
                   onClick={handleLogout}

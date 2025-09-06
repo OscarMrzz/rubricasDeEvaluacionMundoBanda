@@ -1,6 +1,7 @@
 "use client";
 
 import { activarRefrescarDataEventos } from "@/feacture/Eventos/refrescadorDataEventos";
+import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
 import {
   perfilDatosAmpleosInterface,
   perfilInterface,
@@ -121,7 +122,7 @@ export default function FormularioEditarUsuario({
         numeroTelefono: "",
         direccion: "",
       });
-      dispatch(activarRefrescarDataEventos());
+      dispatch(activarRefrescarDataPerfiles());
       onClose();
     }
   };
@@ -181,7 +182,7 @@ export default function FormularioEditarUsuario({
             id="rolUsuario"
             name="rolUsuario"
             value={formData.rolUsuario}
-            onChange={handleInputChange}
+             onChange={e => setFormData({ ...formData, rolUsuario: e.target.value })}
             className="border border-gray-200 p-2 rounded"
             required
           >
