@@ -1,10 +1,12 @@
+import {heroui} from '@heroui/theme';
 import type { Config } from 'tailwindcss'
 
 export default {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/component/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/component/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@heroui/theme/dist/components/progress.js"
   ],
   theme: {
     extend: {
@@ -18,8 +20,13 @@ export default {
         'gradient-radial-at-tr': 'radial-gradient(ellipse at top right, var(--tw-gradient-stops))',
         'gradient-radial-at-bl': 'radial-gradient(ellipse at bottom left, var(--tw-gradient-stops))',
         'gradient-radial-at-br': 'radial-gradient(ellipse at bottom right, var(--tw-gradient-stops))',
-      }
+      },
+      fontFamily: {
+      poppins: ['Poppins', 'sans-serif'],
+        pressstart: ['"Press Start 2P"', 'cursive'],
     },
+  
+    }
   },
-  plugins: [],
+  plugins: [heroui()],
 } satisfies Config
