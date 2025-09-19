@@ -20,7 +20,7 @@ const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
 
   const links = [
-    { id: 'federacion', label: 'Federaciones', href: '/PanelControlPage/federacionesHomePage', Icon: MapPinIcon },
+   { id: 'federacion', label: 'Federaciones', href: '/PanelControlPage/federacionesHomePage', Icon: UserGroupIcon },
     { id: 'region', label: 'Región', href: '/PanelControlPage/regionHomePage', Icon: MapPinIcon },
     { id: 'categorias', label: 'Categorías', href: '/PanelControlPage/categoriasHomePage', Icon: ClipboardDocumentListIcon },
     { id: 'bandas', label: 'Bandas', href: '/PanelControlPage/bandasHomePage', Icon: MusicalNoteIcon },
