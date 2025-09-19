@@ -10,7 +10,7 @@ const initialState: equipoEvaluadorsState= {
     idRegistroEvaluador: "",
     created_at: "",
     idForaneaEvento: "",
-    idForaneaUser: "",
+    idForaneaPerfil: "",
     rolMiembro: "",
     registroEventos: {
         idEvento: "",
@@ -36,7 +36,7 @@ const initialState: equipoEvaluadorsState= {
         direccion: "",
         idForaneaUser: ""
     }
-    } as registroEquipoEvaluadorDatosAmpleosInterface
+    } 
 };
 
 const registrosEquipoEvaliadorSlice= createSlice({
