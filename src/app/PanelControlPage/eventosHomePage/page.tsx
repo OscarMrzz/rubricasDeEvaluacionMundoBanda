@@ -6,16 +6,13 @@ import React from "react";
 import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import {
-  categoriaInterface,
+
   regionesInterface,
-  registroComentariosDatosAmpleosInterface,
+
   registroEventoDatosAmpleosInterface,
-  rubricaDatosAmpleosInterface,
+  
 } from "@/interfaces/interfaces";
-import RubricasServices from "@/lib/services/rubricasServices";
-import FormularioAgregarRubricaComponent from "@/component/formularios/FormulariosRubricas/FormularioAgregarRubricaComponent/Page";
-import TablaRubricasComponent from "@/component/Tablas/tablaRubricasComponent/Page";
-import CategoriasServices from "@/lib/services/categoriaServices";
+
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import {} from "@/feacture/overleys/overleySlice";
@@ -26,7 +23,7 @@ import {
   desactivarOverleyFormularioEditarEventos,
   desactivarOverleyInformacionEventos,
 } from "@/feacture/Eventos/overleysEventosSlice";
-import { desactivarRefrescarDataEventos } from "@/feacture/Eventos/refrescadorDataEventos";
+import { activarRefrescarDataEventos, desactivarRefrescarDataEventos } from "@/feacture/Eventos/refrescadorDataEventos";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import OverleyModal from "@/component/modales/OverleyModal/Page";
 import InformacionEventoComponent from "@/component/informacion/ifnromacionEventoComponent/InformacionEventoComponet";
@@ -35,6 +32,10 @@ import FormularioEditarEventoComponet from "@/component/formularios/FormularioEv
 import TablaRegistroEventossComponent from "@/component/Tablas/TablaRegistroEventos/TablaRegistroEventosComponent";
 import FormularioAgregarEventoComponet from "@/component/formularios/FormularioEventos/Agregar";
 import RegionService from "@/lib/services/regionesServices";
+import InformacionRegistroEquipoEvaluadorComponent from "@/component/informacion/informacionRegistroEquipoEvaluador/InformacionRegistroEquipoEvaluador";
+import FormularioEquipoEvaluadorAgregar from "@/component/formularios/FormularioEquipoEvaluador/FormularioEquipoEvaluadorAgregar";
+import FormularioEquipoEvaluadorEditar from "@/component/formularios/FormularioEquipoEvaluador/FormularioEquipoEvaluadorEditar";
+import { activarOverleyFormularioEditarRegistroEquipoEvaluador, desactivarOverleyFormularioAgregarRegistroEquipoEvaluador, desactivarOverleyFormularioEditarRegistroEquipoEvaluador, desactivarOverleyInformacionRegistroEquipoEvaluador } from "@/feacture/EquipoEvaluador/OverleyEquipoEvaluador";
 
 export default function EventosHomePage() {
   const dispatch = useDispatch();
@@ -51,13 +52,39 @@ export default function EventosHomePage() {
     (state: RootState) =>
       state.overleyEventos.activadorOverleyInformacionEventos
   );
+
+
+  const activadorInformacionRegistroEquipoEvaluador = useSelector(
+    (state: RootState) =>
+      state.overleyRegistroEquipoEvaluador.activadorOverleyInformacionRegistroEquipoEvaluador
+  );
+
+
+
   const activadorOverleyFormularioEditarEventos = useSelector(
     (state: RootState) =>
       state.overleyEventos.activadorOverleyFormularioEditarEventos
   );
+
+  const activadorOverleyFormularioEditarRegistroEquipoEvaluadorn = useSelector(
+    (state: RootState) => 
+      state.overleyRegistroEquipoEvaluador.activadorOverleyFormularioEditarRegistroEquipoEvaluador
+
+
+  )
+  const activadorOverleyFormularioAgregarRegistroEquipoEvaluadorn = useSelector(
+    (state: RootState) => 
+      state.overleyRegistroEquipoEvaluador.activadorOverleyFormularioAgregarRegistroEquipoEvaluador
+
+
+  )
   const EventoSeleccionado = useSelector(
     (state: RootState) => state.eventos.EventoSeleccionado
   );
+  const registroEquipoEvaluadorSeleccionador =useSelector(
+    (state: RootState) => state.registrosEquipoEvaliador.registrosEquipoEvaliadorSeleccionado
+
+  )
 
   const [eventos, setEventos] = useState<registroEventoDatosAmpleosInterface[]>(
     []
@@ -85,7 +112,7 @@ export default function EventosHomePage() {
   >([]);
 
   useEffect(() => {
-    const ListaMeses = [
+    const ListaMeses = [ 
       { idMes: "1", nombreMes: "Enero" },
       { idMes: "2", nombreMes: "Febrero" },
       { idMes: "3", nombreMes: "Marzo" },
@@ -167,7 +194,7 @@ export default function EventosHomePage() {
     }
     setEventos(eventosFiltrados);
   };
-
+/* EVENTOS */
   const cerrarFormularioAgregarEvento = () => {
     dispatch(desactivarOverleyFormularioAgregarEventos());
   };
@@ -181,8 +208,26 @@ export default function EventosHomePage() {
     dispatch(activarOverleyFormularioEditarEventos());
   };
 
+  /* EQUIPO EVALUADOR */
+
+  const cerrarInformacionRegistroEquipoEvaluador = () => {
+    dispatch(desactivarOverleyInformacionRegistroEquipoEvaluador());
+  }
+  const cerrarFormularioEditarRegistroEquipoEvaluador = () => {
+    dispatch(desactivarOverleyFormularioEditarRegistroEquipoEvaluador());
+  };
+  const cerrarFormularioAgregarRegistroEquipoEvaluador = () => {
+    dispatch(desactivarOverleyFormularioAgregarRegistroEquipoEvaluador());
+  };
+  const ActivarFormularioEditarRegistroEquipoEvaluador = () => {
+    dispatch(activarOverleyFormularioEditarRegistroEquipoEvaluador());
+  };
+
   return (
+    <>
+
     <div className="px-20">
+      {/* EVENTOS */}
       <OverleyModal
         open={activadorInformacionEventos}
         onClose={cerrarInformacionEvento}
@@ -191,7 +236,7 @@ export default function EventosHomePage() {
           <InformacionEventoComponent
             Evento={EventoSeleccionado!}
             onClose={cerrarInformacionEvento}
-            onRefresh={() => {}}
+            onRefresh={() => {dispatch(activarRefrescarDataEventos())}}
             openFormEditar={ActivarFormularioEditarEvento}
           />
         )}
@@ -216,6 +261,47 @@ export default function EventosHomePage() {
           onClose={cerrarFormularioEditarEvento}
         />
       </OverleyModalFormulario>
+
+
+      {/* EQUIPO EVALUADOR */}
+
+
+         <OverleyModal
+        open={activadorInformacionRegistroEquipoEvaluador}
+        onClose={cerrarInformacionRegistroEquipoEvaluador}
+      >
+        {registroEquipoEvaluadorSeleccionador && (
+          <InformacionRegistroEquipoEvaluadorComponent
+            registroEquipoEvaluador={registroEquipoEvaluadorSeleccionador!}
+            onClose={cerrarInformacionRegistroEquipoEvaluador}
+            onRefresh={() => {}}
+            openFormEditar={ActivarFormularioEditarRegistroEquipoEvaluador}
+          />
+        )}
+      </OverleyModal>
+      <OverleyModalFormulario
+        open={activadorOverleyFormularioAgregarRegistroEquipoEvaluadorn}
+        onClose={cerrarFormularioAgregarRegistroEquipoEvaluador}
+      >
+        <FormularioEquipoEvaluadorAgregar
+          onClose={cerrarFormularioAgregarRegistroEquipoEvaluador}
+          idEvento={EventoSeleccionado.idEvento!}
+        />
+      </OverleyModalFormulario>
+
+      <OverleyModalFormulario
+        open={activadorOverleyFormularioEditarRegistroEquipoEvaluadorn}
+        onClose={cerrarFormularioEditarRegistroEquipoEvaluador}
+      >
+        <FormularioEquipoEvaluadorEditar
+          registroEquipoEvaluacionAEditar={registroEquipoEvaluadorSeleccionador!}
+          //
+
+          onClose={cerrarFormularioEditarRegistroEquipoEvaluador}
+        />
+      </OverleyModalFormulario>
+
+
 
       <div>
         <div>
@@ -277,5 +363,6 @@ export default function EventosHomePage() {
         <TablaRegistroEventossComponent registroEventos={eventos} />
       )}
     </div>
+    </>
   );
 }

@@ -19,7 +19,7 @@ export default class PerfilesServices {
                     *,
                     federaciones(*)
           
-                `) .eq("idForaneaFederacion", idFederacion);
+                `) .eq("idForaneaFederacion", idFederacion); 
 
             if (error) {
                 console.error("❌ Error obteniendo bandas con datos completos:", error);

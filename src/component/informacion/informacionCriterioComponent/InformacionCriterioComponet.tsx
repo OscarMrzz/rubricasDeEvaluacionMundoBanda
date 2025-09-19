@@ -43,7 +43,7 @@ export default function InformacionCriterioComponent({
           <div className="flex gap-4 w-full justify-center items-center text-center ">
             <h2 className=" text-2xl font-bold">{criterio.nombreCriterio}</h2>
 
-            <p>{criterio.puntosCriterio} %</p>
+            <p>{criterio.puntosCriterio} %</p> 
           </div>
           <div className="  ">
             <p>Rubrica: {criterio.rubricas?.nombreRubrica}</p>

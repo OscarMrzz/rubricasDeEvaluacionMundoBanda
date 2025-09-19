@@ -131,17 +131,16 @@ export interface registroCumplimientoEvaluacionDatosAmpleosInterface extends reg
 export interface registroEquipoEvaluadorInterface{ // Corregido: nombre de interface
     idRegistroEvaluador: string; // Corregido: nombre de campo
     created_at: string;
-    idForaneaFederacion: string;
     idForaneaEvento: string;
-    idForaneaUser: string;
-    idForaneaRolEvaluador: string;
+    idForaneaPerfil: string;
+    rolMiembro: string;
 }
 export interface registroEquipoEvaluadorDatosAmpleosInterface extends registroEquipoEvaluadorInterface {
-    federaciones: federacionInterface;
-    registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
-    rolesEquipoEvaluador: rolEquipoEvaluadorInterface; // Corregido: nombre de tabla
-}
 
+    registroEventos: RegistroEventoInterface;
+    perfiles: perfilInterface;
+
+}
 //-----------REGISTRO EVENTO------------
 export interface RegistroEventoInterface{
     idEvento: string; // Corregido: nombre de campo

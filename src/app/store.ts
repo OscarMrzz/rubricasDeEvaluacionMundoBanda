@@ -12,7 +12,9 @@ import refrescadorDataEventos from "@/feacture/Eventos/refrescadorDataEventos";
 import OverleyEventos from "@/feacture/Eventos/overleysEventosSlice"
 import EventosReducer from "@/feacture/Eventos/eventosSlice";
 import  PerfilSlice from "@/feacture/Perfil/PerfilSlice";
-
+import registrosEquipoEvaliadorSlice from "@/feacture/EquipoEvaluador/EquipoEvaluadorSlice";
+import refrescadorDataRegistroEquipoEvaluador from "@/feacture/EquipoEvaluador/RefrescadorEquipoRegistroEvaluador";
+import OverleyRegsitroEquipoEvaluador from "@/feacture/EquipoEvaluador/OverleyEquipoEvaluador"
 
 
 
@@ -31,6 +33,9 @@ const store = configureStore({
         overleyEventos: OverleyEventos,
         eventos: EventosReducer,
         perfil: PerfilSlice,
+        registrosEquipoEvaliador: registrosEquipoEvaliadorSlice,
+        refrescadorDataRegistroEquipoEvaluador: refrescadorDataRegistroEquipoEvaluador,
+        overleyRegistroEquipoEvaluador: OverleyRegsitroEquipoEvaluador,
 
     },
 });

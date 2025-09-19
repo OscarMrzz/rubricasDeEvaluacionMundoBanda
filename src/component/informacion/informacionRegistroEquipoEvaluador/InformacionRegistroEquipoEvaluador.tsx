@@ -1,33 +1,28 @@
 
-import RegidstroEquipoEvaluadorComponent from "@/component/EquipoEvaluadorComponet/EquipoEvaluadorComponet";
-import { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
+
+import CumplimientosComponent from "@/component/cumplimientosComponent/CumplimientosComponet";
+import { cumplimientosDatosAmpleosInterface, registroEquipoEvaluadorDatosAmpleosInterface } from "@/interfaces/interfaces";
+import cumplimientossServices from "@/lib/services/cumplimientosServices";
 import RegistroEquipoEvaluadorServices from "@/lib/services/registroEquipoEvaluadorServices";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import React from "react";
 type Props = {
-  Evento: registroEventoDatosAmpleosInterface;
+  registroEquipoEvaluador: registroEquipoEvaluadorDatosAmpleosInterface;
   onClose: () => void; // Función para cerrar el modal
   onRefresh?: () => void; // Función para refrescar los datos
   openFormEditar: () => void; // Función para abrir el formulario de edición
 };
 
-export default function InformacionEventoComponent({
-  Evento,
+export default function InformacionRegistroEquipoEvaluadorComponent({
+  registroEquipoEvaluador,
   onClose,
   onRefresh,
   openFormEditar,
 }: Props) {
-
- 
-  const eliminar = async () => {
-    const registroEquipoEvaluadorServices =new RegistroEquipoEvaluadorServices()
-    const registroEventossServices = new RegistroEventossServices();
-    registroEquipoEvaluadorServices.deletePorEvento(Evento.idEvento).then(()=>{
-
-    
-       registroEventossServices.delete(Evento.idEvento)
+  const eliminar = () => {
+    const registroEquipoEvaluadorServices = new RegistroEquipoEvaluadorServices();
+    registroEquipoEvaluadorServices.delete( registroEquipoEvaluador.idRegistroEvaluador)
       .then(() => {
         console.log("✅ cumpimiento eliminado correctamente");
         onRefresh?.(); // Refrescar los datos
@@ -35,14 +30,7 @@ export default function InformacionEventoComponent({
       })
       .catch((error) => {
         console.error("❌ Error al eliminar el cumpimiento:", error);
-      }).finally(()=>{
-        
-        
-      })
-         }
-
-    )
-   
+      });
   };
   const onclickEditar = () => {
     openFormEditar?.();
@@ -55,11 +43,9 @@ export default function InformacionEventoComponent({
         <div className="">
       
           <div className="  ">
-            <h2>{Evento.LugarEvento}</h2>
-            <p>Fecha: {Evento.fechaEvento}</p>
-            <p>Region: {Evento.regiones?.nombreRegion}</p>
+            <p>Miembro : {registroEquipoEvaluador.perfiles.nombre}</p>
 
-         
+            <p className="font-light">{registroEquipoEvaluador.rolMiembro}</p>
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -77,8 +63,6 @@ export default function InformacionEventoComponent({
           </button>
         </div>
       </div>
-      <RegidstroEquipoEvaluadorComponent
-      />
       
       <div>
        

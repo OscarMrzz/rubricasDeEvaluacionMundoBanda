@@ -48,6 +48,9 @@ const initialState: PerfilState = {
         created_at: "",
         nombreFederacion: ""
     }
+    
+        
+
   }
 };
 
