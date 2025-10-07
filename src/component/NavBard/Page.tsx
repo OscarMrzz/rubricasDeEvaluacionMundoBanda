@@ -100,7 +100,15 @@ const NavBard = () => {
         </div>
       </div>
       <div className="flex font-bold text-lg gap-10">
-        {sesion && <Link href="/PanelControlPage">Panel de control</Link>}
+        {sesion && 
+        <Link href="/PanelControlPage">Evaluar</Link>
+        }
+        {sesion && 
+        <Link href="/Reportes">Reportes</Link>
+        }
+        {sesion && 
+        <Link href="/PanelControlPage">Admin</Link>
+        }
         {sesion ? (
           <div style={{ position: "relative" }}>
             <span

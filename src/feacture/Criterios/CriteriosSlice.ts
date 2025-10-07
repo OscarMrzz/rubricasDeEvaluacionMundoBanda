@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {  categoriaInterface, criterioEvaluacionInterface,criterioEvaluacionDatosAmpleosInterface, rubricaInterface } from "../../interfaces/interfaces";
+import { criterioEvaluacionDatosAmpleosInterface, rubricaInterface } from "../../interfaces/interfaces";
 
 interface CriteriosState {
   CriterioSeleccionado: criterioEvaluacionDatosAmpleosInterface;
