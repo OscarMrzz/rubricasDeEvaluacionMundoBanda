@@ -116,7 +116,9 @@ export interface registroCumplimientoEvaluacionInterface{
     idForaneaCategoria: string;
     idForaneaRegion: string;
     puntosObtenidos: number;
-    idForaneaUser: string; // Corregido: era idForaneauser
+    idForaneaPerfil: string;
+    idForaneaFederacion: string;
+    idForaneaRubrica: string;
 }
 export interface registroCumplimientoEvaluacionDatosAmpleosInterface extends registroCumplimientoEvaluacionInterface {
     registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
@@ -125,6 +127,9 @@ export interface registroCumplimientoEvaluacionDatosAmpleosInterface extends reg
     cumplimientos: cumplimientosInterface;
     categorias: categoriaInterface;
     regiones: regionesInterface;
+    perfiles: perfilInterface;
+    federaciones: federacionInterface;
+    rubricas: rubricaInterface;
 }
 
 //-----------REGISTRO EQUIPO EVALUADOR------------

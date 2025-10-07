@@ -10,10 +10,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import EvaluarCriterioComponent from "./EvaluarCriterioComponent";
 import CriteriosServices from "@/lib/services/criteriosServices";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  agregarCriterioEvaluar,
-  recetiarCriteriosEvaluados,
-} from "@/feacture/evaluar/evaluarSlice";
+import { agregarCriterioEvaluar, recetiarCriteriosEvaluados } from "@/feacture/evaluar/evaluarSlice";
 import { RootState } from "@/app/store";
 
 type Props = {
@@ -30,21 +27,13 @@ export default function EvaluarBaseRubricaComponet({
 }: Props) {
   const dispatch = useDispatch();
 
-  const dataCriteriosEvaluar = useSelector(
-    (state: RootState) => state.evaluarCriterio.evaluaciones
-  );
+  const dataCriteriosEvaluar = useSelector((state: RootState) => state.evaluarCriterio.evaluaciones);
 
-  const [listCriteriosOriginales, setListCriteriosOrignales] = useState<
-    criterioEvaluacionDatosAmpleosInterface[]
-  >([]);
-  const [listCriterios, setListCriterios] = React.useState<
-    criterioEvaluacionDatosAmpleosInterface[]
-  >([]);
-  const [cargandoCriterios, setCargandoCriterios] =
-    React.useState<boolean>(true);
-  const [cargandoFichaResultados, setCargandoFichaResultados] =
-    React.useState<boolean>(true);
-    const [comentarios, setComentarios] = useState("");
+  const [listCriteriosOriginales, setListCriteriosOrignales] = useState<criterioEvaluacionDatosAmpleosInterface[]>([]);
+  const [listCriterios, setListCriterios] = React.useState<criterioEvaluacionDatosAmpleosInterface[]>([]);
+  const [cargandoCriterios, setCargandoCriterios] = React.useState<boolean>(true);
+  const [cargandoFichaResultados, setCargandoFichaResultados] = React.useState<boolean>(true);
+  const [comentarios, setComentarios] = useState("");
 
   const [totalPuntos, setTotalPuntos] = useState(0);
 
@@ -62,9 +51,7 @@ export default function EvaluarBaseRubricaComponet({
       dispatch(recetiarCriteriosEvaluados());
       setCargandoFichaResultados(true);
       criteriosFiltrados.forEach((criterio) => {
-        dispatch(
-          agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, valor: 0 })
-        );
+        dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, valor: 0 }));
       });
 
       setCargandoCriterios(false);
@@ -86,9 +73,7 @@ export default function EvaluarBaseRubricaComponet({
       (criterio) => criterio.idForaneaRubrica === rubricaSelecionada.idRubrica
     );
     criteriosFiltrados.forEach((criterio) => {
-      dispatch(
-        agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, valor: 0 })
-      );
+      dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, valor: 0 }));
     });
     setListCriterios(criteriosFiltrados);
     setCargandoCriterios(false);
@@ -107,6 +92,10 @@ export default function EvaluarBaseRubricaComponet({
     sumarPuntosDeCriterios();
   }, [sumarPuntosDeCriterios]);
 
+  const agregarComentario = (comentario: string) => {
+    setComentarios(comentario);
+  }
+
   return (
     <div className="flex flex-col gap-4 p-4 items-center bg-gray-800 px-35">
       <section className="flex flex-col gap-2 items-center mb-4 bg-gray-700 w-full">
@@ -120,10 +109,7 @@ export default function EvaluarBaseRubricaComponet({
           <p>Cargando Criterios...</p>
         ) : (
           listCriterios.map((criterio) => (
-            <EvaluarCriterioComponent
-              key={criterio.idCriterio}
-              criterioSelecionado={criterio}
-            />
+            <EvaluarCriterioComponent key={criterio.idCriterio} criterioSelecionado={criterio} />
           ))
         )}
       </div>
@@ -140,28 +126,19 @@ export default function EvaluarBaseRubricaComponet({
               {cargandoFichaResultados ? (
                 <p>Cargando...</p>
               ) : Object.keys(dataCriteriosEvaluar).length > 0 ? (
-                Object.entries(dataCriteriosEvaluar).map(
-                  ([idCriterio, valor]) => {
-                    const criterio = listCriterios.find(
-                      (c) => c.idCriterio === idCriterio
-                    );
-                    return (
-                      <div
-                        key={idCriterio}
-                        className="flex flex-row items-center gap-1 "
-                      >
-                        {criterio ? (
-                          <>
-                            <span className="font-bold">
-                              {criterio.nombreCriterio}:
-                            </span>
-                            <span className="font-light">{valor}</span>
-                          </>
-                        ) : null}
-                      </div>
-                    );
-                  }
-                )
+                Object.entries(dataCriteriosEvaluar).map(([idCriterio, valor]) => {
+                  const criterio = listCriterios.find((c) => c.idCriterio === idCriterio);
+                  return (
+                    <div key={idCriterio} className="flex flex-row items-center gap-1 ">
+                      {criterio ? (
+                        <>
+                          <span className="font-bold">{criterio.nombreCriterio}:</span>
+                          <span className="font-light">{valor}</span>
+                        </>
+                      ) : null}
+                    </div>
+                  );
+                })
               ) : (
                 <p>No hay criterios para evaluar.</p>
               )}
@@ -171,7 +148,8 @@ export default function EvaluarBaseRubricaComponet({
             <textarea
               name=""
               id=""
-              value={comentarios} onChange={(evento) => setComentarios(evento.target.value)}
+              value={comentarios}
+              onChange={(evento) => agregarComentario(evento.target.value)}
               cols={30}
               maxLength={255}
               style={{ height: "350px" }}
