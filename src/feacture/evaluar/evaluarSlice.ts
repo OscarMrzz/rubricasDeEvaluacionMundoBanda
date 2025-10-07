@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Interface para el estado
+interface EvaluacionItem {
+    idCriterio: string;
+    idCumplimiento: string;
+    valor: number;
+}
+
 interface EvaluarState {
-    // Objeto dinámico para pares clave (string) - valor (number)
-    evaluaciones: Record<string, number>;
+    evaluaciones: Record<string, EvaluacionItem>;
 }
 
 // Estado inicial
@@ -15,10 +20,15 @@ const evaluarSlice = createSlice({
     name: "criterioEvaluar",
     initialState,
     reducers: {
-        // Agregar o actualizar un par clave-valor
-        agregarCriterioEvaluar: (state, action: PayloadAction<{ idCriterio: string; valor: number }>) => {
-            const { idCriterio, valor } = action.payload;
-            state.evaluaciones[idCriterio] = valor;
+        // Agregar o actualizar una evaluación
+        agregarCriterioEvaluar: (state, action: PayloadAction<{ idCriterio: string; idCumplimiento: string; valor: number }>) => {
+            const { idCriterio, idCumplimiento, valor } = action.payload;
+            // Usamos idCriterio como clave única
+            state.evaluaciones[idCriterio] = {
+                idCriterio,
+                idCumplimiento,
+                valor
+            };
         },
 
 
@@ -33,12 +43,21 @@ const evaluarSlice = createSlice({
             state.evaluaciones = {};
         },
 
-        // Incrementar el valor de una clave específica
-        updateCriterioEvaluado: (state, action: PayloadAction<{ idCriterio: string; valor: number }>) => {
-
-            const { idCriterio, valor } = action.payload;
-
-            state.evaluaciones[idCriterio] = valor;
+        // Actualizar el valor de una evaluación específica
+        updateCriterioEvaluado: (state, action: PayloadAction<{ idCriterio: string; idCumplimiento: string; valor: number }>) => {
+            const { idCriterio, idCumplimiento, valor } = action.payload;
+            
+            if (state.evaluaciones[idCriterio]) {
+                state.evaluaciones[idCriterio].idCumplimiento = idCumplimiento;
+                state.evaluaciones[idCriterio].valor = valor;
+            } else {
+                // Si no existe, lo crea
+                state.evaluaciones[idCriterio] = {
+                    idCriterio,
+                    idCumplimiento,
+                    valor
+                };
+            }
         },
 
     },
