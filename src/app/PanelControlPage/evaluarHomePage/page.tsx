@@ -279,6 +279,7 @@ export default function EvaluarHomePage() {
         bandaSelecionada ? (
           <EvaluarBaseRubricaComponet
             eventoSelecionado={eventoSelecionado}
+            regionSelecionada={regionSelecionada}
       
             categoriaSelecionada={categoriaSelecionada}
             rubricaSelecionada={rubricaSelecionada}

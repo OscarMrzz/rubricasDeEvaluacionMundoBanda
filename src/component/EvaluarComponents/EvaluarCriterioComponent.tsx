@@ -62,6 +62,8 @@ export default function EvaluarCriterioComponent({
     dispatch(
       agregarCriterioEvaluar({
         idCriterio: criterioSelecionado.idCriterio,
+        idCumplimiento: cumplimiento.idCumplimiento,
+
         valor: cumplimiento.puntosCumplimiento,
       })
     );

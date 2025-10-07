@@ -2,30 +2,40 @@ import {
   bandaDatosAmpleosInterface,
   categoriaDatosAmpleosInterface,
   criterioEvaluacionDatosAmpleosInterface,
+  perfilInterface,
+  regionesDatosAmpleosInterface,
+  regionesInterface,
+  registroCumplimientoEvaluacionInterface,
   registroEventoDatosAmpleosInterface,
   rubricaDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import EvaluarCriterioComponent from "./EvaluarCriterioComponent";
 import CriteriosServices from "@/lib/services/criteriosServices";
 import { useDispatch, useSelector } from "react-redux";
 import { agregarCriterioEvaluar, recetiarCriteriosEvaluados } from "@/feacture/evaluar/evaluarSlice";
 import { RootState } from "@/app/store";
+import registroCumplimintoServices from "@/lib/services/registroCumplimientoServices";
+import { u } from "framer-motion/client";
+import PerfilesServices from "@/lib/services/perfilesServices";
 
 type Props = {
   eventoSelecionado: registroEventoDatosAmpleosInterface;
   categoriaSelecionada: categoriaDatosAmpleosInterface;
   rubricaSelecionada: rubricaDatosAmpleosInterface;
   bandaSelecionada: bandaDatosAmpleosInterface;
+  regionSelecionada: regionesDatosAmpleosInterface;
 };
 export default function EvaluarBaseRubricaComponet({
   eventoSelecionado,
   categoriaSelecionada,
   rubricaSelecionada,
   bandaSelecionada,
+  regionSelecionada,
 }: Props) {
   const dispatch = useDispatch();
+  const registroCumplimientosServices = useRef( new registroCumplimintoServices())
 
   const dataCriteriosEvaluar = useSelector((state: RootState) => state.evaluarCriterio.evaluaciones);
 
@@ -34,6 +44,7 @@ export default function EvaluarBaseRubricaComponet({
   const [cargandoCriterios, setCargandoCriterios] = React.useState<boolean>(true);
   const [cargandoFichaResultados, setCargandoFichaResultados] = React.useState<boolean>(true);
   const [comentarios, setComentarios] = useState("");
+  const [perfilActivo, setPerfilActivo] = useState<perfilInterface | null>(null);
 
   const [totalPuntos, setTotalPuntos] = useState(0);
 
@@ -51,7 +62,7 @@ export default function EvaluarBaseRubricaComponet({
       dispatch(recetiarCriteriosEvaluados());
       setCargandoFichaResultados(true);
       criteriosFiltrados.forEach((criterio) => {
-        dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, valor: 0 }));
+        dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, idCumplimiento: ""  ,  valor: 0 }));
       });
 
       setCargandoCriterios(false);
@@ -73,7 +84,7 @@ export default function EvaluarBaseRubricaComponet({
       (criterio) => criterio.idForaneaRubrica === rubricaSelecionada.idRubrica
     );
     criteriosFiltrados.forEach((criterio) => {
-      dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, valor: 0 }));
+      dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, idCumplimiento:"", valor: 0 }));
     });
     setListCriterios(criteriosFiltrados);
     setCargandoCriterios(false);
@@ -82,8 +93,12 @@ export default function EvaluarBaseRubricaComponet({
 
   const sumarPuntosDeCriterios = useCallback(() => {
     let total = 0;
-    Object.values(dataCriteriosEvaluar).forEach((valor) => {
-      total += valor;
+    Object.values(dataCriteriosEvaluar).forEach((item) => {
+      if (typeof item === "object" && item !== null && "valor" in item) {
+        total += item.valor;
+      } else if (typeof item === "number") {
+        total += item;
+      }
     });
     setTotalPuntos(total);
   }, [dataCriteriosEvaluar]);
@@ -95,6 +110,81 @@ export default function EvaluarBaseRubricaComponet({
   const agregarComentario = (comentario: string) => {
     setComentarios(comentario);
   }
+
+    const cargarPerfilActivo = async () => {
+      try {
+        const perfilServices = new PerfilesServices();
+        const perfil = await perfilServices.getUsuarioLogiado();
+        if (perfil) {
+          setPerfilActivo(perfil);
+        }
+      } catch (error) {
+        console.error("❌ Error cargando el perfil activo:", error);
+      }
+    };
+
+  useEffect(() => {
+    cargarPerfilActivo();
+
+
+  },[])
+
+  const guardarEvaluacion = () => {
+   
+    if(perfilActivo === null) {
+   
+      return;
+    }
+    const bandaAGuardar = bandaSelecionada.idBanda;
+    const eventoAGuardar = eventoSelecionado.idEvento;
+    const categoriaAGurdar = categoriaSelecionada.idCategoria;
+    const rubricaAGurardar = rubricaSelecionada.idRubrica;
+    const perfilEvaluadorAguardar = perfilActivo.idPerfil;
+    const federaciónAGuardar = perfilActivo.idForaneaFederacion;
+    const regionAguardar =regionSelecionada.idRegion;
+
+    if(!perfilEvaluadorAguardar){
+    
+      return;
+    }
+    const arregloDeCriteriosAGuardar = Object.entries(dataCriteriosEvaluar)
+    if(perfilActivo !== null &&  arregloDeCriteriosAGuardar.length !== 0  && comentarios.trim() !== "" && bandaAGuardar !== null && eventoAGuardar !== null && categoriaAGurdar !== null && rubricaAGurardar !== null){
+  
+      arregloDeCriteriosAGuardar.forEach(async([idCriterio, item])=>{
+    const data: Omit<registroCumplimientoEvaluacionInterface,"idRegistroCumplimientoEvaluacion" | "created_at">  = {
+      idForaneaBanda: bandaAGuardar,
+      idForaneaEvento: eventoAGuardar,
+      idForaneaCategoria: categoriaAGurdar,
+      idForaneaRubrica: rubricaAGurardar,
+      idForaneaPerfil: perfilEvaluadorAguardar,
+      idForaneaFederacion: federaciónAGuardar,
+      idForaneaRegion: regionAguardar,
+      puntosObtenidos: item.valor,
+      idForaneaCumplimiento: item.idCumplimiento,
+      idForaneaCriterio: idCriterio,
+    }
+    try {
+      const respuesta = await registroCumplimientosServices.current.create(data as registroCumplimientoEvaluacionInterface);
+      if(respuesta){
+        
+      }else{
+        console.log("❌ Error al guardar la evaluación.");
+      }
+    } catch (error) {
+      console.error("❌ Error al guardar la evaluación:", error);
+
+  }
+  }
+)
+
+
+    
+
+  }else{
+    console.log("Faltan datos para guardar la evaluacion");
+  }
+  }
+  ;
 
   return (
     <div className="flex flex-col gap-4 p-4 items-center bg-gray-800 px-35">
@@ -126,14 +216,14 @@ export default function EvaluarBaseRubricaComponet({
               {cargandoFichaResultados ? (
                 <p>Cargando...</p>
               ) : Object.keys(dataCriteriosEvaluar).length > 0 ? (
-                Object.entries(dataCriteriosEvaluar).map(([idCriterio, valor]) => {
+                Object.entries(dataCriteriosEvaluar).map(([idCriterio, item]) => {
                   const criterio = listCriterios.find((c) => c.idCriterio === idCriterio);
                   return (
                     <div key={idCriterio} className="flex flex-row items-center gap-1 ">
                       {criterio ? (
                         <>
                           <span className="font-bold">{criterio.nombreCriterio}:</span>
-                          <span className="font-light">{valor}</span>
+                          <span className="font-light">{item.valor}</span>
                         </>
                       ) : null}
                     </div>
@@ -163,7 +253,7 @@ export default function EvaluarBaseRubricaComponet({
         <button className="bg-gray-600 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
           Cancelar
         </button>
-        <button className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer">
+        <button onClick={()=> guardarEvaluacion()} className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer">
           Guardar Evaluación
         </button>
       </div>
