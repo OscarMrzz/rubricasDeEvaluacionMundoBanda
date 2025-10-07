@@ -66,6 +66,36 @@
          throw error;
      }
  }
+
+  async getDatosAmpleosFiltradosRegion(idForaneaRegion:string): Promise<registroEventoDatosAmpleosInterface[]> {
+      await this.ensurePerfil();
+     try {
+         if (!this.perfil?.idForaneaFederacion) {
+             throw new Error("No hay federación en el perfil del usuario.");
+         }
+         const { data, error } = await dataBaseSupabase
+             .from(tabla)
+             .select(`
+                 *,
+                 federaciones(*),
+                 regiones(*)
+             `)
+             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+             .eq("idForaneaRegion", idForaneaRegion)
+             .order("fechaEvento", { ascending: true });
+ 
+         if (error) {
+             console.error("❌ Error obteniendo regiones con federaciones:", error);
+             throw error;
+         }
+ 
+      
+         return data as registroEventoDatosAmpleosInterface[];
+     } catch (error) {
+         console.error("❌ Error general en getDatosAmpleos:", error);
+         throw error;
+     }
+ }
  
      async get() {
           await this.ensurePerfil();
