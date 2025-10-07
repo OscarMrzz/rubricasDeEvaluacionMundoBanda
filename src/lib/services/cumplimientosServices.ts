@@ -57,7 +57,7 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
             throw error;
         }
 
-        console.log("✅ Regiones con cumplimientos:", data);
+       
         return data as cumplimientosDatosAmpleosInterface[];
     } catch (error) {
         console.error("❌ Error general en getDatosAmpleos:", error);
