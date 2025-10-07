@@ -24,7 +24,7 @@ export default class BandasServices {
                 throw error;
             }
 
-            console.log("✅ Bandas con datos completos:", data);
+        
             return data as bandaDatosAmpleosInterface[];
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
