@@ -50,10 +50,7 @@ export default function FormularioAgregarCumplimientoComponet({
     try {
       const cumplimientosServices = new cumplimientossServices();
 
-      const nuevoCunplimiento: Omit<
-        cumplimientosInterface,
-        "idCumplimiento" | "created_at"
-      > = {
+      const nuevoCunplimiento: Omit<cumplimientosInterface,"idCumplimiento" | "created_at"> = {
         detalleCumplimiento: formData.detalleCumplimiento,
         puntosCumplimiento: formData.puntosCumplimiento,
         idForaneaCriterio: criterio.idCriterio,
