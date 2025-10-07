@@ -1,9 +1,12 @@
+import { agregarCriterioEvaluar } from "@/feacture/evaluar/evaluarSlice";
 import {
   criterioEvaluacionDatosAmpleosInterface,
   cumplimientosDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
 import cumplimientossServices from "@/lib/services/cumplimientosServices";
+import { on } from "events";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 type Props = {
   criterioSelecionado: criterioEvaluacionDatosAmpleosInterface;
@@ -12,6 +15,11 @@ type Props = {
 export default function EvaluarCriterioComponent({
   criterioSelecionado,
 }: Props) {
+
+  const dispatch = useDispatch();
+
+
+
   const [listCumplimientoOriginales, setListCumplimientoOriginales] =
     React.useState<cumplimientosDatosAmpleosInterface[]>([]);
   const [listCumplimiento, setListCumplimiento] = React.useState<
@@ -49,6 +57,16 @@ export default function EvaluarCriterioComponent({
     }
   }, [criterioSelecionado, listCumplimientoOriginales]);
 
+ const  onclickCumplimientoSelecionado= (cumplimiento: cumplimientosDatosAmpleosInterface) =>{
+    setCumplimientoSelecionado(cumplimiento);
+    dispatch(
+      agregarCriterioEvaluar({
+        idCriterio: criterioSelecionado.idCriterio,
+        valor: cumplimiento.puntosCumplimiento,
+      })
+    );
+  }
+
   return (
     <div className="w-full h-120 shadow-2xl  bg-gray-700 p-4">
       <div>
@@ -83,7 +101,7 @@ export default function EvaluarCriterioComponent({
                 type="radio"
                 name="cum"
                 value={cumplimiento.idCumplimiento}
-                onChange={() => setCumplimientoSelecionado(cumplimiento)}
+                onChange={() => onclickCumplimientoSelecionado(cumplimiento)}
                 className="hidden"
               />
               <div className="flex flex-row gap-4 ml-4">
