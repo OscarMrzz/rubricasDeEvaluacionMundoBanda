@@ -15,12 +15,19 @@ import {
   UserGroupIcon,
   MapPinIcon,
   PresentationChartBarIcon,
+  ListBulletIcon,
 } from "@heroicons/react/24/solid";
 
 const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
 
   const links = [
+    {
+      id: "evaluar",
+      label: "Evaluar",
+           href: "/PanelControlPage/evaluarHomePage",
+      Icon: ClipboardDocumentCheckIcon,
+    },
     {
       id: "federacion",
       label: "Federaciones",
@@ -43,7 +50,7 @@ const SidebarPanelControlComponent = () => {
       id: "categorias",
       label: "Categorías",
       href: "/PanelControlPage/categoriasHomePage",
-      Icon: ClipboardDocumentListIcon,
+      Icon: ListBulletIcon,
     },
     {
       id: "bandas",
@@ -55,14 +62,9 @@ const SidebarPanelControlComponent = () => {
       id: "rubricas",
       label: "Rúbrica",
       href: "/PanelControlPage/rubricaHomePage",
-      Icon: ClipboardDocumentCheckIcon,
+      Icon: AdjustmentsHorizontalIcon,
     },
-    {
-      id: "evaluar",
-      label: "Evaluar",
-           href: "/PanelControlPage/evaluarHomePage",
-      Icon: PresentationChartBarIcon,
-    },
+    
     {
       id: "evento",
       label: "Evento",
