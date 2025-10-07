@@ -15,6 +15,7 @@ import  PerfilSlice from "@/feacture/Perfil/PerfilSlice";
 import registrosEquipoEvaliadorSlice from "@/feacture/EquipoEvaluador/EquipoEvaluadorSlice";
 import refrescadorDataRegistroEquipoEvaluador from "@/feacture/EquipoEvaluador/RefrescadorEquipoRegistroEvaluador";
 import OverleyRegsitroEquipoEvaluador from "@/feacture/EquipoEvaluador/OverleyEquipoEvaluador"
+import evaluarCriterioSlice from "@/feacture/evaluar/evaluarSlice";
 
 
 
@@ -36,6 +37,7 @@ const store = configureStore({
         registrosEquipoEvaliador: registrosEquipoEvaliadorSlice,
         refrescadorDataRegistroEquipoEvaluador: refrescadorDataRegistroEquipoEvaluador,
         overleyRegistroEquipoEvaluador: OverleyRegsitroEquipoEvaluador,
+        evaluarCriterio: evaluarCriterioSlice,
 
     },
 });
