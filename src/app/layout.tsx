@@ -25,14 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#1d3557] text-gray-50 grid grid-rows-[75px_1fr_100px] min-h-screen font-poppins ${poppins.className} `}
+        className={`bg-gray-800 w-screen text-gray-50 grid grid-rows-[75px_1fr_100px] min-h-screen font-poppins ${poppins.className} `}
       >
         <Provider store={store}>
-          <header className="flex flex-col sticky top-0 z-50">
+          <header className="flex flex-col sticky  top-0 z-50">
             <NavBard />
           </header>
 
-          <main className="w-full overflow-auto">{children}</main>
+          <main className="w-full  overflow-y-auto-auto ">{children}</main>
 
           <footer>
             <FooterComponent />
