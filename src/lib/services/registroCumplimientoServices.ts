@@ -11,19 +11,6 @@ const elId = "idRegistroCumplimientoEvaluacion";
 
 
 
-   /* 
-        export interface registroCumplimientoEvaluacionDatosAmpleosInterface extends registroCumplimientoEvaluacionInterface {
-            registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
-            bandas: bandaInterface;
-            criteriosEvalucion: criterioEvaluacionInterface; // Corregido: nombre de tabla
-            cumplimientos: cumplimientosInterface;
-            categorias: categoriaInterface;
-            regiones: regionesInterface;
-            perfiles: perfilInterface;
-            federaciones: federacionInterface;
-             rubricas: rubricaInterface;
-        }
-        */
 
 export default class registroCumplimintoServices   {
   perfil: perfilInterface | null = null;
