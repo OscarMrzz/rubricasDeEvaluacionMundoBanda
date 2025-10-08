@@ -26,6 +26,8 @@ export default function EvaluarHomePage() {
   const [eventosOriginales, setEventosOriginales] = React.useState<registroEventoDatosAmpleosInterface[]>([]);
   const [listCategorias, setListCategorias] = React.useState<categoriaDatosAmpleosInterface[]>([]);
   const [listRubricas, setListRubricas] = React.useState<rubricaDatosAmpleosInterface[]>([]);
+  const [seCargoListaRubicas, setSeCargoListaRubricas] = React.useState<boolean>(false);
+
   const [listBandasOriginales, setListBandasOriginales] = React.useState<bandaDatosAmpleosInterface[]>([]);
   const [listBandas, setListBandas] = React.useState<bandaDatosAmpleosInterface[]>([]);
   const [listBandasNoEvaluadas, setListBandasNoEvaluadas] = React.useState<bandaInterface[]>([]);
@@ -88,13 +90,23 @@ export default function EvaluarHomePage() {
     const datosCategorias = await categoriasServices.current.getDatosAmpleos();
     setListCategorias(datosCategorias);
 
-    const datosRubricas = await rubricasServices.current.getDatosAmpleos();
-    setListRubricas(datosRubricas);
+ 
 
     const datosBandas = await bandasServices.current.getDatosAmpleos();
     setListBandas(datosBandas);
     setListBandasOriginales(datosBandas); // Guardar datos originales de bandas
   };
+  useEffect(() => {
+    const cargarRubricas = async () => {
+    if(categoriaSelecionada){
+       const datosRubricas = await rubricasServices.current.getPorCategoria(categoriaSelecionada.idCategoria);
+    setListRubricas(datosRubricas);
+    setSeCargoListaRubricas(true);
+    }
+  }
+  cargarRubricas();
+  
+  },[categoriaSelecionada]);
 
   useEffect(() => {
     setYaseFiltraronBandas(false);
@@ -264,14 +276,32 @@ export default function EvaluarHomePage() {
               setRubricaSelecionada(selected);
             }}
           >
-            <option value="" disabled>
+            {
+              categoriaSelecionada ? (<>
+                {seCargoListaRubicas ? (
+              <>  
+              <option value="" disabled>
               Rubrica
             </option>
             {listRubricas.map((rubrica) => (
               <option className="text-gray-700" key={rubrica.idRubrica} value={rubrica.idRubrica}>
                 {rubrica.nombreRubrica}
               </option>
-            ))}
+            ))}</>):(
+                  <option value="" disabled>
+              cargando...
+            </option>
+            )}
+
+              
+              </>):(
+                     <option value="" disabled>
+              Rubricas...
+            </option>
+              )
+            }
+          
+          
           </select>
         </div>
 
@@ -288,7 +318,7 @@ export default function EvaluarHomePage() {
           >
             {!categoriaSelecionada ? (
               <option value="" className="text-gray-700" disabled>
-                Seleccione categoria...
+                Bandas...
               </option>
             ) : ( yaseFiltraronBandas ?
               <>
