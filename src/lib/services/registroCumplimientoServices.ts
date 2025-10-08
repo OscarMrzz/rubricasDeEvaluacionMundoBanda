@@ -2,7 +2,7 @@ import { dataBaseSupabase } from "../supabase";
 import {  perfilInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface } from "@/interfaces/interfaces";
 
 import PerfilesServices from "@/lib/services/perfilesServices";
-import { i } from "framer-motion/client";
+
 
 type Interface = registroCumplimientoEvaluacionInterface;
 
@@ -141,7 +141,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .single();
 
         if (error) throw error;
-        return data;
+       return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorBanda(idBanda: string) {
          await this.ensurePerfil();
@@ -167,7 +167,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .single();
 
         if (error) throw error;
-        return data;
+        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorBandaYEvento(idBanda: string, idEvento: string) {
          await this.ensurePerfil();
@@ -194,7 +194,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .single();
 
         if (error) throw error;
-        return data;
+        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorRubrica(idRubrica: string) {
          await this.ensurePerfil();
@@ -203,14 +203,25 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .select("*")
+                .select(`
+                *
+             ,registroEventos(*),
+                bandas(*),
+                criteriosEvalucion(*),
+                cumplimientos(*),
+                categorias(*),
+                regiones(*),
+                perfiles(*),
+                federaciones(*),
+                rubricas(*)
+            `)
             .eq("idForaneaRubrica", idRubrica)
           
             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorRubricaYEvento(idRubrica: string, idEvento: string) {
          await this.ensurePerfil();
@@ -219,16 +230,27 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .select("*")
+                .select(`
+                *
+             ,registroEventos(*),
+                bandas(*),
+                criteriosEvalucion(*),
+                cumplimientos(*),
+                categorias(*),
+                regiones(*),
+                perfiles(*),
+                federaciones(*),
+                rubricas(*)
+            `)
             .eq("idForaneaRubrica", idRubrica)
             .eq("idForaneaEvento", idEvento)
           
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .single();
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-        return data;
+       return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
+ 
 
 
     async create(dataCreate: Interface) {

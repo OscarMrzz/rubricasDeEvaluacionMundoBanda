@@ -10,10 +10,12 @@ import { useDispatch } from "react-redux";
 
 type Props = {
   criterioSelecionado: criterioEvaluacionDatosAmpleosInterface;
+  criterioNoEvaluado: string
 };
 
 export default function EvaluarCriterioComponent({
   criterioSelecionado,
+  criterioNoEvaluado
 }: Props) {
 
   const dispatch = useDispatch();
@@ -70,7 +72,10 @@ export default function EvaluarCriterioComponent({
   }
 
   return (
-    <div className="w-full h-120 shadow-2xl  bg-gray-700 p-4">
+    <div 
+    className={`w-full h-120 shadow-2xl  bg-gray-700 p-4
+      ${criterioSelecionado.idCriterio === criterioNoEvaluado? "border-2 border-red-800" : "border-2 border-transparent"}
+    `}>
       <div>
         <h3 className="text-xl font-bold">
           {criterioSelecionado.nombreCriterio}

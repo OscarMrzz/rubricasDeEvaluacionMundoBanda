@@ -186,11 +186,13 @@ export interface registroComentariosInterface{
     created_at: string;
     idForaneaEvento: string;
     idForaneaBanda: string;
-    idForaneaCriterio: string;
+  
     idForaneaCategoria: string;
     idForaneaRegion: string;
-    idForaneaUser: string;
+    idForaneaPerfil: string;
     comentario: string;
+    idForaneaRubrica: string;
+    idForaneaFederacion: string;
 }
 export interface registroComentariosDatosAmpleosInterface extends registroComentariosInterface {
     registroEventos: RegistroEventoInterface; // Corregido: nombre de tabla
@@ -198,6 +200,9 @@ export interface registroComentariosDatosAmpleosInterface extends registroComent
     criteriosEvalucion: criterioEvaluacionInterface; // Corregido: nombre de tabla
     categorias: categoriaInterface;
     regiones: regionesInterface;
+    perfiles: perfilInterface;
+    rubricas: rubricaInterface;
+    federaciones: federacionInterface;
 }
 
 //-----------ROL EQUIPO EVALUADOR------------

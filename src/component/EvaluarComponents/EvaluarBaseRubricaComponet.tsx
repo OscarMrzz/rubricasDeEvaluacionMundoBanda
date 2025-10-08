@@ -1,10 +1,12 @@
 import {
   bandaDatosAmpleosInterface,
+  bandaInterface,
   categoriaDatosAmpleosInterface,
   criterioEvaluacionDatosAmpleosInterface,
   perfilInterface,
   regionesDatosAmpleosInterface,
   regionesInterface,
+  registroComentariosInterface,
   registroCumplimientoEvaluacionInterface,
   registroEventoDatosAmpleosInterface,
   rubricaDatosAmpleosInterface,
@@ -19,12 +21,14 @@ import { RootState } from "@/app/store";
 import registroCumplimintoServices from "@/lib/services/registroCumplimientoServices";
 import { u } from "framer-motion/client";
 import PerfilesServices from "@/lib/services/perfilesServices";
+import registroComentariosServices from "@/lib/services/RegistroComentariosServices";
+import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
 
 type Props = {
   eventoSelecionado: registroEventoDatosAmpleosInterface;
   categoriaSelecionada: categoriaDatosAmpleosInterface;
   rubricaSelecionada: rubricaDatosAmpleosInterface;
-  bandaSelecionada: bandaDatosAmpleosInterface;
+  bandaSelecionada: bandaInterface;
   regionSelecionada: regionesDatosAmpleosInterface;
 };
 export default function EvaluarBaseRubricaComponet({
@@ -35,7 +39,8 @@ export default function EvaluarBaseRubricaComponet({
   regionSelecionada,
 }: Props) {
   const dispatch = useDispatch();
-  const registroCumplimientosServices = useRef( new registroCumplimintoServices())
+  const registroCumplimientosServices = useRef(new registroCumplimintoServices());
+  const registroComentariosServices =useRef(new RegistroComentariosServices())
 
   const dataCriteriosEvaluar = useSelector((state: RootState) => state.evaluarCriterio.evaluaciones);
 
@@ -45,6 +50,8 @@ export default function EvaluarBaseRubricaComponet({
   const [cargandoFichaResultados, setCargandoFichaResultados] = React.useState<boolean>(true);
   const [comentarios, setComentarios] = useState("");
   const [perfilActivo, setPerfilActivo] = useState<perfilInterface | null>(null);
+const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<boolean>(false);
+  const [campoImcompleto, setCampoIncompleto] = useState("");
 
   const [totalPuntos, setTotalPuntos] = useState(0);
 
@@ -62,7 +69,7 @@ export default function EvaluarBaseRubricaComponet({
       dispatch(recetiarCriteriosEvaluados());
       setCargandoFichaResultados(true);
       criteriosFiltrados.forEach((criterio) => {
-        dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, idCumplimiento: ""  ,  valor: 0 }));
+        dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, idCumplimiento: "", valor: 0 }));
       });
 
       setCargandoCriterios(false);
@@ -84,7 +91,7 @@ export default function EvaluarBaseRubricaComponet({
       (criterio) => criterio.idForaneaRubrica === rubricaSelecionada.idRubrica
     );
     criteriosFiltrados.forEach((criterio) => {
-      dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, idCumplimiento:"", valor: 0 }));
+      dispatch(agregarCriterioEvaluar({ idCriterio: criterio.idCriterio, idCumplimiento: "", valor: 0 }));
     });
     setListCriterios(criteriosFiltrados);
     setCargandoCriterios(false);
@@ -109,30 +116,35 @@ export default function EvaluarBaseRubricaComponet({
 
   const agregarComentario = (comentario: string) => {
     setComentarios(comentario);
-  }
+  };
 
-    const cargarPerfilActivo = async () => {
-      try {
-        const perfilServices = new PerfilesServices();
-        const perfil = await perfilServices.getUsuarioLogiado();
-        if (perfil) {
-          setPerfilActivo(perfil);
-        }
-      } catch (error) {
-        console.error("❌ Error cargando el perfil activo:", error);
+  const cargarPerfilActivo = async () => {
+    try {
+      const perfilServices = new PerfilesServices();
+      const perfil = await perfilServices.getUsuarioLogiado();
+      if (perfil) {
+        setPerfilActivo(perfil);
       }
-    };
+    } catch (error) {
+      console.error("❌ Error cargando el perfil activo:", error);
+    }
+  };
 
   useEffect(() => {
     cargarPerfilActivo();
+  }, []);
 
+  const guardarEvaluacion = async () => {
+    setSeprecionoElBotoGuardar(true)
 
-  },[])
+    const camposCompletos = revisarCamposCompletos()
 
-  const guardarEvaluacion = () => {
+    if(camposCompletos){
+
    
-    if(perfilActivo === null) {
-   
+
+
+    if (perfilActivo === null) {
       return;
     }
     const bandaAGuardar = bandaSelecionada.idBanda;
@@ -141,50 +153,96 @@ export default function EvaluarBaseRubricaComponet({
     const rubricaAGurardar = rubricaSelecionada.idRubrica;
     const perfilEvaluadorAguardar = perfilActivo.idPerfil;
     const federaciónAGuardar = perfilActivo.idForaneaFederacion;
-    const regionAguardar =regionSelecionada.idRegion;
+    const regionAguardar = regionSelecionada.idRegion;
 
-    if(!perfilEvaluadorAguardar){
-    
+    if (!perfilEvaluadorAguardar) {
       return;
     }
-    const arregloDeCriteriosAGuardar = Object.entries(dataCriteriosEvaluar)
-    if(perfilActivo !== null &&  arregloDeCriteriosAGuardar.length !== 0  && comentarios.trim() !== "" && bandaAGuardar !== null && eventoAGuardar !== null && categoriaAGurdar !== null && rubricaAGurardar !== null){
-  
-      arregloDeCriteriosAGuardar.forEach(async([idCriterio, item])=>{
-    const data: Omit<registroCumplimientoEvaluacionInterface,"idRegistroCumplimientoEvaluacion" | "created_at">  = {
-      idForaneaBanda: bandaAGuardar,
-      idForaneaEvento: eventoAGuardar,
-      idForaneaCategoria: categoriaAGurdar,
-      idForaneaRubrica: rubricaAGurardar,
-      idForaneaPerfil: perfilEvaluadorAguardar,
-      idForaneaFederacion: federaciónAGuardar,
-      idForaneaRegion: regionAguardar,
-      puntosObtenidos: item.valor,
-      idForaneaCumplimiento: item.idCumplimiento,
-      idForaneaCriterio: idCriterio,
-    }
-    try {
-      const respuesta = await registroCumplimientosServices.current.create(data as registroCumplimientoEvaluacionInterface);
-      if(respuesta){
-        
-      }else{
-        console.log("❌ Error al guardar la evaluación.");
+    const arregloDeCriteriosAGuardar = Object.entries(dataCriteriosEvaluar);
+    if (
+      perfilActivo !== null &&
+      arregloDeCriteriosAGuardar.length !== 0 &&
+      comentarios.trim() !== "" &&
+      bandaAGuardar !== null &&
+      eventoAGuardar !== null &&
+      categoriaAGurdar !== null &&
+      rubricaAGurardar !== null
+    ) {
+      arregloDeCriteriosAGuardar.forEach(async ([idCriterio, item]) => {
+        const data: Omit<registroCumplimientoEvaluacionInterface, "idRegistroCumplimientoEvaluacion" | "created_at"> = {
+          idForaneaBanda: bandaAGuardar,
+          idForaneaEvento: eventoAGuardar,
+          idForaneaCategoria: categoriaAGurdar,
+          idForaneaRubrica: rubricaAGurardar,
+          idForaneaPerfil: perfilEvaluadorAguardar,
+          idForaneaFederacion: federaciónAGuardar,
+          idForaneaRegion: regionAguardar,
+          puntosObtenidos: item.valor,
+          idForaneaCumplimiento: item.idCumplimiento,
+          idForaneaCriterio: idCriterio,
+        };
+      
+        try {
+          const respuesta = await registroCumplimientosServices.current.create(
+            data as registroCumplimientoEvaluacionInterface
+          );
+          if (respuesta) {
+          } else {
+            console.log("❌ Error al guardar la evaluación.");
+          }
+        } catch (error) {
+          console.error("❌ Error al guardar la evaluación:", error);
+        }
+      });
+      try {
+              const dataComentario: Omit<registroComentariosInterface, "idRegistroComentario" | "created_at"> = {
+        idForaneaBanda: bandaAGuardar,
+        idForaneaEvento: eventoAGuardar,
+        idForaneaCategoria: categoriaAGurdar,
+        idForaneaRubrica: rubricaAGurardar,
+        idForaneaPerfil: perfilEvaluadorAguardar,
+        idForaneaFederacion: federaciónAGuardar,
+        idForaneaRegion: regionAguardar,
+
+        comentario: comentarios.trim(),
+      };
+
+      const respuestaComentario = await registroComentariosServices.current.create(dataComentario as registroComentariosInterface);
+      if (respuestaComentario) {
+        console.log("✅ Comentario guardado con éxito.");
+      } else {
+        console.log("❌ Error al guardar el comentario.");
+
+      
+        };
+      } catch (error) {
+        console.error("❌ Error al guardar el comentario:", error);
       }
-    } catch (error) {
-      console.error("❌ Error al guardar la evaluación:", error);
-
-  }
-  }
-)
 
 
-    
+    } else {
+      console.log("Faltan datos para guardar la evaluacion");
+    }
+     }
+  };
 
-  }else{
-    console.log("Faltan datos para guardar la evaluacion");
-  }
-  }
-  ;
+  const revisarCamposCompletos = () => {
+    const arregloDeCriteriosAGuardar = Object.entries(dataCriteriosEvaluar);
+    let criterioNoEvaluado = "";
+    arregloDeCriteriosAGuardar.forEach(([idCriterio, item]) => {
+      if (item.idCumplimiento === "") {
+        criterioNoEvaluado = idCriterio;
+        return;
+      }
+    })
+    if (criterioNoEvaluado !== ""){
+      setCampoIncompleto(criterioNoEvaluado)
+      return false
+    }
+    else{
+      return true
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 p-4 items-center bg-gray-800 px-35">
@@ -199,7 +257,7 @@ export default function EvaluarBaseRubricaComponet({
           <p>Cargando Criterios...</p>
         ) : (
           listCriterios.map((criterio) => (
-            <EvaluarCriterioComponent key={criterio.idCriterio} criterioSelecionado={criterio} />
+            <EvaluarCriterioComponent key={criterio.idCriterio} criterioSelecionado={criterio} criterioNoEvaluado={campoImcompleto} />
           ))
         )}
       </div>
@@ -243,7 +301,9 @@ export default function EvaluarBaseRubricaComponet({
               cols={30}
               maxLength={255}
               style={{ height: "350px" }}
-              className="w-80 p-3 border border-gray-300 rounded-lg resize-none focus:outline-none"
+              className={`w-80 p-3 border  rounded-lg resize-none focus:outline-none
+                ${comentarios.length===0 && sePrecionoElBotoGuardar ? "border-2 border-red-800":"border-gray-300"}
+                `}
               placeholder="Observaciones comentarios y sugerencias..."
             ></textarea>
           </div>
@@ -253,7 +313,10 @@ export default function EvaluarBaseRubricaComponet({
         <button className="bg-gray-600 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
           Cancelar
         </button>
-        <button onClick={()=> guardarEvaluacion()} className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer">
+        <button
+          onClick={() => guardarEvaluacion()}
+          className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer"
+        >
           Guardar Evaluación
         </button>
       </div>

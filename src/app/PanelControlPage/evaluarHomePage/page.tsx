@@ -1,77 +1,112 @@
 "use client";
 import EvaluarBaseRubricaComponet from "@/component/EvaluarComponents/EvaluarBaseRubricaComponet";
 import {
+  bandaInterface,
   bandaDatosAmpleosInterface,
   categoriaDatosAmpleosInterface,
   regionesDatosAmpleosInterface,
+  registroCumplimientoEvaluacionDatosAmpleosInterface,
   registroEventoDatosAmpleosInterface,
   rubricaDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
 import BandasServices from "@/lib/services/bandasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
 import RegionService from "@/lib/services/regionesServices";
+import registroCumplimintoServices from "@/lib/services/registroCumplimientoServices";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, use, useRef } from "react";
 
 export default function EvaluarHomePage() {
-  const [listaRegiones, setListaRegiones] = React.useState<
-    regionesDatosAmpleosInterface[]
-  >([]);
-  const [listeventos, setListEventos] = React.useState<
-    registroEventoDatosAmpleosInterface[]
-  >([]);
-  const [eventosOriginales, setEventosOriginales] = React.useState<
-    registroEventoDatosAmpleosInterface[]
-  >([]);
-  const [listCategorias, setListCategorias] = React.useState<
-    categoriaDatosAmpleosInterface[]
-  >([]);
-  const [listRubricas, setListRubricas] = React.useState<
-    rubricaDatosAmpleosInterface[]
-  >([]);
-  const [listBandasOriginales, setListBandasOriginales] = React.useState<
-    bandaDatosAmpleosInterface[]
-  >([]);
-  const [listBandas, setListBandas] = React.useState<
-    bandaDatosAmpleosInterface[]
-  >([]);
+  const [listaRegiones, setListaRegiones] = React.useState<regionesDatosAmpleosInterface[]>([]);
+  const [listeventos, setListEventos] = React.useState<registroEventoDatosAmpleosInterface[]>([]);
+  const [eventosOriginales, setEventosOriginales] = React.useState<registroEventoDatosAmpleosInterface[]>([]);
+  const [listCategorias, setListCategorias] = React.useState<categoriaDatosAmpleosInterface[]>([]);
+  const [listRubricas, setListRubricas] = React.useState<rubricaDatosAmpleosInterface[]>([]);
+  const [listBandasOriginales, setListBandasOriginales] = React.useState<bandaDatosAmpleosInterface[]>([]);
+  const [listBandas, setListBandas] = React.useState<bandaDatosAmpleosInterface[]>([]);
+  const [listBandasNoEvaluadas, setListBandasNoEvaluadas] = React.useState<bandaInterface[]>([]);
 
-  const [regionSelecionada, setRegionSeleccionada] =
-    React.useState<regionesDatosAmpleosInterface>();
-  const [eventoSelecionado, setEventoSelecionado] =
-    React.useState<registroEventoDatosAmpleosInterface>();
-  const [categoriaSelecionada, setCategoriaSelecionada] =
-    React.useState<categoriaDatosAmpleosInterface>();
-  const [rubricaSelecionada, setRubricaSelecionada] =
-    React.useState<rubricaDatosAmpleosInterface>();
-  const [bandaSelecionada, setBandaSelecionada] =
-    React.useState<bandaDatosAmpleosInterface>();
+  const [regionSelecionada, setRegionSeleccionada] = React.useState<regionesDatosAmpleosInterface>();
+  const [eventoSelecionado, setEventoSelecionado] = React.useState<registroEventoDatosAmpleosInterface>();
+  const [categoriaSelecionada, setCategoriaSelecionada] = React.useState<categoriaDatosAmpleosInterface>();
+  const [rubricaSelecionada, setRubricaSelecionada] = React.useState<rubricaDatosAmpleosInterface>();
+  const [bandaSelecionada, setBandaSelecionada] = React.useState<bandaInterface>();
+  const [yaseFiltraronBandas, setYaseFiltraronBandas] = React.useState<boolean>(false);
+
+  const regionesServices = useRef(new RegionService());
+  const eventosServices = useRef(new RegistroEventossServices());
+  const categoriasServices = useRef(new CategoriasServices());
+  const rubricasServices = useRef(new RubricasServices());
+  const bandasServices = useRef(new BandasServices());
+  const registroCumplimientoEvaluadosServices = useRef(new registroCumplimintoServices());
+
+  const obtenerBandasYaEvaluadas = async (idEvento: string, idRubrica: string) => {
+    const bandasUnicasList: bandaInterface[] = [];
+    if (idEvento && idRubrica) {
+      const datosPorRubircaYEvento = await registroCumplimientoEvaluadosServices.current.getPorRubricaYEvento(
+        idRubrica,
+        idEvento
+      );
+
+      const bandasUnicas: { [key: string]: bandaInterface } = {};
+
+      for (const registro of datosPorRubircaYEvento) {
+        if (!bandasUnicas[registro.bandas.idBanda]) {
+          bandasUnicas[registro.bandas.idBanda] = registro.bandas;
+          bandasUnicasList.push(registro.bandas);
+        }
+      }
+    }
+    return bandasUnicasList;
+  };
+
+  const ObtenerBandasNoEvaluadas = async (idEvento: string, idRubrica: string) => {
+    const bandasYaEvaluadas = await obtenerBandasYaEvaluadas(idEvento, idRubrica);
+    const bandasNoevaluadas = listBandas.filter(
+      (banda) => !bandasYaEvaluadas.some((evaluada) => evaluada.idBanda === banda.idBanda)
+    );
+    return bandasNoevaluadas as bandaInterface[];
+  };
+  useEffect(() => {
+    cargarDatos();
+  }, []);
 
   const cargarDatos = async () => {
-    const regionesServices = new RegionService();
-    const datosRegiones = await regionesServices.getDatosAmpleos();
+    const datosRegiones = await regionesServices.current.getDatosAmpleos();
     setListaRegiones(datosRegiones);
 
-    const eventosServices = new RegistroEventossServices();
-    const datosEventos = await eventosServices.getDatosAmpleos();
+    const datosEventos = await eventosServices.current.getDatosAmpleos();
     setListEventos(datosEventos);
     setEventosOriginales(datosEventos); // Guardar datos originales
 
-    const categoriasServices = new CategoriasServices();
-    const datosCategorias = await categoriasServices.getDatosAmpleos();
+    const datosCategorias = await categoriasServices.current.getDatosAmpleos();
     setListCategorias(datosCategorias);
 
-    const rubricasServices = new RubricasServices();
-    const datosRubricas = await rubricasServices.getDatosAmpleos();
+    const datosRubricas = await rubricasServices.current.getDatosAmpleos();
     setListRubricas(datosRubricas);
 
-    const bandasServices = new BandasServices();
-    const datosBandas = await bandasServices.getDatosAmpleos();
+    const datosBandas = await bandasServices.current.getDatosAmpleos();
     setListBandas(datosBandas);
     setListBandasOriginales(datosBandas); // Guardar datos originales de bandas
   };
+
+  useEffect(() => {
+    setYaseFiltraronBandas(false);
+    setBandaSelecionada(undefined);
+    const cargarBandasNoEvaluadas = async () => {
+      if (eventoSelecionado && rubricaSelecionada) {
+        const listaBandasNoEvaluadass: bandaInterface[] = await ObtenerBandasNoEvaluadas(
+          eventoSelecionado.idEvento,
+          rubricaSelecionada.idRubrica
+        );
+        setListBandasNoEvaluadas(listaBandasNoEvaluadass);
+        setYaseFiltraronBandas(true);
+      }
+    };
+    cargarBandasNoEvaluadas();
+  }, [eventoSelecionado, rubricaSelecionada]);
 
   const filtrarEventosPorRegion = useCallback(() => {
     if (regionSelecionada) {
@@ -85,6 +120,7 @@ export default function EvaluarHomePage() {
       setListEventos(eventosOriginales);
     }
   }, [regionSelecionada, eventosOriginales]);
+
   const filtrarBandasPorCategoria = useCallback(() => {
     if (categoriaSelecionada) {
       const datosFiltrados = listBandasOriginales.filter(
@@ -102,10 +138,6 @@ export default function EvaluarHomePage() {
   }, [filtrarBandasPorCategoria]);
 
   useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  useEffect(() => {
     filtrarEventosPorRegion();
   }, [filtrarEventosPorRegion]);
 
@@ -119,9 +151,7 @@ export default function EvaluarHomePage() {
             id=""
             value={regionSelecionada?.idRegion ?? ""}
             onChange={(evento) => {
-              const selected = listaRegiones.find(
-                (region) => region.idRegion === evento.target.value
-              );
+              const selected = listaRegiones.find((region) => region.idRegion === evento.target.value);
               setRegionSeleccionada(selected);
             }}
           >
@@ -130,11 +160,7 @@ export default function EvaluarHomePage() {
             </option>
             {listaRegiones.map((evento) => {
               return (
-                <option
-                  className="text-gray-700"
-                  key={evento.idRegion}
-                  value={evento.idRegion}
-                >
+                <option className="text-gray-700" key={evento.idRegion} value={evento.idRegion}>
                   {evento.nombreRegion}
                 </option>
               );
@@ -149,9 +175,7 @@ export default function EvaluarHomePage() {
             id=""
             value={eventoSelecionado?.idEvento || ""}
             onChange={(evento) => {
-              const selected = listeventos.find(
-                (ev) => ev.idEvento === evento.target.value
-              );
+              const selected = listeventos.find((ev) => ev.idEvento === evento.target.value);
               setEventoSelecionado(selected);
             }}
           >
@@ -165,11 +189,7 @@ export default function EvaluarHomePage() {
                   Evento
                 </option>
                 {listeventos.map((evento) => (
-                  <option
-                    className="text-gray-700"
-                    key={evento.idEvento}
-                    value={evento.idEvento}
-                  >
+                  <option className="text-gray-700" key={evento.idEvento} value={evento.idEvento}>
                     {evento.LugarEvento}
                   </option>
                 ))}
@@ -185,9 +205,7 @@ export default function EvaluarHomePage() {
             className="border-2 w-full"
             value={categoriaSelecionada?.idCategoria || ""}
             onChange={(evento) => {
-              const selected = listCategorias.find(
-                (categoria) => categoria.idCategoria === evento.target.value
-              );
+              const selected = listCategorias.find((categoria) => categoria.idCategoria === evento.target.value);
               setCategoriaSelecionada(selected);
             }}
           >
@@ -196,11 +214,7 @@ export default function EvaluarHomePage() {
             </option>
 
             {listCategorias.map((categoria) => (
-              <option
-                className="text-gray-700"
-                key={categoria.idCategoria}
-                value={categoria.idCategoria}
-              >
+              <option className="text-gray-700" key={categoria.idCategoria} value={categoria.idCategoria}>
                 {categoria.nombreCategoria}
               </option>
             ))}
@@ -214,9 +228,7 @@ export default function EvaluarHomePage() {
             className="border-2 w-full"
             value={rubricaSelecionada?.idRubrica || ""}
             onChange={(evento) => {
-              const selected = listRubricas.find(
-                (rubrica) => rubrica.idRubrica === evento.target.value
-              );
+              const selected = listRubricas.find((rubrica) => rubrica.idRubrica === evento.target.value);
               setRubricaSelecionada(selected);
             }}
           >
@@ -224,11 +236,7 @@ export default function EvaluarHomePage() {
               Rubrica
             </option>
             {listRubricas.map((rubrica) => (
-              <option
-                className="text-gray-700"
-                key={rubrica.idRubrica}
-                value={rubrica.idRubrica}
-              >
+              <option className="text-gray-700" key={rubrica.idRubrica} value={rubrica.idRubrica}>
                 {rubrica.nombreRubrica}
               </option>
             ))}
@@ -242,9 +250,7 @@ export default function EvaluarHomePage() {
             className="border-2 w-full"
             value={bandaSelecionada?.idBanda || ""}
             onChange={(evento) => {
-              const selected = listBandas.find(
-                (banda) => banda.idBanda === evento.target.value
-              );
+              const selected = listBandasNoEvaluadas.find((banda) => banda.idBanda === evento.target.value);
               setBandaSelecionada(selected);
             }}
           >
@@ -252,35 +258,29 @@ export default function EvaluarHomePage() {
               <option value="" className="text-gray-700" disabled>
                 Seleccione categoria...
               </option>
-            ) : (
+            ) : ( yaseFiltraronBandas ?
               <>
                 <option value="" className="text-gray-700" disabled>
                   Banda
                 </option>
-                {listBandas.map((banda) => (
-                  <option
-                    className="text-gray-700"
-                    key={banda.idBanda}
-                    value={banda.idBanda}
-                  >
+                {listBandasNoEvaluadas.map((banda) => (
+                  <option className="text-gray-700" key={banda.idBanda} value={banda.idBanda}>
                     {banda.nombreBanda}
                   </option>
                 ))}
-              </>
+              </>: <option value="" className="text-gray-700" disabled>
+                  cargando...
+                </option>
+
             )}
           </select>
         </div>
       </section>
       <section>
-        {eventoSelecionado &&
-        regionSelecionada &&
-        categoriaSelecionada &&
-        rubricaSelecionada &&
-        bandaSelecionada ? (
+        {eventoSelecionado && regionSelecionada && categoriaSelecionada && rubricaSelecionada && bandaSelecionada ? (
           <EvaluarBaseRubricaComponet
             eventoSelecionado={eventoSelecionado}
             regionSelecionada={regionSelecionada}
-      
             categoriaSelecionada={categoriaSelecionada}
             rubricaSelecionada={rubricaSelecionada}
             bandaSelecionada={bandaSelecionada}
