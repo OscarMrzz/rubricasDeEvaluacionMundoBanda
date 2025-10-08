@@ -19,10 +19,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { agregarCriterioEvaluar, recetiarCriteriosEvaluados } from "@/feacture/evaluar/evaluarSlice";
 import { RootState } from "@/app/store";
 import registroCumplimintoServices from "@/lib/services/registroCumplimientoServices";
-import { u } from "framer-motion/client";
+import { div, u } from "framer-motion/client";
 import PerfilesServices from "@/lib/services/perfilesServices";
 import registroComentariosServices from "@/lib/services/RegistroComentariosServices";
 import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
+import loading2 from "@/animacionesJson/loading2.json";
+import Lottie from "lottie-react";
 
 type Props = {
   eventoSelecionado: registroEventoDatosAmpleosInterface;
@@ -261,6 +263,13 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
         <p>{categoriaSelecionada.nombreCategoria}</p>
         <p>{rubricaSelecionada.nombreRubrica}</p>
       </section>
+      {
+        Object.keys(dataCriteriosEvaluar).length === 0 ?<div>
+        <Lottie animationData={loading2} loop={true} className=" " />
+
+      </div> : null
+      }
+      
       <div className=" w-full flex flex-col gap-4 ">
         {cargandoCriterios ? (
           <p>Cargando Criterios...</p>
@@ -271,18 +280,25 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
         )}
       </div>
 
+
+
+
+{Object.keys(dataCriteriosEvaluar).length === 0  ? null:
+<>
+
       <div className="w-full bg-gray-500 h-120 shadow-2xl  p-4 border-2 border-gray-400 text-gray-800">
+
         <div className="border-b-2 border-gray-700 mb-4 pb-2 flex justify-between">
           <h2 className="text-2xl font-bold">{bandaSelecionada.nombreBanda}</h2>
           <p className="pr-5"> Total: {totalPuntos}</p>
         </div>
 
+        
+
         <div className="flex flex-row gap-4 justify-between">
           <div>
             <div className="flex flex-row flex-wrap gap-10 justify-start items-start">
-              {cargandoFichaResultados ? (
-                <p>Cargando...</p>
-              ) : Object.keys(dataCriteriosEvaluar).length > 0 ? (
+              { Object.keys(dataCriteriosEvaluar).length > 0 ? (
                 Object.entries(dataCriteriosEvaluar).map(([idCriterio, item]) => {
                   const criterio = listCriterios.find((c) => c.idCriterio === idCriterio);
                   return (
@@ -317,8 +333,14 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
             ></textarea>
           </div>
         </div>
+        
       </div>
-      <div className="w-full flex justify-end items-center bg-gray-500 h-25 p-2 gap-4 border-2 border-gray-400 shadow-2xl">
+        
+        
+
+        
+    
+    <div className="w-full flex justify-end items-center bg-gray-500 h-25 p-2 gap-4 border-2 border-gray-400 shadow-2xl">
         <button className="bg-gray-600 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
           Cancelar
         </button>
@@ -329,6 +351,14 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
           Guardar Evaluación
         </button>
       </div>
+
+     
+</>
+          }
+
+
+      
+   
     </div>
   );
 }
