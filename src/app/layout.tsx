@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import NavBard from "@/component/NavBard/Page";
-import FooterComponent from "@/component/FooterComponent/Page";
+
 
 import { Provider } from "react-redux";
 import store from "@/app/store"; // 👈 ajusta la ruta según tu proyecto
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-gray-800 w-screen text-gray-50 grid grid-rows-[75px_1fr_100px] min-h-screen font-poppins ${poppins.className} `}
+        className={`bg-gray-800 w-screen text-gray-50 grid grid-rows-[75px_1fr] min-h-screen font-poppins ${poppins.className} `}
       >
         <Provider store={store}>
           <header className="flex flex-col sticky  top-0 z-50">
@@ -34,9 +34,6 @@ export default function RootLayout({
 
           <main className="w-full  overflow-y-auto-auto ">{children}</main>
 
-          <footer>
-            <FooterComponent />
-          </footer>
         </Provider>
       </body>
     </html>
