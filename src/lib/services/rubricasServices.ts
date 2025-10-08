@@ -29,6 +29,27 @@ export default class RubricasServices {
             throw error;
         }
     }
+    async getPorCategoria(idCategoria: string): Promise<rubricaDatosAmpleosInterface[]> {
+        try {
+            const { data, error } = await dataBaseSupabase
+                .from(tabla)
+                .select(`
+                    *,
+                    federaciones(*),
+                    categorias(*)
+                `) .eq("idForaneaCategoria", idCategoria);
+
+            if (error) {
+                console.error("❌ Error obteniendo regiones con federaciones:", error);
+                throw error;
+            }
+
+            return data as rubricaDatosAmpleosInterface[];
+        } catch (error) {
+            console.error("❌ Error general en getDatosAmpleos:", error);
+            throw error;
+        }
+    }
 
     async get() {
         const { data, error } = await dataBaseSupabase.from(tabla).select("*");
