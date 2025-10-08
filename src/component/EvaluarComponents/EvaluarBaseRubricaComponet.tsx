@@ -30,6 +30,8 @@ type Props = {
   rubricaSelecionada: rubricaDatosAmpleosInterface;
   bandaSelecionada: bandaInterface;
   regionSelecionada: regionesDatosAmpleosInterface;
+  recetiar: () => void;
+  revisandoEvluacion: () => void;
 };
 export default function EvaluarBaseRubricaComponet({
   eventoSelecionado,
@@ -37,6 +39,9 @@ export default function EvaluarBaseRubricaComponet({
   rubricaSelecionada,
   bandaSelecionada,
   regionSelecionada,
+  
+  recetiar,
+  revisandoEvluacion,
 }: Props) {
   const dispatch = useDispatch();
   const registroCumplimientosServices = useRef(new registroCumplimintoServices());
@@ -136,6 +141,7 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
 
   const guardarEvaluacion = async () => {
     setSeprecionoElBotoGuardar(true)
+    revisandoEvluacion()
 
     const camposCompletos = revisarCamposCompletos()
 
@@ -210,6 +216,7 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
       const respuestaComentario = await registroComentariosServices.current.create(dataComentario as registroComentariosInterface);
       if (respuestaComentario) {
         console.log("✅ Comentario guardado con éxito.");
+        recetiar();
       } else {
         console.log("❌ Error al guardar el comentario.");
 
@@ -224,6 +231,8 @@ const [sePrecionoElBotoGuardar,setSeprecionoElBotoGuardar] = React.useState<bool
       console.log("Faltan datos para guardar la evaluacion");
     }
      }
+
+     
   };
 
   const revisarCamposCompletos = () => {

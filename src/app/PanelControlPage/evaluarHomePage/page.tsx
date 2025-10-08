@@ -1,5 +1,7 @@
 "use client";
 import EvaluarBaseRubricaComponet from "@/component/EvaluarComponents/EvaluarBaseRubricaComponet";
+import ApprovateMessage from "@/component/Message/ApprovateMessage";
+import LoadingMessage1 from "@/component/Message/LoadingMessage1";
 import {
   bandaInterface,
   bandaDatosAmpleosInterface,
@@ -16,7 +18,7 @@ import registroCumplimintoServices from "@/lib/services/registroCumplimientoServ
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 
-import React, { useEffect, useCallback, use, useRef } from "react";
+import React, { useEffect, useCallback, use, useRef, useState } from "react";
 
 export default function EvaluarHomePage() {
   const [listaRegiones, setListaRegiones] = React.useState<regionesDatosAmpleosInterface[]>([]);
@@ -27,6 +29,8 @@ export default function EvaluarHomePage() {
   const [listBandasOriginales, setListBandasOriginales] = React.useState<bandaDatosAmpleosInterface[]>([]);
   const [listBandas, setListBandas] = React.useState<bandaDatosAmpleosInterface[]>([]);
   const [listBandasNoEvaluadas, setListBandasNoEvaluadas] = React.useState<bandaInterface[]>([]);
+    const [ActivadorApprovateMessage, setActivadorApprovateMessage] = useState(false);
+    const [ActivadorLoadingMessage, setActivadorLoadingMessage] = useState(false);
 
   const [regionSelecionada, setRegionSeleccionada] = React.useState<regionesDatosAmpleosInterface>();
   const [eventoSelecionado, setEventoSelecionado] = React.useState<registroEventoDatosAmpleosInterface>();
@@ -141,8 +145,36 @@ export default function EvaluarHomePage() {
     filtrarEventosPorRegion();
   }, [filtrarEventosPorRegion]);
 
+  const recetiar = () => {
+    setActivadorLoadingMessage(false)
+    setActivadorApprovateMessage(true)
+    setRubricaSelecionada(undefined);
+    setBandaSelecionada(undefined);
+    setYaseFiltraronBandas(false);
+
+  };
+
+  const revisarEvluacion = () => {
+    setActivadorLoadingMessage(true)
+  }
+ 
+
   return (
     <div>
+        <ApprovateMessage
+            open={ActivadorApprovateMessage}
+            onClose={()=>{setActivadorApprovateMessage(false)}}
+            titulo={"Exito"}
+            texto={"Evaluacion guardada con exito"}
+            
+            />
+        <LoadingMessage1
+            open={ActivadorLoadingMessage}
+            onClose={()=>{setActivadorLoadingMessage(false)}}
+            titulo={"Procesando"}
+            texto={"Revisando rubrica y subiendo al servidor..."}
+            
+            />
       <section className="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
         <div className="w-full">
           <select
@@ -284,6 +316,8 @@ export default function EvaluarHomePage() {
             categoriaSelecionada={categoriaSelecionada}
             rubricaSelecionada={rubricaSelecionada}
             bandaSelecionada={bandaSelecionada}
+            recetiar={recetiar}
+            revisandoEvluacion={revisarEvluacion}
           />
         ) : null}
       </section>
