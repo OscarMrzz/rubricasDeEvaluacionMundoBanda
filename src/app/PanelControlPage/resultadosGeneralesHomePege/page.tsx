@@ -1,13 +1,13 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 
-import { PlusIcon } from "@heroicons/react/16/solid";
+
 import {
   regionesInterface,
-  registroCumplimientoEvaluacionDatosAmpleosInterface,
+
   RegistroEventoInterface,
   resultadosGeneralesInterface,
 } from "@/interfaces/interfaces";
@@ -19,6 +19,7 @@ import {} from "@/feacture/overleys/overleySlice";
 import RegionService from "@/lib/services/regionesServices";
 
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
+/* import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices"; */
 
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
