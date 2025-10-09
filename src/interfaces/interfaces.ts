@@ -231,3 +231,11 @@ export interface rubricaDatosAmpleosInterface extends rubricaInterface {
     categorias: categoriaInterface;
     federaciones: federacionInterface;
 }
+
+export interface resultadosGeneralesInterface{
+    banda: bandaInterface;
+    evento: RegistroEventoInterface;
+    categoria: categoriaInterface;
+    region: regionesInterface;
+    totalPuntos: number;
+}
