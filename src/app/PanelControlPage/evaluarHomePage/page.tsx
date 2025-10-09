@@ -7,18 +7,18 @@ import {
   bandaDatosAmpleosInterface,
   categoriaDatosAmpleosInterface,
   regionesDatosAmpleosInterface,
-  registroCumplimientoEvaluacionDatosAmpleosInterface,
+
   registroEventoDatosAmpleosInterface,
   rubricaDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
 import BandasServices from "@/lib/services/bandasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
 import RegionService from "@/lib/services/regionesServices";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroComentariosServices";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 
-import React, { useEffect, useCallback, use, useRef, useState } from "react";
+import React, { useEffect, useCallback,  useRef, useState } from "react";
 
 export default function EvaluarHomePage() {
   const [listaRegiones, setListaRegiones] = React.useState<regionesDatosAmpleosInterface[]>([]);
