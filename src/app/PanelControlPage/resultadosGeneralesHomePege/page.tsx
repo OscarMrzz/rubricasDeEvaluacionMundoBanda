@@ -4,13 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 
-
-import {
-  regionesInterface,
-
-  RegistroEventoInterface,
-  resultadosGeneralesInterface,
-} from "@/interfaces/interfaces";
+import { regionesInterface, RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
@@ -18,7 +12,7 @@ import {} from "@/feacture/overleys/overleySlice";
 
 import RegionService from "@/lib/services/regionesServices";
 
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 /* import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices"; */
 
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";

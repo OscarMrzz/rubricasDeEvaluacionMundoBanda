@@ -1,7 +1,7 @@
 import { RootState } from "@/app/store";
 import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
 import { registroCumplimientoEvaluacionDatosAmpleosInterface, rubricaInterface } from "@/interfaces/interfaces";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 import loading2 from "@/animacionesJson/Loading2.json";
 
 import Lottie from "lottie-react";

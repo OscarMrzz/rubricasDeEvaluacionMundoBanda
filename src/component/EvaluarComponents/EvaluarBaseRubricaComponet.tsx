@@ -18,7 +18,7 @@ import CriteriosServices from "@/lib/services/criteriosServices";
 import { useDispatch, useSelector } from "react-redux";
 import { agregarCriterioEvaluar, recetiarCriteriosEvaluados } from "@/feacture/evaluar/evaluarSlice";
 import { RootState } from "@/app/store";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 
 import PerfilesServices from "@/lib/services/perfilesServices";
 
