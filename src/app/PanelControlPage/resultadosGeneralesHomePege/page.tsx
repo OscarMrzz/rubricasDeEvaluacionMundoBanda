@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 
 import { PlusIcon } from "@heroicons/react/16/solid";
-import { regionesInterface, RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import {
+  regionesInterface,
+  registroCumplimientoEvaluacionDatosAmpleosInterface,
+  RegistroEventoInterface,
+  resultadosGeneralesInterface,
+} from "@/interfaces/interfaces";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
@@ -13,20 +18,29 @@ import {} from "@/feacture/overleys/overleySlice";
 
 import RegionService from "@/lib/services/regionesServices";
 
-import registroCumplimintoServices from "@/lib/services/registroCumplimientoServices";
+import RegistroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
 
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import { h2 } from "framer-motion/client";
+
+import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
+import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
+
 
 export default function ResultadosGeneralesHomePage() {
-  const registroCumpliminetoServices = useRef(new registroCumplimintoServices());
+  const registroCumpliminetoServices = useRef(new RegistroCumplimintoServices());
   const regionesServices = useRef(new RegionService());
   const registroEventosServices = useRef(new RegistroEventossServices());
 
   const [resultados, setResultados] = useState<resultadosGeneralesInterface[]>([]);
 
-  const [loading, setLoading] = useState(true);
+
+
+  const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
+ 
+
+  const dispatch = useDispatch()
+
   const [cargandoRegiones, setCargandoRegiones] = useState(false);
   const [cargandoEventos, setCargandoEventos] = useState(false);
   const [cargandoDatosTabla, setCargandoDatosTabla] = useState(false);
@@ -45,11 +59,8 @@ export default function ResultadosGeneralesHomePage() {
 
         setResultados(resultadosData);
         setCargandoDatosTabla(false);
-
-        setLoading(false);
       } catch (error) {
         console.error("❌ Error al obtener las Rubricas:", error);
-        setLoading(false);
       } finally {
       }
     }
@@ -107,6 +118,11 @@ export default function ResultadosGeneralesHomePage() {
 
   return (
     <>
+      <ModalInformacionResultados
+        open={activadorModalIformacionResultados}
+        onClose={() => {dispatch(desactivarOverleyInformacionResultados())}}
+     
+      />
       <div className="px-20">
         <div>
           <div>
@@ -153,7 +169,7 @@ export default function ResultadosGeneralesHomePage() {
                 >
                   {cargandoEventos ? (
                     <option className="bg-white text-gray-400" value="">
-                      Eventos..
+                      Eventos...
                     </option>
                   ) : (
                     <>
@@ -172,13 +188,17 @@ export default function ResultadosGeneralesHomePage() {
             </div>
           </div>
         </div>
-        {
-          cargandoEventos? <h2 className="text-3xl font-black">SELECCIONA REGION Y EVENTO</h2>:
+        {cargandoEventos ? (
+          <h2 className="text-3xl font-black">SELECCIONA REGION Y EVENTO</h2>
+        ) : (
           <>
-           {cargandoDatosTabla ? <SkeletonTabla /> : <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />}
+            {cargandoDatosTabla ? (
+              <SkeletonTabla />
+            ) : (
+              <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />
+            )}
           </>
-        }
-       
+        )}
       </div>
     </>
   );

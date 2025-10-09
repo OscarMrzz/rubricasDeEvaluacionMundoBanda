@@ -14,7 +14,7 @@ import {
 import BandasServices from "@/lib/services/bandasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
 import RegionService from "@/lib/services/regionesServices";
-import registroCumplimintoServices from "@/lib/services/registroCumplimientoServices";
+import RegistroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 
@@ -31,8 +31,8 @@ export default function EvaluarHomePage() {
   const [listBandasOriginales, setListBandasOriginales] = React.useState<bandaDatosAmpleosInterface[]>([]);
   const [listBandas, setListBandas] = React.useState<bandaDatosAmpleosInterface[]>([]);
   const [listBandasNoEvaluadas, setListBandasNoEvaluadas] = React.useState<bandaInterface[]>([]);
-    const [ActivadorApprovateMessage, setActivadorApprovateMessage] = useState(false);
-    const [ActivadorLoadingMessage, setActivadorLoadingMessage] = useState(false);
+  const [ActivadorApprovateMessage, setActivadorApprovateMessage] = useState(false);
+  const [ActivadorLoadingMessage, setActivadorLoadingMessage] = useState(false);
 
   const [regionSelecionada, setRegionSeleccionada] = React.useState<regionesDatosAmpleosInterface>();
   const [eventoSelecionado, setEventoSelecionado] = React.useState<registroEventoDatosAmpleosInterface>();
@@ -46,7 +46,7 @@ export default function EvaluarHomePage() {
   const categoriasServices = useRef(new CategoriasServices());
   const rubricasServices = useRef(new RubricasServices());
   const bandasServices = useRef(new BandasServices());
-  const registroCumplimientoEvaluadosServices = useRef(new registroCumplimintoServices());
+  const registroCumplimientoEvaluadosServices = useRef(new RegistroCumplimintoServices());
 
   const obtenerBandasYaEvaluadas = async (idEvento: string, idRubrica: string) => {
     const bandasUnicasList: bandaInterface[] = [];
@@ -90,23 +90,20 @@ export default function EvaluarHomePage() {
     const datosCategorias = await categoriasServices.current.getDatosAmpleos();
     setListCategorias(datosCategorias);
 
- 
-
     const datosBandas = await bandasServices.current.getDatosAmpleos();
     setListBandas(datosBandas);
     setListBandasOriginales(datosBandas); // Guardar datos originales de bandas
   };
   useEffect(() => {
     const cargarRubricas = async () => {
-    if(categoriaSelecionada){
-       const datosRubricas = await rubricasServices.current.getPorCategoria(categoriaSelecionada.idCategoria);
-    setListRubricas(datosRubricas);
-    setSeCargoListaRubricas(true);
-    }
-  }
-  cargarRubricas();
-  
-  },[categoriaSelecionada]);
+      if (categoriaSelecionada) {
+        const datosRubricas = await rubricasServices.current.getPorCategoria(categoriaSelecionada.idCategoria);
+        setListRubricas(datosRubricas);
+        setSeCargoListaRubricas(true);
+      }
+    };
+    cargarRubricas();
+  }, [categoriaSelecionada]);
 
   useEffect(() => {
     setYaseFiltraronBandas(false);
@@ -158,35 +155,35 @@ export default function EvaluarHomePage() {
   }, [filtrarEventosPorRegion]);
 
   const recetiar = () => {
-    setActivadorLoadingMessage(false)
-    setActivadorApprovateMessage(true)
+    setActivadorLoadingMessage(false);
+    setActivadorApprovateMessage(true);
     setRubricaSelecionada(undefined);
     setBandaSelecionada(undefined);
     setYaseFiltraronBandas(false);
-
   };
 
   const revisarEvluacion = () => {
-    setActivadorLoadingMessage(true)
-  }
- 
+    setActivadorLoadingMessage(true);
+  };
 
   return (
     <div>
-        <ApprovateMessage
-            open={ActivadorApprovateMessage}
-            onClose={()=>{setActivadorApprovateMessage(false)}}
-            titulo={"Exito"}
-            texto={"Evaluacion guardada con exito"}
-            
-            />
-        <LoadingMessage1
-            open={ActivadorLoadingMessage}
-            onClose={()=>{setActivadorLoadingMessage(false)}}
-            titulo={"Procesando"}
-            texto={"Revisando rubrica y subiendo al servidor..."}
-            
-            />
+      <ApprovateMessage
+        open={ActivadorApprovateMessage}
+        onClose={() => {
+          setActivadorApprovateMessage(false);
+        }}
+        titulo={"Exito"}
+        texto={"Evaluacion guardada con exito"}
+      />
+      <LoadingMessage1
+        open={ActivadorLoadingMessage}
+        onClose={() => {
+          setActivadorLoadingMessage(false);
+        }}
+        titulo={"Procesando"}
+        texto={"Revisando rubrica y subiendo al servidor..."}
+      />
       <section className="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
         <div className="w-full">
           <select
@@ -276,32 +273,30 @@ export default function EvaluarHomePage() {
               setRubricaSelecionada(selected);
             }}
           >
-            {
-              categoriaSelecionada ? (<>
+            {categoriaSelecionada ? (
+              <>
                 {seCargoListaRubicas ? (
-              <>  
-              <option value="" disabled>
-              Rubrica
-            </option>
-            {listRubricas.map((rubrica) => (
-              <option className="text-gray-700" key={rubrica.idRubrica} value={rubrica.idRubrica}>
-                {rubrica.nombreRubrica}
-              </option>
-            ))}</>):(
+                  <>
+                    <option value="" disabled>
+                      Rubrica
+                    </option>
+                    {listRubricas.map((rubrica) => (
+                      <option className="text-gray-700" key={rubrica.idRubrica} value={rubrica.idRubrica}>
+                        {rubrica.nombreRubrica}
+                      </option>
+                    ))}
+                  </>
+                ) : (
                   <option value="" disabled>
-              cargando...
-            </option>
+                    cargando...
+                  </option>
+                )}
+              </>
+            ) : (
+              <option value="" disabled>
+                Rubricas...
+              </option>
             )}
-
-              
-              </>):(
-                     <option value="" disabled>
-              Rubricas...
-            </option>
-              )
-            }
-          
-          
           </select>
         </div>
 
@@ -320,7 +315,7 @@ export default function EvaluarHomePage() {
               <option value="" className="text-gray-700" disabled>
                 Bandas...
               </option>
-            ) : ( yaseFiltraronBandas ?
+            ) : yaseFiltraronBandas ? (
               <>
                 <option value="" className="text-gray-700" disabled>
                   Banda
@@ -330,10 +325,11 @@ export default function EvaluarHomePage() {
                     {banda.nombreBanda}
                   </option>
                 ))}
-              </>: <option value="" className="text-gray-700" disabled>
-                  cargando...
-                </option>
-
+              </>
+            ) : (
+              <option value="" className="text-gray-700" disabled>
+                cargando...
+              </option>
             )}
           </select>
         </div>

@@ -12,7 +12,7 @@ const elId = "idRegistroCumplimientoEvaluacion";
 
 
 
-export default class registroCumplimintoServices   {
+export default class RegistroCumplimintoServices   {
   perfil: perfilInterface | null = null;
   private perfilPromise: Promise<void> | null = null;
   
@@ -137,8 +137,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 rubricas(*)
             `)
             .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .single();
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
@@ -163,8 +162,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 rubricas(*)
             `)
             .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .single();
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
@@ -190,8 +188,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             `)
             .eq("idForaneaBanda", idBanda)
             .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .single();
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
@@ -217,8 +214,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             `)
             .eq("idForaneaRubrica", idRubrica)
           
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .single();
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
