@@ -12,7 +12,7 @@ const elId = "idRegistroCumplimientoEvaluacion";
 
 
 
-export default class RegistroCumplimintoServices   {
+export default class RegistroCumplimientoServices   {
   perfil: perfilInterface | null = null;
   private perfilPromise: Promise<void> | null = null;
   

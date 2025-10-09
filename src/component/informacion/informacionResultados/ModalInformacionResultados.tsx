@@ -1,11 +1,11 @@
 import { RootState } from "@/app/store";
 import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
 import { registroCumplimientoEvaluacionDatosAmpleosInterface, rubricaInterface } from "@/interfaces/interfaces";
-import RegistroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
 import loading2 from "@/animacionesJson/Loading2.json";
 
 import Lottie from "lottie-react";
-import React, {  useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type OverleyModalProps = {
@@ -14,14 +14,14 @@ type OverleyModalProps = {
 };
 
 export default function ModalInformacionResultados({ open, onClose }: OverleyModalProps) {
-  const registroCumplimientoServices = useRef(new RegistroCumplimintoServices());
+  const registroCumplimientoServices = useRef(new RegistroCumplimientoServices());
   const [datosCumplimientosbandaSelecionada, setDatosCumplimientosbandaSelecionada] = React.useState<
     registroCumplimientoEvaluacionDatosAmpleosInterface[]
   >([]);
   const filaResultadosSelecionada = useSelector((state: RootState) => state.resultadosGeneralesReducer);
   const [cargadoDatos, setCargadoDatos] = React.useState(true);
-  const [listaCRubricasUnicas, setListaRubricaUnicas] = React.useState<rubricaInterface[]>([])
-  const [totalPorRubrica, setTotalPorRubrica] = React.useState<{[key: string]: number}>({});
+  const [listaCRubricasUnicas, setListaRubricaUnicas] = React.useState<rubricaInterface[]>([]);
+  const [totalPorRubrica, setTotalPorRubrica] = React.useState<{ [key: string]: number }>({});
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -36,8 +36,6 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
       setCargadoDatos(false);
     };
     fetchData();
-
-   
   }, [filaResultadosSelecionada]);
 
   useEffect(() => {
@@ -66,7 +64,6 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
   };
 
   const porcesarDatos = () => {
-
     const rubricasUnicas: { [key: string]: rubricaInterface } = {};
     const rubricasUnicasList: rubricaInterface[] = [];
     for (const dato of datosCumplimientosbandaSelecionada) {
@@ -85,9 +82,7 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
       totales[dato.rubricas.idRubrica] += dato.puntosObtenidos;
     }
     setTotalPorRubrica(totales);
-   
-
-  }
+  };
 
   return (
     <>
@@ -105,39 +100,37 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
               <div className="p-4">
                 <h2 className="text-2xl font-bold mb-4">Banda X</h2>
 
-             {
-              listaCRubricasUnicas.map((rubrica) => (
-                <div key={rubrica.idRubrica} className="bg-gray-700 mb-6 border-b pb-4 border-gray-500 shadow-2xl border-2 p-4">
-                  <div className="flex flex-row gap-8 items-center mb-4">
+                {listaCRubricasUnicas.map((rubrica) => (
+                  <div
+                    key={rubrica.idRubrica}
+                    className="bg-gray-700 mb-6 border-b pb-4 border-gray-500 shadow-2xl border-2 p-4"
+                  >
+                    <div className="flex flex-row gap-8 items-center mb-4">
+                      <h3 className="text-xl font-semibold  text-gray-300">{rubrica.nombreRubrica}</h3>
+                      <p className="text-lg font-semibold  text-gray-300"> {totalPorRubrica[rubrica.idRubrica] || 0}</p>
+                    </div>
 
-                  <h3 className="text-xl font-semibold  text-gray-300">{rubrica.nombreRubrica}</h3>
-                  <p className="text-lg font-semibold  text-gray-300"> {totalPorRubrica[rubrica.idRubrica] || 0}</p>
+                    <div className="flex flex-col gap-2 ">
+                      {datosCumplimientosbandaSelecionada
+                        .filter((dato) => dato.rubricas.idRubrica === rubrica.idRubrica)
+                        .map((dato) => (
+                          <div
+                            key={dato.idRegistroCumplimientoEvaluacion}
+                            className=" h-15   bg-gray-600 flex items-center gap-10 "
+                          >
+                            <div className=" bg-[#274c77] flex justify-center items-center  w-15 h-full p-2 ">
+                              <p className="font-bold"> {dato.puntosObtenidos}</p>
+                            </div>
+
+                            <p>
+                              <strong>{dato.criteriosEvalucion.nombreCriterio}</strong>{" "}
+                            </p>
+                          </div>
+                        ))}
+                    </div>
+                    <div></div>
                   </div>
-                 
-                 <div className="flex flex-col gap-2 ">
-                  {datosCumplimientosbandaSelecionada
-                    .filter((dato) => dato.rubricas.idRubrica === rubrica.idRubrica)
-                    .map((dato) => (
-                      <div key={dato.idRegistroCumplimientoEvaluacion} className=" h-15   bg-gray-600 flex items-center gap-10 ">
-                        <div className=" bg-[#274c77] flex justify-center items-center  w-15 h-full p-2 ">
-                      <p className="font-bold"> {dato.puntosObtenidos}</p>
-                        </div>
-                         
-                       <p><strong>{dato.criteriosEvalucion.nombreCriterio}</strong> </p>
-             
-                      
-        
-
-                      </div>
-                    ))}
-                 </div>
-                 <div>
-                  
-                 </div>
-                </div>
-                  )
-              )
-             }
+                ))}
               </div>
             ) : (
               <div className="p-4 flex justify-center items-start">

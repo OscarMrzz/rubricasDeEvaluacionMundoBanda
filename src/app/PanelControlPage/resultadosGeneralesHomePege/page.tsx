@@ -18,7 +18,7 @@ import {} from "@/feacture/overleys/overleySlice";
 
 import RegionService from "@/lib/services/regionesServices";
 
-import RegistroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
 
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
@@ -26,20 +26,16 @@ import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
 import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
 
-
 export default function ResultadosGeneralesHomePage() {
-  const registroCumpliminetoServices = useRef(new RegistroCumplimintoServices());
+  const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const regionesServices = useRef(new RegionService());
   const registroEventosServices = useRef(new RegistroEventossServices());
 
   const [resultados, setResultados] = useState<resultadosGeneralesInterface[]>([]);
 
-
-
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
- 
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [cargandoRegiones, setCargandoRegiones] = useState(false);
   const [cargandoEventos, setCargandoEventos] = useState(false);
@@ -120,8 +116,9 @@ export default function ResultadosGeneralesHomePage() {
     <>
       <ModalInformacionResultados
         open={activadorModalIformacionResultados}
-        onClose={() => {dispatch(desactivarOverleyInformacionResultados())}}
-     
+        onClose={() => {
+          dispatch(desactivarOverleyInformacionResultados());
+        }}
       />
       <div className="px-20">
         <div>

@@ -14,7 +14,7 @@ import {
 import BandasServices from "@/lib/services/bandasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
 import RegionService from "@/lib/services/regionesServices";
-import RegistroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
 
@@ -46,7 +46,7 @@ export default function EvaluarHomePage() {
   const categoriasServices = useRef(new CategoriasServices());
   const rubricasServices = useRef(new RubricasServices());
   const bandasServices = useRef(new BandasServices());
-  const registroCumplimientoEvaluadosServices = useRef(new RegistroCumplimintoServices());
+  const registroCumplimientoEvaluadosServices = useRef(new RegistroCumplimientoServices());
 
   const obtenerBandasYaEvaluadas = async (idEvento: string, idRubrica: string) => {
     const bandasUnicasList: bandaInterface[] = [];

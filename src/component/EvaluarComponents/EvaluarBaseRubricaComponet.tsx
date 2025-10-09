@@ -18,7 +18,7 @@ import CriteriosServices from "@/lib/services/criteriosServices";
 import { useDispatch, useSelector } from "react-redux";
 import { agregarCriterioEvaluar, recetiarCriteriosEvaluados } from "@/feacture/evaluar/evaluarSlice";
 import { RootState } from "@/app/store";
-import registroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices";
 
 import PerfilesServices from "@/lib/services/perfilesServices";
 
@@ -46,7 +46,7 @@ export default function EvaluarBaseRubricaComponet({
   revisandoEvluacion,
 }: Props) {
   const dispatch = useDispatch();
-  const registroCumplimientosServices = useRef(new registroCumplimintoServices());
+  const registroCumplimientosServices = useRef(new RegistroCumplimientoServices());
   const registroComentariosServices = useRef(new RegistroComentariosServices());
 
   const dataCriteriosEvaluar = useSelector((state: RootState) => state.evaluarCriterio.evaluaciones);
