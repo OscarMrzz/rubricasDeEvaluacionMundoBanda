@@ -23,7 +23,7 @@ import { div, u } from "framer-motion/client";
 import PerfilesServices from "@/lib/services/perfilesServices";
 import registroComentariosServices from "@/lib/services/RegistroComentariosServices";
 import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
-import loading2 from "@/animacionesJson/loading2.json";
+import loading2 from "@/animacionesJson/Loading2.json";
 import Lottie from "lottie-react";
 
 type Props = {
