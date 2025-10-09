@@ -1,49 +1,56 @@
-import { RootState } from '@/app/store';
-import { setfilaResultadoItemSeleccionado } from '@/feacture/resultadosGenerales/ResultadosGeneralesSlice';
-import { registroCumplimientoEvaluacionDatosAmpleosInterface } from '@/interfaces/interfaces';
-import RegistroCumplimintoServices from '@/lib/services/RegistroCumplimientoServices';
+import { RootState } from "@/app/store";
+import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
+import { registroCumplimientoEvaluacionDatosAmpleosInterface, rubricaInterface } from "@/interfaces/interfaces";
+import RegistroCumplimintoServices from "@/lib/services/RegistroCumplimientoServices";
 import loading2 from "@/animacionesJson/Loading2.json";
-import { div } from 'framer-motion/client';
-import Lottie from 'lottie-react';
-import React, {  use, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+
+import Lottie from "lottie-react";
+import React, {  useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type OverleyModalProps = {
   open: boolean;
   onClose: () => void;
+};
 
-  
-  
-}
+export default function ModalInformacionResultados({ open, onClose }: OverleyModalProps) {
+  const registroCumplimientoServices = useRef(new RegistroCumplimintoServices());
+  const [datosCumplimientosbandaSelecionada, setDatosCumplimientosbandaSelecionada] = React.useState<
+    registroCumplimientoEvaluacionDatosAmpleosInterface[]
+  >([]);
+  const filaResultadosSelecionada = useSelector((state: RootState) => state.resultadosGeneralesReducer);
+  const [cargadoDatos, setCargadoDatos] = React.useState(true);
+  const [listaCRubricasUnicas, setListaRubricaUnicas] = React.useState<rubricaInterface[]>([])
+  const [totalPorRubrica, setTotalPorRubrica] = React.useState<{[key: string]: number}>({});
 
-export default function ModalInformacionResultados({open, onClose}:OverleyModalProps)  {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      setCargadoDatos(true);
 
+      if (!filaResultadosSelecionada || !filaResultadosSelecionada.idEvento) return;
+      const { idEvento, idBanda } = filaResultadosSelecionada;
+      const data = await registroCumplimientoServices.current.getPorBandaYEvento(idBanda, idEvento);
+      console.log("Datos de cumplimiento obtenidos:", data);
+      setDatosCumplimientosbandaSelecionada(data);
+      setCargadoDatos(false);
+    };
+    fetchData();
 
-const registroCumplimientoServices =useRef(new RegistroCumplimintoServices());
-const [datosCumplimientosbandaSelecionada, setDatosCumplimientosbandaSelecionada] = React.useState<registroCumplimientoEvaluacionDatosAmpleosInterface[] >([]);
- const filaResultadosSelecionada = useSelector((state: RootState) => state.resultadosGeneralesReducer);
- const [cargadoDatos, setCargadoDatos] = React.useState(true);
+   
+  }, [filaResultadosSelecionada]);
 
- const dispatch = useDispatch();
-useEffect(() => {
-  const fetchData = async () => {
-    setCargadoDatos(true);
+  useEffect(() => {
+    porcesarDatos();
+  }, [datosCumplimientosbandaSelecionada]);
 
-    if (!filaResultadosSelecionada || !filaResultadosSelecionada.idEvento) return;
-    const {idEvento,idBanda} = filaResultadosSelecionada;
-    const data = await registroCumplimientoServices.current.getPorBandaYEvento(idBanda, idEvento);
-    console.log("Datos de cumplimiento obtenidos:", data);
-    setDatosCumplimientosbandaSelecionada(data);
-    setCargadoDatos(false);
-  };
-  fetchData();
-}, [filaResultadosSelecionada]);
-  
   const [Animar, setAnimar] = React.useState(false);
   useEffect(() => {
     if (open) {
       setAnimar(false);
-      setTimeout(() => { setAnimar(true); }, 10);
+      setTimeout(() => {
+        setAnimar(true);
+      }, 10);
     } else {
       setAnimar(false); // Reinicia la animación al cerrar
     }
@@ -51,67 +58,97 @@ useEffect(() => {
 
   const cerrarModal = () => {
     setDatosCumplimientosbandaSelecionada([]);
-    dispatch(setfilaResultadoItemSeleccionado({idBanda:"", idEvento:""}));
+    dispatch(setfilaResultadoItemSeleccionado({ idBanda: "", idEvento: "" }));
     setCargadoDatos(true);
 
     setAnimar(false);
-    onClose()
+    onClose();
+  };
+
+  const porcesarDatos = () => {
+
+    const rubricasUnicas: { [key: string]: rubricaInterface } = {};
+    const rubricasUnicasList: rubricaInterface[] = [];
+    for (const dato of datosCumplimientosbandaSelecionada) {
+      if (!rubricasUnicas[dato.rubricas.idRubrica]) {
+        rubricasUnicas[dato.rubricas.idRubrica] = dato.rubricas;
+        rubricasUnicasList.push(dato.rubricas);
+      }
+    }
+    setListaRubricaUnicas(rubricasUnicasList);
+
+    const totales: { [key: string]: number } = {};
+    for (const dato of datosCumplimientosbandaSelecionada) {
+      if (!totales[dato.rubricas.idRubrica]) {
+        totales[dato.rubricas.idRubrica] = 0;
+      }
+      totales[dato.rubricas.idRubrica] += dato.puntosObtenidos;
+    }
+    setTotalPorRubrica(totales);
+   
+
   }
 
-
-
-
   return (
-<>
-  {open ? (
-    <div onDoubleClick={()=>cerrarModal()}  className="bg-gray-950/50 inset-0 z-100 fixed w-screen h-screen flex justify-center items-center">
-      <div className={`w-4xl h-140 bg-[#065b98] ${Animar ? 'scale-100' : 'scale-75'}  transition-all duration-500 ease-in-out`}>
+    <>
+      {open ? (
+        <div
+          onDoubleClick={() => cerrarModal()}
+          className="bg-gray-950/50 inset-0 z-100 fixed w-screen h-screen flex justify-center items-center"
+        >
+          <div
+            className={`w-4xl h-140 bg-gray-800 px-25 overflow-auto scrollbar-estetica ${
+              Animar ? "scale-100" : "scale-75"
+            }  transition-all duration-500 ease-in-out`}
+          >
+            {!cargadoDatos ? (
+              <div className="p-4">
+                <h2 className="text-2xl font-bold mb-4">Banda X</h2>
 
-        {
-!cargadoDatos  ? (
-  <div className="p-4">
-    <h2 className="text-2xl font-bold mb-4">Información de Resultados</h2>
+             {
+              listaCRubricasUnicas.map((rubrica) => (
+                <div key={rubrica.idRubrica} className="bg-gray-700 mb-6 border-b pb-4 border-gray-500 shadow-2xl border-2 p-4">
+                  <div className="flex flex-row gap-8 items-center mb-4">
 
-      
-       
-      
-
-
-         <ul>
-      {datosCumplimientosbandaSelecionada.map((dato) => (
-        <li key={dato.idRegistroCumplimientoEvaluacion} className="mb-2 border-b border-gray-300 pb-2">
-          {
-            dato.rubricas.nombreRubrica
-          }
-          
-          
-        </li>
-      ))}
-          
-    </ul>
-
-
+                  <h3 className="text-xl font-semibold  text-gray-300">{rubrica.nombreRubrica}</h3>
+                  <p className="text-lg font-semibold  text-gray-300"> {totalPorRubrica[rubrica.idRubrica] || 0}</p>
+                  </div>
+                 
+                 <div className="flex flex-col gap-2 ">
+                  {datosCumplimientosbandaSelecionada
+                    .filter((dato) => dato.rubricas.idRubrica === rubrica.idRubrica)
+                    .map((dato) => (
+                      <div key={dato.idRegistroCumplimientoEvaluacion} className=" h-15   bg-gray-600 flex items-center gap-10 ">
+                        <div className=" bg-[#274c77] flex justify-center items-center  w-15 h-full p-2 ">
+                      <p className="font-bold"> {dato.puntosObtenidos}</p>
+                        </div>
+                         
+                       <p><strong>{dato.criteriosEvalucion.nombreCriterio}</strong> </p>
+             
+                      
         
-    
- 
-  </div>
-) : (
-  <div className="p-4 flex justify-center items-start">
-    <div className='w-xl '>
-         
-          <Lottie animationData={loading2} loop={true} className=" " />
+
+                      </div>
+                    ))}
+                 </div>
+                 <div>
+                  
+                 </div>
+                </div>
+                  )
+              )
+             }
+              </div>
+            ) : (
+              <div className="p-4 flex justify-center items-start">
+                <div className="w-xl ">
+                  <Lottie animationData={loading2} loop={true} className=" " />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-       
-  </div>
-)
-        }
-
-     
-
-      </div>
-    </div>
-  ) : null}
-</>
-  )
+      ) : null}
+    </>
+  );
 }
-
