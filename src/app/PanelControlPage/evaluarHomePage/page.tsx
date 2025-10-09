@@ -17,7 +17,7 @@ import RegionService from "@/lib/services/regionesServices";
 import RegistroCumplimientoServices from "@/lib/services/RegistroComentariosServices";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
-
+//hola
 import React, { useEffect, useCallback,  useRef, useState } from "react";
 
 export default function EvaluarHomePage() {
