@@ -10,6 +10,9 @@ import { Provider } from "react-redux";
 import store from "@/app/store"; // 👈 ajusta la ruta según tu proyecto
 
 import { Poppins } from "next/font/google";
+import { useEffect, useRef } from "react";
+import RegionService from "@/lib/services/regionesServices";
+import { useRegionesStore } from "@/Store/regionesStore";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,6 +25,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+    const { listRegionesStore, setRegionesStore, recetiarRegionesStore } = useRegionesStore();
+
+  const regionesServices =useRef(new RegionService())
+
+  useEffect(()=>{
+    const traerDatosRegiones= async()=>{
+      const datos= await regionesServices.current.get()
+      setRegionesStore(datos)
+    }
+    traerDatosRegiones()
+
+
+  },[])
   return (
     <html lang="en">
       <body

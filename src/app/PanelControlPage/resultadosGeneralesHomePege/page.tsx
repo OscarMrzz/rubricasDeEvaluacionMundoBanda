@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 
@@ -20,6 +20,7 @@ import RegistroEventossServices from "@/lib/services/registroEventosServices";
 
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
 import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
+import { useRegionesStore } from "@/Store/regionesStore";
 
 export default function ResultadosGeneralesHomePage() {
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
@@ -31,6 +32,18 @@ export default function ResultadosGeneralesHomePage() {
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
 
   const dispatch = useDispatch();
+  const { listRegionesStore, setRegionesStore, recetiarRegionesStore } = useRegionesStore();
+
+  useEffect(() => {
+
+    if (listRegionesStore.length > 0) {
+       setCargandoRegiones(true);
+      setRegionLista(listRegionesStore);
+    setCargandoRegiones(false);
+    } 
+
+
+  }, [listRegionesStore]);
 
   const [cargandoRegiones, setCargandoRegiones] = useState(false);
   const [cargandoEventos, setCargandoEventos] = useState(false);
@@ -74,14 +87,14 @@ export default function ResultadosGeneralesHomePage() {
   useEffect(() => {
     const cargarRegiones = async () => {
       console.log("Cargando regiones...");
-      setCargandoRegiones(true);
+      //setCargandoRegiones(true);
       setCargandoDatosTabla(true);
       setCargandoEventos(true);
 
       try {
-        const regionData = await regionesServices.current.get();
-        setRegionLista(regionData);
-        setCargandoRegiones(false);
+        //const regionData = await regionesServices.current.get();
+        //setRegionLista(regionData);
+       // setCargandoRegiones(false);
       } catch (error) {
         console.error("❌ Error al obtener las Categorias:", error);
       }
