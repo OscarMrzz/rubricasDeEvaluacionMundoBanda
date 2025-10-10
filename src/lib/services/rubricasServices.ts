@@ -1,5 +1,5 @@
 import { dataBaseSupabase } from "../supabase";
-import { rubricaDatosAmpleosInterface, rubricaInterface } from "@/interfaces/interfaces";
+import { rubricaDatosAmpleosInterface, rubricaInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
 
 type Interface = rubricaInterface;
 
@@ -7,7 +7,23 @@ const tabla = "rubricas";
 const elId = "idRubrica";
 
 export default class RubricasServices {
-    // 🔹 Trae regiones con su federación (join automático)
+
+      perfil: perfilDatosAmpleosInterface | null = null;
+     
+      
+    constructor() {
+      
+        this.initPerfil();
+    }
+    
+    async initPerfil() {
+        const perilBruto = localStorage.getItem("perfilActivo");
+        if (perilBruto) {
+         
+        this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+        }
+    }
+
     async getDatosAmpleos(): Promise<rubricaDatosAmpleosInterface[]> {
         try {
             const { data, error } = await dataBaseSupabase

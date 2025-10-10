@@ -1,7 +1,7 @@
 import { dataBaseSupabase } from "../supabase";
-import {  perfilInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import {  perfilDatosAmpleosInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
 
-import PerfilesServices from "@/lib/services/perfilesServices";
+
 
 
 type Interface = registroCumplimientoEvaluacionInterface;
@@ -13,28 +13,19 @@ const elId = "idRegistroCumplimientoEvaluacion";
 
 
 export default class  RegistroCumplimientoServices   {
-  perfil: perfilInterface | null = null;
-  private perfilPromise: Promise<void> | null = null;
+  perfil: perfilDatosAmpleosInterface | null = null;
+ 
   
-  perfilesServices: PerfilesServices;
-
 constructor() {
-    this.perfilesServices = new PerfilesServices();
-    this.perfilPromise = this.initPerfil();
-    // Inicializa después del constructor
+  
     this.initPerfil();
 }
 
 async initPerfil() {
-    this.perfil = await this.perfilesServices.getUsuarioLogiado();
-}
-async ensurePerfil() {
-    if (!this.perfil) {
-        if (this.perfilPromise) {
-            await this.perfilPromise;
-        } else {
-            await this.initPerfil();
-        }
+    const perilBruto = localStorage.getItem("perfilActivo");
+    if (perilBruto) {
+     
+    this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
     }
 }
 
@@ -43,7 +34,7 @@ async ensurePerfil() {
 
  
 async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInterface[]> {
-     await this.ensurePerfil();
+     
     try {
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
@@ -79,7 +70,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 }
 
     async get() {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -91,7 +82,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
     }
 
     async getOne(id: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -118,7 +109,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
     }
 
     async getPorEvento(idEvento: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -143,7 +134,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorBanda(idBanda: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -168,7 +159,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorBandaYEvento(idBanda: string, idEvento: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -194,7 +185,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorRubrica(idRubrica: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -220,7 +211,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
     async getPorRubricaYEvento(idRubrica: string, idEvento: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -250,7 +241,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
    
     async getResultadosEvento(idEvento: string): Promise<resultadosGeneralesInterface[]> {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -311,7 +302,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
 
     async create(dataCreate: Interface) {
-         await this.ensurePerfil();
+         
         if (!this.perfil || !this.perfil.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -327,7 +318,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
     }
 
     async update(id: string, dataUpdate: Interface) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
@@ -344,7 +335,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
     }
 
     async delete(id: string) {
-         await this.ensurePerfil();
+         
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }

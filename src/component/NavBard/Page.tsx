@@ -1,40 +1,29 @@
 "use client";
 
 import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
-import PerfilesServices from "@/lib/services/perfilesServices";
-import { createBrowserClient } from "@supabase/ssr";
-import { Session } from "@supabase/supabase-js";
+import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
+
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-const supabase = createBrowserClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 const NavBard = () => {
-  const [sesion, setSesion] = useState<Session | null>(null);
-  const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>(
-    {} as perfilDatosAmpleosInterface
-  );
+  const [haySesionIniciada, setHaySesionIniciada] = useState<boolean>(false);
+  const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
   const [openUserMenu, setOpenUserMenu] = useState(false);
+
+  const {haySesionStore,cerrarSesionStore} = useInicioSesionStore();
 
   const abrirMenuUsuario = () => {
     setOpenUserMenu(!openUserMenu);
   };
 
-  // Cerrar el menú al hacer clic fuera
+
   useEffect(() => {
     if (!openUserMenu) return;
     const handleClickOutside = (event: MouseEvent) => {
       const menu = document.getElementById("user-menu");
       const button = document.getElementById("user-menu-button");
-      if (
-        menu &&
-        !menu.contains(event.target as Node) &&
-        button &&
-        !button.contains(event.target as Node)
-      ) {
+      if (menu && !menu.contains(event.target as Node) && button && !button.contains(event.target as Node)) {
         setOpenUserMenu(false);
       }
     };
@@ -44,72 +33,38 @@ const NavBard = () => {
     };
   }, [openUserMenu]);
 
-  // Recargar perfil cuando la sesión cambie y sea válida
   useEffect(() => {
-    if (!sesion) {
-      setPerfil({} as perfilDatosAmpleosInterface);
-      return;
-    }
-    const perfilesServices = new PerfilesServices();
-    perfilesServices
-      .getUsuarioLogiado()
-      .then((perfil) => {
-        if (perfil) {
-          setPerfil(perfil);
-        }
-      })
-      .catch((error) => {
-        console.error("Error obteniendo usuario logueado:", error);
-      });
-  }, [sesion]);
-
-  // Actualizar la sesión al iniciar sesión o cerrar sesión
-
-  useEffect(() => {
-    // Obtener la sesión actual al montar
-    supabase.auth.getSession().then(({ data }) => {
-      setSesion(data.session);
-    });
-    // Suscribirse a cambios de sesión
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSesion(session);
+    const perfilBruto = localStorage.getItem("perfilActivo");
+    if (perfilBruto) {
+      const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
+      if (perfil) {
+        setPerfil(perfil);
+        setHaySesionIniciada(true);
       }
-    );
-    // Limpiar el listener al desmontar
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, []);
+    }
+  }, [haySesionStore]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setSesion(null);
+    localStorage.removeItem("perfilActivo");
+
     setPerfil({} as perfilDatosAmpleosInterface);
     setOpenUserMenu(false);
+    setHaySesionIniciada(false);
+    cerrarSesionStore();
   };
 
   return (
     <div className="bg-grey-500/5 backdrop-blur-md h-full w-full flex text-white items-center justify-between px-15">
       <div className="flex gap-20">
         <div className="text-3xl font-bold " style={{ letterSpacing: "0.3em" }}>
-          <Link href="/">
-          
-          {perfil.federaciones?.nombreFederacion || ""}
-          </Link>
+          <Link href="/">{perfil.federaciones?.nombreFederacion || ""}</Link>
         </div>
       </div>
       <div className="flex font-bold text-lg gap-10">
-        {sesion && 
-        <Link href="/PanelControlPage">Evaluar</Link>
-        }
-        {sesion && 
-        <Link href="/Reportes">Reportes</Link>
-        }
-        {sesion && 
-        <Link href="/PanelControlPage">Admin</Link>
-        }
-        {sesion ? (
+        {haySesionIniciada && <Link href="/PanelControlPage">Evaluar</Link>}
+        {haySesionIniciada && <Link href="/Reportes">Reportes</Link>}
+        {haySesionIniciada && <Link href="/PanelControlPage">Admin</Link>}
+        {haySesionIniciada ? (
           <div style={{ position: "relative" }}>
             <span
               id="user-menu-button"
@@ -127,10 +82,7 @@ const NavBard = () => {
                 <li className="hover:bg-[#fb763e] font-medium cursor-pointer">
                   <Link href="/miPerfilPage">Perfil</Link>
                 </li>
-                <li
-                  onClick={handleLogout}
-                  className="hover:bg-[#fb763e] font-medium cursor-pointer"
-                >
+                <li onClick={handleLogout} className="hover:bg-[#fb763e] font-medium cursor-pointer">
                   Cerrar sesión
                 </li>
               </ul>

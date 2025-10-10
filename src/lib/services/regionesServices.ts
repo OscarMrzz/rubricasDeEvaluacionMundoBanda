@@ -7,7 +7,7 @@ const tabla = "regiones";
 const elID = "idRegion"
 
 export default class RegionService {
-    // 🔹 Trae regiones con su federación (join automático)
+   
     async getDatosAmpleos(): Promise<regionesDatosAmpleosInterface[]> {
         try {
             const { data, error } = await dataBaseSupabase
