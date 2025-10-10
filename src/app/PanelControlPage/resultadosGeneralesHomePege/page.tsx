@@ -1,55 +1,39 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
-
-import { regionesInterface, RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
-
+import { RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import {} from "@/feacture/overleys/overleySlice";
-
-import RegionService from "@/lib/services/regionesServices";
-
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
-/* import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientoServices"; */
-
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
 import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
-import { useRegionesStore } from "@/Store/regionesStore";
-
+import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
 export default function ResultadosGeneralesHomePage() {
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
-  const regionesServices = useRef(new RegionService());
-  const registroEventosServices = useRef(new RegistroEventossServices());
 
   const [resultados, setResultados] = useState<resultadosGeneralesInterface[]>([]);
 
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
 
   const dispatch = useDispatch();
-  const { listRegionesStore, setRegionesStore, recetiarRegionesStore } = useRegionesStore();
+
+  const { listEventosStore } = useEventosStore();
 
   useEffect(() => {
+    if (listEventosStore.length > 0) {
+      setCargandoEventos(true);
+      setCargandoDatosTabla(true);
+      setEventosLista(listEventosStore);
+      setCargandoEventos(false);
+    }
+  }, [listEventosStore]);
 
-    if (listRegionesStore.length > 0) {
-       setCargandoRegiones(true);
-      setRegionLista(listRegionesStore);
-    setCargandoRegiones(false);
-    } 
-
-
-  }, [listRegionesStore]);
-
-  const [cargandoRegiones, setCargandoRegiones] = useState(false);
   const [cargandoEventos, setCargandoEventos] = useState(false);
   const [cargandoDatosTabla, setCargandoDatosTabla] = useState(false);
-  const [regionesLista, setRegionLista] = useState<regionesInterface[]>([]);
-  const [regionSelecionada, setRegionSeleccionada] = useState<regionesInterface>();
+
   const [eventoSeleccionado, setEventoSeleccionado] = useState<RegistroEventoInterface>();
   const [eventosLista, setEventosLista] = useState<RegistroEventoInterface[]>([]);
 
@@ -70,55 +54,12 @@ export default function ResultadosGeneralesHomePage() {
     }
   }
 
-  const selecionarRegion = (idRegion: string) => {
-    const region = regionesLista.find((region) => region.idRegion === idRegion);
-    setRegionSeleccionada(region);
-
-    setEventoSeleccionado(undefined);
-    setResultados([]);
-  };
   const selecionarEvento = (idEvento: string) => {
     const evento = eventosLista.find((evento) => evento.idEvento === idEvento);
     setEventoSeleccionado(evento);
     setResultados([]);
     traerDatosTabla(idEvento);
   };
-
-  useEffect(() => {
-    const cargarRegiones = async () => {
-      console.log("Cargando regiones...");
-      //setCargandoRegiones(true);
-      setCargandoDatosTabla(true);
-      setCargandoEventos(true);
-
-      try {
-        //const regionData = await regionesServices.current.get();
-        //setRegionLista(regionData);
-       // setCargandoRegiones(false);
-      } catch (error) {
-        console.error("❌ Error al obtener las Categorias:", error);
-      }
-    };
-    cargarRegiones();
-  }, []);
-
-  useEffect(() => {
-    if (regionSelecionada) {
-      setCargandoEventos(true);
-      const cargarEvento = async () => {
-        try {
-          const eventosData = await registroEventosServices.current.getDatosAmpleosFiltradosRegion(
-            regionSelecionada.idRegion
-          );
-          setEventosLista(eventosData);
-          setCargandoEventos(false);
-        } catch (error) {
-          console.error("❌ Error al obtener los eventos por region:", error);
-        }
-      };
-      cargarEvento();
-    }
-  }, [regionSelecionada]);
 
   return (
     <>
@@ -136,33 +77,6 @@ export default function ResultadosGeneralesHomePage() {
             </div>
             <div className="flex justify-between mb-4">
               <div className="flex gap-4">
-                <select
-                  className=" w-40 h-6 bg-red-500 border-0"
-                  name=""
-                  id=""
-                  value={regionSelecionada?.idRegion ?? ""}
-                  onChange={(event) => {
-                    selecionarRegion(event.target.value);
-                  }}
-                >
-                  {cargandoRegiones ? (
-                    <option className="bg-white text-gray-400" value="">
-                      Regiones...
-                    </option>
-                  ) : (
-                    <>
-                      <option className="bg-white text-gray-400" value="">
-                        Regiones
-                      </option>
-                      {regionesLista.map((Region) => (
-                        <option className="bg-white text-gray-800" key={Region.idRegion} value={Region.idRegion}>
-                          {Region.nombreRegion}
-                        </option>
-                      ))}
-                    </>
-                  )}
-                </select>
-
                 <select
                   className=" w-40 h-6 bg-red-500 border-0"
                   name=""
