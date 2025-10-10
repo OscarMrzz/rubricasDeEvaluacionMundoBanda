@@ -21,6 +21,7 @@ import BandasServices from "@/lib/services/bandasServices";
 import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
 import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
 import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
+import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -46,18 +47,33 @@ export default function RootLayout({
   const rubicasServices =useRef(new RubricasServices())
   const bandasServices =useRef(new BandasServices())
 
+  const {haySesionStore}= useInicioSesionStore()
+
   useEffect(()=>{
-   
+    if(!haySesionStore){
+      recetiarRegionesStore()
+      recetiarEventosStore()
+      recetiarCategoriasStore()
+      recetiarRubicasStore()
+      recetiarBandasStore()
+
+      return
+    }else{
+
       regionesServices.current.get().then((datosRegiones)=>{setRegionesStore(datosRegiones)})
       eventosServices.current.get().then((data)=>{setEventosStore(data)})
       categoriasServices.current.get().then((data)=>{setCategoriasStore(data)})
       rubicasServices.current.get().then((data)=>{setRubicasStore(data)})
       bandasServices.current.get().then((data)=>{setBandasStore(data)})
+
+    }
+   
+      
     
   
 
 
-  },[])
+  },[haySesionStore])
   return (
     <html lang="en">
       <body

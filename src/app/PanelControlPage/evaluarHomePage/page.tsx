@@ -4,23 +4,15 @@ import ApprovateMessage from "@/component/Message/ApprovateMessage";
 import LoadingMessage1 from "@/component/Message/LoadingMessage1";
 import {
   bandaInterface,
-  bandaDatosAmpleosInterface,
-  categoriaDatosAmpleosInterface,
-  regionesDatosAmpleosInterface,
 
-  registroEventoDatosAmpleosInterface,
-  rubricaDatosAmpleosInterface,
   regionesInterface,
   RegistroEventoInterface,
   categoriaInterface,
   rubricaInterface,
 } from "@/interfaces/interfaces";
-import BandasServices from "@/lib/services/bandasServices";
-import CategoriasServices from "@/lib/services/categoriaServices";
-import RegionService from "@/lib/services/regionesServices";
+
 import RegistroCumplimientoServices from "@/lib/services/RegistroComentariosServices";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import RubricasServices from "@/lib/services/rubricasServices";
+
 import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
 import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
 import { useEventosStore } from "@/Store/EventosStore/listEventosStore";

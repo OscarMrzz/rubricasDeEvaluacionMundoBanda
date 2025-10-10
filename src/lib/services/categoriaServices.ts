@@ -65,6 +65,7 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
         .from(tabla).select("*")
         .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
+        console.log(data);
         return data;
     }
 
