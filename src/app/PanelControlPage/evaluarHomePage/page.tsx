@@ -10,6 +10,10 @@ import {
 
   registroEventoDatosAmpleosInterface,
   rubricaDatosAmpleosInterface,
+  regionesInterface,
+  RegistroEventoInterface,
+  categoriaInterface,
+  rubricaInterface,
 } from "@/interfaces/interfaces";
 import BandasServices from "@/lib/services/bandasServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
@@ -17,35 +21,40 @@ import RegionService from "@/lib/services/regionesServices";
 import RegistroCumplimientoServices from "@/lib/services/RegistroComentariosServices";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
+import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
+import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
+import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
+import { useRegionesStore } from "@/Store/listRegionesStore";
+import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
 //hola
-import React, { useEffect, useCallback,  useRef, useState } from "react";
+import React, { useEffect, useCallback,  useRef, useState, use } from "react";
 
 export default function EvaluarHomePage() {
-  const [listaRegiones, setListaRegiones] = React.useState<regionesDatosAmpleosInterface[]>([]);
-  const [listeventos, setListEventos] = React.useState<registroEventoDatosAmpleosInterface[]>([]);
-  const [eventosOriginales, setEventosOriginales] = React.useState<registroEventoDatosAmpleosInterface[]>([]);
-  const [listCategorias, setListCategorias] = React.useState<categoriaDatosAmpleosInterface[]>([]);
-  const [listRubricas, setListRubricas] = React.useState<rubricaDatosAmpleosInterface[]>([]);
+  const [listaRegiones, setListaRegiones] = React.useState<regionesInterface[]>([]);
+  const [listeventos, setListEventos] = React.useState<RegistroEventoInterface[]>([]);
+  const [eventosOriginales, setEventosOriginales] = React.useState<RegistroEventoInterface[]>([]);
+  const [listCategorias, setListCategorias] = React.useState<categoriaInterface[]>([]);
+  const [listRubricas, setListRubricas] = React.useState<rubricaInterface[]>([]);
   const [seCargoListaRubicas, setSeCargoListaRubricas] = React.useState<boolean>(false);
 
-  const [listBandasOriginales, setListBandasOriginales] = React.useState<bandaDatosAmpleosInterface[]>([]);
-  const [listBandas, setListBandas] = React.useState<bandaDatosAmpleosInterface[]>([]);
+  const [listBandasOriginales, setListBandasOriginales] = React.useState<bandaInterface[]>([]);
+  const [listBandas, setListBandas] = React.useState<bandaInterface[]>([]);
   const [listBandasNoEvaluadas, setListBandasNoEvaluadas] = React.useState<bandaInterface[]>([]);
   const [ActivadorApprovateMessage, setActivadorApprovateMessage] = useState(false);
   const [ActivadorLoadingMessage, setActivadorLoadingMessage] = useState(false);
 
-  const [regionSelecionada, setRegionSeleccionada] = React.useState<regionesDatosAmpleosInterface>();
-  const [eventoSelecionado, setEventoSelecionado] = React.useState<registroEventoDatosAmpleosInterface>();
-  const [categoriaSelecionada, setCategoriaSelecionada] = React.useState<categoriaDatosAmpleosInterface>();
-  const [rubricaSelecionada, setRubricaSelecionada] = React.useState<rubricaDatosAmpleosInterface>();
+  const [regionSelecionada, setRegionSeleccionada] = React.useState<regionesInterface>();
+  const [eventoSelecionado, setEventoSelecionado] = React.useState<RegistroEventoInterface>();
+  const [categoriaSelecionada, setCategoriaSelecionada] = React.useState<categoriaInterface>();
+  const [rubricaSelecionada, setRubricaSelecionada] = React.useState<rubricaInterface>();
   const [bandaSelecionada, setBandaSelecionada] = React.useState<bandaInterface>();
   const [yaseFiltraronBandas, setYaseFiltraronBandas] = React.useState<boolean>(false);
 
-  const regionesServices = useRef(new RegionService());
-  const eventosServices = useRef(new RegistroEventossServices());
-  const categoriasServices = useRef(new CategoriasServices());
-  const rubricasServices = useRef(new RubricasServices());
-  const bandasServices = useRef(new BandasServices());
+
+
+
+
+ 
   const registroCumplimientoEvaluadosServices = useRef(new RegistroCumplimientoServices());
 
   const obtenerBandasYaEvaluadas = async (idEvento: string, idRubrica: string) => {
@@ -71,38 +80,90 @@ export default function EvaluarHomePage() {
   const ObtenerBandasNoEvaluadas = async (idEvento: string, idRubrica: string) => {
     const bandasYaEvaluadas = await obtenerBandasYaEvaluadas(idEvento, idRubrica);
     const bandasNoevaluadas = listBandas.filter(
-      (banda) => !bandasYaEvaluadas.some((evaluada) => evaluada.idBanda === banda.idBanda)
+      (banda:bandaInterface) => !bandasYaEvaluadas.some((evaluada) => evaluada.idBanda === banda.idBanda)
     );
     return bandasNoevaluadas as bandaInterface[];
   };
+  
+  //Aqui vamos a trabajar
+
+  const {listRegionesStore} = useRegionesStore();
+  const {listEventosStore} = useEventosStore();
+  const {listCategoriasStore} = useCategoriasStore();
+  const {listRubicasStore} = useRubicasStore();
+  const {listBandasStore} = useBandasStore();
+
+
   useEffect(() => {
-    cargarDatos();
-  }, []);
+    if (listRegionesStore.length > 0) {
+      setListaRegiones(listRegionesStore);
+    }
+  }, [listRegionesStore]);
 
-  const cargarDatos = async () => {
-    const datosRegiones = await regionesServices.current.getDatosAmpleos();
-    setListaRegiones(datosRegiones);
 
-    const datosEventos = await eventosServices.current.getDatosAmpleos();
-    setListEventos(datosEventos);
-    setEventosOriginales(datosEventos); // Guardar datos originales
-
-    const datosCategorias = await categoriasServices.current.getDatosAmpleos();
-    setListCategorias(datosCategorias);
-
-    const datosBandas = await bandasServices.current.getDatosAmpleos();
-    setListBandas(datosBandas);
-    setListBandasOriginales(datosBandas); // Guardar datos originales de bandas
-  };
   useEffect(() => {
-    const cargarRubricas = async () => {
+    if (listEventosStore.length > 0) {
+      setListEventos([]);
+      setEventosOriginales(listEventosStore); 
+    }
+
+  }, [listEventosStore]);
+
+  useEffect(() => {
+  if (regionSelecionada) {
+    
+    setEventoSelecionado(undefined); 
+      const datosFiltrados = eventosOriginales.filter(
+        (evento) => evento.idForaneaRegion === regionSelecionada.idRegion
+      );
+      setListEventos(datosFiltrados);
+    } else {
+
+      setListEventos(eventosOriginales);
+    }
+
+
+  }, [regionSelecionada, eventosOriginales]);
+
+
+
+
+  useEffect(() => {
+    if (listCategoriasStore.length > 0) {
+      setListCategorias(listCategoriasStore);
+    }
+
+  }, [listCategoriasStore]);
+
+  useEffect(() => {
+    if (listRubicasStore.length > 0) {
+      setListRubricas(listRubicasStore);
+      setSeCargoListaRubricas(true);
+    }
+
+  }, [listRubicasStore]);
+
+  useEffect(() => {
+    if (listBandasStore.length > 0) {
+      setListBandas([]);
+      setListBandasOriginales(listBandasStore); // Guardar datos originales de bandas
+    }
+  }, [listBandasStore]);
+
+
+
+
+ 
+
+  useEffect(() => {
+   
       if (categoriaSelecionada) {
-        const datosRubricas = await rubricasServices.current.getPorCategoria(categoriaSelecionada.idCategoria);
+        const datosRubricas = listRubicasStore.filter(
+          (rubrica: rubricaInterface ) => rubrica.idForaneaCategoria === categoriaSelecionada.idCategoria
+        );
         setListRubricas(datosRubricas);
         setSeCargoListaRubricas(true);
       }
-    };
-    cargarRubricas();
   }, [categoriaSelecionada]);
 
   useEffect(() => {
@@ -110,6 +171,7 @@ export default function EvaluarHomePage() {
     setBandaSelecionada(undefined);
     const cargarBandasNoEvaluadas = async () => {
       if (eventoSelecionado && rubricaSelecionada) {
+        setListBandasNoEvaluadas([]); // Limpiar la lista antes de cargar nuevas bandas
         const listaBandasNoEvaluadass: bandaInterface[] = await ObtenerBandasNoEvaluadas(
           eventoSelecionado.idEvento,
           rubricaSelecionada.idRubrica
@@ -122,16 +184,7 @@ export default function EvaluarHomePage() {
   }, [eventoSelecionado, rubricaSelecionada]);
 
   const filtrarEventosPorRegion = useCallback(() => {
-    if (regionSelecionada) {
-      // Filtrar siempre desde los datos originales
-      const datosFiltrados = eventosOriginales.filter(
-        (evento) => evento.idForaneaRegion === regionSelecionada.idRegion
-      );
-      setListEventos(datosFiltrados);
-    } else {
-      // Si no hay región seleccionada, mostrar todos los eventos
-      setListEventos(eventosOriginales);
-    }
+    
   }, [regionSelecionada, eventosOriginales]);
 
   const filtrarBandasPorCategoria = useCallback(() => {
@@ -192,7 +245,7 @@ export default function EvaluarHomePage() {
             id=""
             value={regionSelecionada?.idRegion ?? ""}
             onChange={(evento) => {
-              const selected = listaRegiones.find((region) => region.idRegion === evento.target.value);
+              const selected = listaRegiones.find((region:regionesInterface) => region.idRegion === evento.target.value);
               setRegionSeleccionada(selected);
             }}
           >

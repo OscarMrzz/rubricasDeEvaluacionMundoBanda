@@ -248,16 +248,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
     }
 
 
-    /* 
-    export interface resultadosGeneralesInterface{
-        banda: bandaInterface;
-        evento: RegistroEventoInterface;
-        categoria: categoriaInterface;
-        region: regionesInterface;
-        totalPuntos: number;
-    }
-    
-    */
+   
     async getResultadosEvento(idEvento: string): Promise<resultadosGeneralesInterface[]> {
          await this.ensurePerfil();
         if (!this.perfil?.idForaneaFederacion) {

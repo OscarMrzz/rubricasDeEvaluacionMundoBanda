@@ -138,7 +138,7 @@
              `)
              .eq("idForaneaEvento", idEvento)
              .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .single();
+            
  
          if (error) throw error;
          return data;
@@ -164,7 +164,7 @@
              `)
              .eq("idForaneaBanda", idBanda)
              .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .single();
+          
  
          if (error) throw error;
          return data;
@@ -191,7 +191,7 @@
              .eq("idForaneaBanda", idBanda)
              .eq("idForaneaEvento", idEvento)
              .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .single();
+       
  
          if (error) throw error;
          return data;
@@ -246,7 +246,7 @@
              .eq("idForaneaEvento", idEvento)
            
              .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .single();
+            
  
          if (error) throw error;
          return data;

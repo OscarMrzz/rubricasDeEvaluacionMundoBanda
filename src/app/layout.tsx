@@ -12,7 +12,7 @@ import store from "@/app/store"; // 👈 ajusta la ruta según tu proyecto
 import { Poppins } from "next/font/google";
 import { use, useEffect, useRef } from "react";
 import RegionService from "@/lib/services/regionesServices";
-import { useRegionesStore } from "@/Store/regionesStore";
+import { useRegionesStore } from "@/Store/listRegionesStore";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
 import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
 import CategoriasServices from "@/lib/services/categoriaServices";

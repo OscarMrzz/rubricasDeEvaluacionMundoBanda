@@ -1,15 +1,18 @@
 import {
-  bandaDatosAmpleosInterface,
+
   bandaInterface,
-  categoriaDatosAmpleosInterface,
+
+  categoriaInterface,
   criterioEvaluacionDatosAmpleosInterface,
   perfilInterface,
-  regionesDatosAmpleosInterface,
+
   regionesInterface,
   registroComentariosInterface,
   registroCumplimientoEvaluacionInterface,
-  registroEventoDatosAmpleosInterface,
-  rubricaDatosAmpleosInterface,
+ 
+  RegistroEventoInterface,
+
+  rubricaInterface,
 } from "@/interfaces/interfaces";
 
 import React, { useEffect, useState, useCallback, useRef } from "react";
@@ -27,11 +30,11 @@ import loading2 from "@/animacionesJson/Loading2.json";
 import Lottie from "lottie-react";
 
 type Props = {
-  eventoSelecionado: registroEventoDatosAmpleosInterface;
-  categoriaSelecionada: categoriaDatosAmpleosInterface;
-  rubricaSelecionada: rubricaDatosAmpleosInterface;
+  eventoSelecionado: RegistroEventoInterface;
+  categoriaSelecionada: categoriaInterface;
+  rubricaSelecionada: rubricaInterface;
   bandaSelecionada: bandaInterface;
-  regionSelecionada: regionesDatosAmpleosInterface;
+  regionSelecionada: regionesInterface;
   recetiar: () => void;
   revisandoEvluacion: () => void;
 };
