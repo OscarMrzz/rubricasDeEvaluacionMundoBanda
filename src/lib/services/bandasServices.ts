@@ -1,5 +1,5 @@
 import { dataBaseSupabase } from "../supabase";
-import { bandaDatosAmpleosInterface,bandaInterface } from "@/interfaces/interfaces";
+import { bandaDatosAmpleosInterface,bandaInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
 
 type Interface = bandaInterface;
 
@@ -7,9 +7,31 @@ const tabla = "bandas";
 const elId = "idBanda";
 
 export default class BandasServices {
-    // 🔹 Trae bandas con federación, categoría y región (join automático)
+
+     perfil: perfilDatosAmpleosInterface | null = null;
+      
+    
+    constructor() {
+    
+        this.initPerfil();
+    }
+    
+    async initPerfil() {
+        const perilBruto = localStorage.getItem("perfilActivo");
+        if (perilBruto) {
+         
+        this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+        }
+    }
+
     async getDatosAmpleos(): Promise<bandaDatosAmpleosInterface[]> {
+
+
         try {
+
+              if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
             const { data, error } = await dataBaseSupabase
                 .from(tabla)
                 .select(` 
@@ -17,7 +39,7 @@ export default class BandasServices {
                     federaciones(*),
                     categorias(*),
                     regiones(*)
-                `);
+                `).eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
             if (error) {
                 console.error("❌ Error obteniendo bandas con datos completos:", error);
@@ -33,23 +55,53 @@ export default class BandasServices {
     }
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*");
+        try{
+
+              if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+            const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
         return data;
+
+        }
+        catch(error){
+            console.error("❌ Error general en get:", error);
+            throw error;
+        }
+        
     }
 
     async getOne(id: string) {
-        const { data, error } = await dataBaseSupabase
+        try{
+              if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+
+   const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id)
+            .eq(elId, id).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
         return data;
+
+        }
+        catch(error){
+            console.error("❌ Error general en getOne:", error);
+            throw error;
+        }
+     
     }
 
     async create(dataCreate: Interface) {
+        try{
+
+                if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+            
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .insert(dataCreate)
@@ -58,6 +110,15 @@ export default class BandasServices {
 
         if (error) throw error;
         return data;
+
+
+        }
+        catch(error){
+            console.error("❌ Error general en create:", error);
+            throw error;
+        }
+
+
     }
 
     async update(id: string, dataUpdate: Interface) {

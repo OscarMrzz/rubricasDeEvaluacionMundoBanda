@@ -1,5 +1,5 @@
  import { dataBaseSupabase } from "../supabase";
- import { registroEquipoEvaluadorDatosAmpleosInterface, registroEquipoEvaluadorInterface } from "@/interfaces/interfaces";
+ import { registroEquipoEvaluadorDatosAmpleosInterface, registroEquipoEvaluadorInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
  
  type Interface = registroEquipoEvaluadorInterface;
  
@@ -7,7 +7,21 @@
  const elId = "idRegistroEvaluador";
  
  export default class RegistroEquipoEvaluadorServices {
-     // 🔹 Trae regiones con su federación (join automático)
+   perfil: perfilDatosAmpleosInterface | null = null;
+ 
+  
+constructor() {
+  
+    this.initPerfil();
+}
+
+async initPerfil() {
+    const perilBruto = localStorage.getItem("perfilActivo");
+    if (perilBruto) {
+     
+    this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+    }
+}
      async getDatosAmpleos(idEvento:string): Promise<registroEquipoEvaluadorDatosAmpleosInterface[]> {
          try {
              const { data, error } = await dataBaseSupabase

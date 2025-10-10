@@ -40,7 +40,7 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
             .select(`
                 *,
                 criteriosEvalucion(*)
-            `)
+            `).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
 
 
         if (error) {
@@ -62,7 +62,7 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
             throw new Error("No hay federación en el perfil del usuario.");
         }
         const { data, error } = await dataBaseSupabase
-        .from(tabla).select("*")
+        .from(tabla).select("*").eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
     
         if (error) throw error;
         return data;
@@ -76,7 +76,7 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id)
+            .eq(elId, id).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
            
             .single();
 

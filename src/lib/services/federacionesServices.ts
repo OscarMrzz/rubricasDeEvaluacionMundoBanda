@@ -1,5 +1,5 @@
 import { dataBaseSupabase } from "../supabase";
-import { federacionInterface} from "@/interfaces/interfaces";
+import { federacionInterface, perfilDatosAmpleosInterface} from "@/interfaces/interfaces";
 
 type Interface = federacionInterface;
 
@@ -7,6 +7,21 @@ const tabla = "federaciones";
 const Elid = "idFederacion";
 
 export default class FederacionesService {
+     perfil: perfilDatosAmpleosInterface | null = null;
+     
+      
+    constructor() {
+      
+        this.initPerfil();
+    }
+    
+    async initPerfil() {
+        const perilBruto = localStorage.getItem("perfilActivo");
+        if (perilBruto) {
+         
+        this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+        }
+    }
  
 
     async get() {
