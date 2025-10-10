@@ -23,7 +23,7 @@ export default function InformacionCumplimientoComponent({
     const cumplimientosServices = new cumplimientossServices();
     cumplimientosServices.delete(cumplimiento.idCumplimiento)
       .then(() => {
-        console.log("✅ cumpimiento eliminado correctamente");
+       
         onRefresh?.(); // Refrescar los datos
         onClose?.(); // Cerrar el modal después de eliminar
       })

@@ -41,8 +41,7 @@ const FederacionesHomePage = () => {
         const federacionesData: federacionInterface[] = await federacionesService.get();
         setFederaciones(federacionesData);
         setLoading(false);
-        console.log("✅ Federaciones obtenidas:");
-        console.log(federacionesData);
+       
       } catch (error) {
         console.error("❌ Error al obtener las federaciones:", error);
         setLoading(false);

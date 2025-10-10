@@ -28,8 +28,7 @@ const RegionHomePage = () => {
         await regionService.get();
       setRegiones(regionesData);
       setLoading(false);
-      console.log("✅ Regiones obtenidas:");
-      console.log(regionesData);
+    
     } catch (error) {
       console.error("❌ Error al obtener las regiones:", error);
       setLoading(false);

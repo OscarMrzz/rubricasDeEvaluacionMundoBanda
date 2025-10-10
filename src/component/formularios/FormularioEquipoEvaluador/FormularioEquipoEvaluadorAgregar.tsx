@@ -110,8 +110,7 @@ export default  function FormularioEquipoEvaluadorAgregar  ({ refresacar, onClos
       };
 
       await registroEquipoEvaluadorServices.create(nuevaRegsitroEquipoEvaluador as registroEquipoEvaluadorInterface);
-      console.log("✅ Registro Equipo evaluador creado con éxito");
-      console.log(nuevaRegsitroEquipoEvaluador);
+     
 
 
       // Limpiar formulario

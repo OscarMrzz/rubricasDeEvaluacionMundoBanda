@@ -14,7 +14,7 @@ const InformacionCategoriaComponent = ({ categoria, onClose, onRefresh ,openForm
         const categoriaServices = new CategoriasServices()
         categoriaServices.delete(categoria.idCategoria)
             .then(() => {
-                console.log("✅ Región eliminada correctamente");
+          
                 onRefresh?.(); // Refrescar los datos
                 onClose?.(); // Cerrar el modal después de eliminar
             })

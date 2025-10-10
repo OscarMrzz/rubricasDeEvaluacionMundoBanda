@@ -25,7 +25,7 @@ export default function FormularioCambiarPassword({onclose, activarMessageApprov
                 console.error("❌ Error actualizando la contraseña:", respuesta.error.message);
             }
             if(respuesta.data){
-                console.log("✅ Contraseña actualizada con éxito:", respuesta.data);
+              
                 activarMessageApprovate();
                 if(onclose){
          

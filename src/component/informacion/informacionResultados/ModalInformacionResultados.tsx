@@ -31,7 +31,7 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
       if (!filaResultadosSelecionada || !filaResultadosSelecionada.idEvento) return;
       const { idEvento, idBanda } = filaResultadosSelecionada;
       const data = await registroCumplimientoServices.current.getPorBandaYEvento(idBanda, idEvento);
-      console.log("Datos de cumplimiento obtenidos:", data);
+     
       setDatosCumplimientosbandaSelecionada(data);
       setCargadoDatos(false);
     };

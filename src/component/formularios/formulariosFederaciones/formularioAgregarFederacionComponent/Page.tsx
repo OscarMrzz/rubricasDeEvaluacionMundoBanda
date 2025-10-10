@@ -38,7 +38,7 @@ export default function FormularioAgregarFederacionComponent  ({refresacar, onCl
           };
     
           await bandasServices.create(nuevaFederacion as federacionInterface);
-          console.log("✅ Banda creada exitosamente");
+         
     
           // Limpiar formulario
           setFormData({

@@ -48,7 +48,7 @@ export default function InformacionUsuarioComponent({
       nuevoEstadoUsuario.idForaneaFederacion=idFederacion
    
       perfilesServices.EliminarPerfilDeFederacion(perfil.idPerfil,nuevoEstadoUsuario);
-     console.log("Perfil eliminado correctamente");
+    
 
 
     } catch (error) {

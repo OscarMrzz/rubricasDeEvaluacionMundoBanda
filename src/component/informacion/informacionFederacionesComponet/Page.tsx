@@ -14,7 +14,7 @@ const InformacionFederacionesComponent = ({ federacion, onClose, onRefresh, open
         const federacionesServices = new FederacionesService();
         federacionesServices.delete(federacion.idFederacion)
             .then(() => {
-                console.log("✅ Federación eliminada correctamente");
+            
                 onRefresh?.(); // Refrescar los datos
                 onClose?.(); // Cerrar el modal después de eliminar
             })

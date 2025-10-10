@@ -23,7 +23,7 @@ export default function InformacionCriterioComponent({
     const criteriosServices = new CriteriosServices();
     criteriosServices.delete(criterio.idCriterio)
       .then(() => {
-        console.log("✅ Criterio eliminado correctamente");
+      
         onRefresh?.(); // Refrescar los datos
         onClose?.(); // Cerrar el modal después de eliminar
       })

@@ -127,8 +127,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
       };
 
       await registroEquipoEvaluadorServices.update(registroEquipoEvaluacionAEditar.idRegistroEvaluador, nuevaRegsitroEquipoEvaluador as registroEquipoEvaluadorInterface);
-      console.log("✅ Registro Equipo evaluador creado con éxito");
-      console.log(nuevaRegsitroEquipoEvaluador);
+    
 
 
       // Limpiar formulario

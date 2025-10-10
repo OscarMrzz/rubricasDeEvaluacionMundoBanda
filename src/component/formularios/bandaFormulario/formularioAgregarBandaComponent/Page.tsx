@@ -90,7 +90,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
       };
 
       await bandasServices.create(nuevaBanda as bandaInterface);
-      console.log("✅ Banda creada exitosamente");
+   
 
       // Limpiar formulario
       setFormData({

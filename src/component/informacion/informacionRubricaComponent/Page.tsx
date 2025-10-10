@@ -28,7 +28,7 @@ export default function InformacionRubricaComponent({
     rubricaServices
       .delete(rubrica.idRubrica)
       .then(() => {
-        console.log("✅ Región eliminada correctamente");
+        
         onRefresh?.(); // Refrescar los datos
         onClose?.(); // Cerrar el modal después de eliminar
       })

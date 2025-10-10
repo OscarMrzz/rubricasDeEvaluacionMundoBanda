@@ -124,8 +124,7 @@ export default function RubricaHomePage() {
       setRubricas(rubricasData);
       setRubricasOriginales(rubricasData);
       setLoading(false);
-      console.log("✅ Rubricas obtenidas:");
-      console.log(rubricasData);
+     
     } catch (error) {
       console.error("❌ Error al obtener las Rubricas:", error);
       setLoading(false);

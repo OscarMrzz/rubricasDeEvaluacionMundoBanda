@@ -24,7 +24,7 @@ export default function InformacionRegistroEquipoEvaluadorComponent({
     const registroEquipoEvaluadorServices = new RegistroEquipoEvaluadorServices();
     registroEquipoEvaluadorServices.delete( registroEquipoEvaluador.idRegistroEvaluador)
       .then(() => {
-        console.log("✅ cumpimiento eliminado correctamente");
+        
         onRefresh?.(); // Refrescar los datos
         onClose?.(); // Cerrar el modal después de eliminar
       })

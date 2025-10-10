@@ -35,8 +35,7 @@ const BandasHomePage = () => {
       setBandas(BandasData);
       setCategorias(categoriasData);
       setLoading(false);
-      console.log("✅ Bandas obtenidas:");
-      console.log(BandasData);
+     
     } catch (error) {
       console.error("❌ Error al obtener las Bandas:", error);
       setLoading(false);

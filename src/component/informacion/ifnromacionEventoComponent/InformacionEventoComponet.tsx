@@ -29,7 +29,7 @@ export default function InformacionEventoComponent({
     
        registroEventossServices.delete(Evento.idEvento)
       .then(() => {
-        console.log("✅ cumpimiento eliminado correctamente");
+       
         onRefresh?.(); // Refrescar los datos
         onClose?.(); // Cerrar el modal después de eliminar
       })

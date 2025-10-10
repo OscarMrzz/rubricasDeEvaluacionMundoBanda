@@ -118,8 +118,7 @@ export default function FormularioAgregarEventoComponet({ onClose }: Props) {
       const regionesServices = new RegionService();
       const regiones = await regionesServices.getDatosAmpleos();
       if (regiones) {
-        console.log("Regiones cargadas:", regiones);
-        SetlistaRegiones(regiones);
+      
 
       }
 

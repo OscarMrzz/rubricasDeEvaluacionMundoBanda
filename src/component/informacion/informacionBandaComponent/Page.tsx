@@ -16,7 +16,7 @@ const InformacionBandaComponent = ({ Banda, onClose, onRefresh,openFormEditar }:
         const bandasServices = new BandasServices();
         bandasServices.delete(Banda.idBanda)
             .then(() => {
-                console.log("✅ Banda eliminada correctamente");
+                
                 onRefresh?.(); // Refrescar los datos
                 onClose?.(); // Cerrar el modal después de eliminar
             })

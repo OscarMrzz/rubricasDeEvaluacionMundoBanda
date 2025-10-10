@@ -216,7 +216,7 @@ export default function EvaluarBaseRubricaComponet({
             dataComentario as registroComentariosInterface
           );
           if (respuestaComentario) {
-            console.log("✅ Comentario guardado con éxito.");
+         
             recetiar();
           } else {
             console.log("❌ Error al guardar el comentario.");
@@ -225,7 +225,7 @@ export default function EvaluarBaseRubricaComponet({
           console.error("❌ Error al guardar el comentario:", error);
         }
       } else {
-        console.log("Faltan datos para guardar la evaluacion");
+        console.log("❌ Faltan datos para guardar la evaluación.");
       }
     }
   };

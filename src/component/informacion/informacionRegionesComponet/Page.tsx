@@ -13,7 +13,7 @@ const InformacionRegionesComponent = ({ region, onClose, onRefresh ,openFormEdit
         const regionesServices = new RegionService();
         regionesServices.delete(region.idRegion)
             .then(() => {
-                console.log("✅ Región eliminada correctamente");
+            
                 onRefresh?.(); // Refrescar los datos
                 onClose?.(); // Cerrar el modal después de eliminar
             })

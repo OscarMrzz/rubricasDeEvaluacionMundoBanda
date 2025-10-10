@@ -35,8 +35,7 @@ const CategoriasHomePage = () => {
         await categoriasServices.get();
       setCategorias(categoriasData);
       setLoading(false);
-      console.log("✅ Categorías obtenidas:");
-      console.log(categoriasData);
+     
     } catch (error) {
       console.error("❌ Error al obtener las categorías:", error);
       setLoading(false);
