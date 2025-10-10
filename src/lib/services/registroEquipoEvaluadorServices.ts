@@ -50,6 +50,16 @@ async initPerfil() {
          if (error) throw error;
          return data;
      }
+
+    async getporPerfil(idUsuario:string) {
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaPerfil",idUsuario);
+        if (error) throw error;
+        
+        
+        
+        return data as registroEquipoEvaluadorInterface[] 
+     }
+  
  
      async getOne(id: string) {
          const { data, error } = await dataBaseSupabase

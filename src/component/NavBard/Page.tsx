@@ -1,7 +1,13 @@
 "use client";
 
 import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
+import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
+import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
+import { useRegionesStore } from "@/Store/listRegionesStore";
 import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
+import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
+
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -12,6 +18,11 @@ const NavBard = () => {
   const [openUserMenu, setOpenUserMenu] = useState(false);
 
   const {haySesionStore,cerrarSesionStore} = useInicioSesionStore();
+  const { recetiarRegionesStore } = useRegionesStore();
+  const { recetiarEventosStore } = useEventosStore();
+  const { recetiarCategoriasStore } = useCategoriasStore();
+  const { recetiarRubicasStore } = useRubicasStore();
+  const { recetiarBandasStore } = useBandasStore();
 
   const abrirMenuUsuario = () => {
     setOpenUserMenu(!openUserMenu);
@@ -46,6 +57,16 @@ const NavBard = () => {
 
   const handleLogout = async () => {
     localStorage.removeItem("perfilActivo");
+
+       
+          recetiarRegionesStore();
+          recetiarEventosStore();
+          recetiarCategoriasStore();
+          recetiarRubicasStore();
+          recetiarBandasStore();
+        
+    
+       
 
     setPerfil({} as perfilDatosAmpleosInterface);
     setOpenUserMenu(false);
@@ -97,3 +118,5 @@ const NavBard = () => {
 };
 
 export default NavBard;
+
+
