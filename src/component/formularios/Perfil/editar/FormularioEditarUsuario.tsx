@@ -2,27 +2,19 @@
 
 import { activarRefrescarDataEventos } from "@/feacture/Eventos/refrescadorDataEventos";
 import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
-import {
-  perfilDatosAmpleosInterface,
-  perfilInterface,
-} from "@/interfaces/interfaces"; // Update the path as needed
+import { perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces"; // Update the path as needed
 import PerfilesServices from "@/lib/services/perfilesServices";
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-
 
 type Props = {
   perfilAEditar: perfilDatosAmpleosInterface;
   onClose: () => void;
 };
 
-export default function FormularioEditarUsuario({
-  onClose,
-  perfilAEditar,
-}: Props) {
+export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Props) {
   const dispatch = useDispatch();
-  const [perfilActivo, setPerfilActivo] =
-    useState<perfilDatosAmpleosInterface>();
+  const [perfilActivo, setPerfilActivo] = useState<perfilDatosAmpleosInterface>();
   const [formData, setFormData] = useState({
     nombre: "",
     alias: "",
@@ -59,7 +51,7 @@ export default function FormularioEditarUsuario({
       nombre: perfilAEditar.nombre,
       alias: perfilAEditar.alias,
       rolUsuario: perfilAEditar.tipoUsuario,
-      fechaNacimiento: perfilAEditar.fechaNacimiento,
+      fechaNacimiento: perfilAEditar.fechaNacimiento || "",
       sexo: perfilAEditar.sexo,
       genero: perfilAEditar.genero,
       identidad: perfilAEditar.identidad,
@@ -68,11 +60,7 @@ export default function FormularioEditarUsuario({
     });
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -85,9 +73,7 @@ export default function FormularioEditarUsuario({
     setLoading(true);
     try {
       if (!perfilActivo || !perfilActivo.idForaneaFederacion) {
-        alert(
-          "El perfil activo o su federación no está disponible. Intenta de nuevo."
-        );
+        alert("El perfil activo o su federación no está disponible. Intenta de nuevo.");
         setLoading(false);
         return;
       }
@@ -95,7 +81,7 @@ export default function FormularioEditarUsuario({
       const nuevoPerfil: Omit<perfilInterface, "idPerfil" | "created_at"> = {
         nombre: formData.nombre,
         alias: formData.alias,
-        fechaNacimiento: formData.fechaNacimiento,
+        fechaNacimiento: formData.fechaNacimiento || null,
         sexo: formData.sexo,
         genero: formData.genero,
         idForaneaFederacion: perfilActivo.idForaneaFederacion,
@@ -172,8 +158,6 @@ export default function FormularioEditarUsuario({
           />
         </div>
 
-
-  
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="rolUsuario">
             Rol Usuario
@@ -182,7 +166,7 @@ export default function FormularioEditarUsuario({
             id="rolUsuario"
             name="rolUsuario"
             value={formData.rolUsuario}
-             onChange={e => setFormData({ ...formData, rolUsuario: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, rolUsuario: e.target.value })}
             className="border border-gray-200 p-2 rounded"
             required
           >

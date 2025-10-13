@@ -1,5 +1,3 @@
-
-
 import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
 import { perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces";
 import PerfilesServices from "@/lib/services/perfilesServices";
@@ -15,49 +13,38 @@ type Props = {
   openFormEditar: () => void; // Función para abrir el formulario de edición
 };
 
-export default function InformacionUsuarioComponent({
-  perfil,
-  onClose,
-  onRefresh,
-  openFormEditar,
-}: Props) {
-
+export default function InformacionUsuarioComponent({ perfil, onClose, onRefresh, openFormEditar }: Props) {
   const dispatch = useDispatch();
   const eliminar = () => {
     try {
       const perfilesServices = new PerfilesServices();
-      const rol="sinPermisos"
-      const  idFederacion ="3ad8c36d-c54a-4642-bfee-50736e04c991"
-      const nuevoEstadoUsuario: perfilInterface ={ 
-        idPerfil:perfil.idPerfil,
-        created_at:perfil.created_at,
-        nombre:perfil.nombre,
-        alias:perfil.alias,
-        tipoUsuario:perfil.tipoUsuario,
-        fechaNacimiento:perfil.fechaNacimiento,
-        sexo:perfil.sexo,
-        genero:perfil.genero,
-        identidad:perfil.identidad,
-        numeroTelefono:perfil.numeroTelefono,
-        direccion:perfil.direccion,
-        idForaneaUser:perfil.idForaneaUser,
-        idForaneaFederacion:perfil.idForaneaFederacion
+      const rol = "sinPermisos";
+      const idFederacion = "3ad8c36d-c54a-4642-bfee-50736e04c991";
+      const nuevoEstadoUsuario: perfilInterface = {
+        idPerfil: perfil.idPerfil,
+        created_at: perfil.created_at,
+        nombre: perfil.nombre,
+        alias: perfil.alias,
+        tipoUsuario: perfil.tipoUsuario,
+        fechaNacimiento: perfil.fechaNacimiento || null,
+        sexo: perfil.sexo,
+        genero: perfil.genero,
+        identidad: perfil.identidad,
+        numeroTelefono: perfil.numeroTelefono,
+        direccion: perfil.direccion,
+        idForaneaUser: perfil.idForaneaUser,
+        idForaneaFederacion: perfil.idForaneaFederacion,
+      };
+      nuevoEstadoUsuario.tipoUsuario = rol;
+      nuevoEstadoUsuario.idForaneaFederacion = idFederacion;
 
-       };
-      nuevoEstadoUsuario.tipoUsuario=rol
-      nuevoEstadoUsuario.idForaneaFederacion=idFederacion
-   
-      perfilesServices.EliminarPerfilDeFederacion(perfil.idPerfil,nuevoEstadoUsuario);
-    
-
-
+      perfilesServices.EliminarPerfilDeFederacion(perfil.idPerfil, nuevoEstadoUsuario);
     } catch (error) {
       console.error("❌ Error eliminando el perfil:", error);
-    }finally{
+    } finally {
       dispatch(activarRefrescarDataPerfiles());
       onClose?.();
     }
-  
   };
   const onclickEditar = () => {
     openFormEditar?.();
@@ -68,22 +55,17 @@ export default function InformacionUsuarioComponent({
     <div className="max-h-[450px] overflow-auto scrollbar-estetica">
       <div className="grid grid-cols-[1fr_60px] gap-4 p-8">
         <div className="">
-      
           <div className="  ">
             <h2>{perfil.nombre}</h2>
             <p>Alias: {perfil.alias}</p>
             <p>Tipo Usuario: {perfil.tipoUsuario}</p>
-            <p>Fecha Nacimiento: {perfil.fechaNacimiento}</p>
+            <p>Fecha Nacimiento: {perfil.fechaNacimiento || "No especificada"}</p>
             <p>Genero: {perfil.genero}</p>
             <p>Sexo: {perfil.sexo}</p>
             <p>Identidad: {perfil.identidad}</p>
             <p>Numero Telefono: {perfil.numeroTelefono}</p>
             <p>Direccion: {perfil.direccion}</p>
             <p>Federacion: {perfil.federaciones?.nombreFederacion}</p>
-      
-            
-
-         
           </div>
         </div>
         <div className="flex flex-col gap-2">
@@ -101,10 +83,8 @@ export default function InformacionUsuarioComponent({
           </button>
         </div>
       </div>
-      
-      <div>
-       
-      </div>
+
+      <div></div>
     </div>
   );
 }
