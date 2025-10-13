@@ -90,7 +90,7 @@ export interface perfilInterface{
     created_at: string;
     nombre: string;
     alias: string;
-    fechaNacimiento: string;
+    fechaNacimiento: string | null;
     genero: string;
     tipoUsuario: string;
     sexo: string;

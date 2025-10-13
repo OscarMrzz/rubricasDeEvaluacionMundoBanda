@@ -71,8 +71,8 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="py-24 px-12">
-      <div className="bg-gray-800 text-white p-8 rounded-lg shadow-md max-w-md mx-auto">
+    <div className="px-4 lg:p-12 ">
+      <div className="bg-gray-900 text-white p-8 rounded-lg shadow-md max-w-md mx-auto">
         <h1 className="text-3xl font-bold text-gray-100">Iniciar Sesión</h1>
         <p className="text-gray-400 mt-4">
           Esta es la página de inicio de sesión. Aquí puedes ingresar tus credenciales para acceder a tu cuenta.
@@ -108,19 +108,19 @@ const SignInPage = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-4 py-2  w-full rounded hover:bg-blue-700 transition-colors"
             disabled={loading}
           >
             {loading ? "Entrando..." : "Iniciar Sesión"}
           </button>
           {mensaje && <div className="mt-4 text-sm text-red-300">{mensaje}</div>}
         </form>
-        <p className="mt-3">
+      {/*   <p className="mt-3">
           ¿No tienes una cuenta?
           <Link href="/authPage/SignUpPage" className="text-blue-300 ml-1">
             Registrate
           </Link>
-        </p>
+        </p> */}
       </div>
     </div>
   );

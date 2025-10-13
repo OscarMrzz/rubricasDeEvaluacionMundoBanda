@@ -1,11 +1,7 @@
 "use client";
 
 import { activarRefrescarDataEventos } from "@/feacture/Eventos/refrescadorDataEventos";
-import {
-  federacionInterface,
-  perfilDatosAmpleosInterface,
-  perfilInterface,
-} from "@/interfaces/interfaces"; // Update the path as needed
+import { federacionInterface, perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces"; // Update the path as needed
 import PerfilesServices from "@/lib/services/perfilesServices";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -14,17 +10,13 @@ import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfi
 import FederacionesService from "@/lib/services/federacionesServices";
 import { u } from "framer-motion/client";
 
-
-
-
 type Props = {
   onClose: () => void;
 };
 
 export default function FormularioAgregarUsuario({ onClose }: Props) {
   const dispatch = useDispatch();
-  const [perfilActivo, setPerfilActivo] =
-    useState<perfilDatosAmpleosInterface>();
+  const [perfilActivo, setPerfilActivo] = useState<perfilDatosAmpleosInterface>();
 
   useEffect(() => {
     cargarPerfilActivo();
@@ -58,47 +50,38 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
   });
 
   const [loading, setLoading] = useState(false);
-    const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
-    const [listFederaciones, setListFederaciones] = useState<federacionInterface[]>([]);
-    const [federacionSelecionada, setFederacionSeleccionada] = useState<federacionInterface | null>(null);
+  const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
+  const [listFederaciones, setListFederaciones] = useState<federacionInterface[]>([]);
+  const [federacionSelecionada, setFederacionSeleccionada] = useState<federacionInterface | null>(null);
 
-    const federacionesServices = useRef(new FederacionesService());
+  const federacionesServices = useRef(new FederacionesService());
 
-    useEffect(() => {
-      const fetchFederaciones = async () =>{
-
-      try{
-        const federaciones =await federacionesServices.current.get();
-        if(federaciones){
+  useEffect(() => {
+    const fetchFederaciones = async () => {
+      try {
+        const federaciones = await federacionesServices.current.get();
+        if (federaciones) {
           setListFederaciones(federaciones);
         }
-      }catch(error){
+      } catch (error) {
         console.error("❌ Error cargando las federaciones:", error);
       }
     };
 
     fetchFederaciones();
+  }, []);
 
-    }, []);
-
-
-   useEffect(() => {
-      const perfilBruto = localStorage.getItem("perfilActivo");
-      if (perfilBruto) {
-        const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
-        if (perfil) {
-          setPerfil(perfil);
-         
-        }
+  useEffect(() => {
+    const perfilBruto = localStorage.getItem("perfilActivo");
+    if (perfilBruto) {
+      const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
+      if (perfil) {
+        setPerfil(perfil);
       }
-    }, []);
-  
+    }
+  }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -125,14 +108,11 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
 
     if (userCreadoId) {
       try {
-
-          if (!perfilActivo || !perfilActivo.idForaneaFederacion) {
-        alert(
-          "El perfil activo o su federación no está disponible. Intenta de nuevo."
-        );
-        setLoading(false);
-        return;
-      }
+        if (!perfilActivo || !perfilActivo.idForaneaFederacion) {
+          alert("El perfil activo o su federación no está disponible. Intenta de nuevo.");
+          setLoading(false);
+          return;
+        }
         const perfilesServices = new PerfilesServices();
         let federacionAAplicar: string;
         if (perfilActivo.tipoUsuario === "superadmin") {
@@ -143,21 +123,21 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
 
         const nuevoPerfil: Omit<perfilInterface, "idPerfil" | "created_at"> = {
           nombre: formData.nombre,
-          alias: formData.alias,
-          fechaNacimiento: formData.fechaNacimiento,
-          sexo: formData.sexo,
-          genero: formData.genero,
+          alias: formData.alias || "",
+          fechaNacimiento: formData.fechaNacimiento || null,
+          sexo: formData.sexo || "",
+          genero: formData.genero || "",
           idForaneaFederacion: federacionAAplicar,
-          identidad: formData.identidad,
-          numeroTelefono: formData.numeroTelefono,
-          direccion: formData.direccion,
+          identidad: formData.identidad || "",
+          numeroTelefono: formData.numeroTelefono || "",
+          direccion: formData.direccion || "",
           tipoUsuario: formData.rolUsuario,
           idForaneaUser: userCreadoId,
         };
 
         await perfilesServices.create(nuevoPerfil as perfilInterface);
       } catch (error) {
-        console.error("❌ Error al crear la Evento:", error);
+        console.error("❌ Error al crear perfil:", error);
         alert("Error al agregar la Eventos");
       } finally {
         setLoading(false);
@@ -177,23 +157,18 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
           numeroTelefono: "",
           direccion: "",
         });
-      dispatch(activarRefrescarDataPerfiles());
+        dispatch(activarRefrescarDataPerfiles());
         onClose();
       }
     }
   };
 
   if (!perfilActivo) {
-    return (
-      <div className="px-25 flex items-center justify-center min-h-[200px]">
-    cargado...
-      </div>
-    );
+    return <div className="px-25 flex items-center justify-center min-h-[200px]">cargado...</div>;
   }
 
   return (
     <div className="px-25 ">
-  
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
@@ -205,30 +180,21 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             name="federacion"
             value={federacionSelecionada ? federacionSelecionada.idFederacion : ""}
             onChange={(e) => {
-              const federacion = listFederaciones.find(f => f.idFederacion === e.target.value) || null;
+              const federacion = listFederaciones.find((f) => f.idFederacion === e.target.value) || null;
               setFederacionSeleccionada(federacion);
             }}
             className="border border-gray-200 p-2 rounded w-full"
-  
-       
           >
             <option className="bg-white text-gray-400" value="" disabled>
-              { "Federacion"}
+              {"Federacion"}
             </option>
             {listFederaciones.map((federacion) => (
-              <option
-                key={federacion.idFederacion}
-                className="bg-white text-gray-800"
-                value={federacion.idFederacion}
-              >
+              <option key={federacion.idFederacion} className="bg-white text-gray-800" value={federacion.idFederacion}>
                 {federacion.nombreFederacion}
               </option>
             ))}
           </select>
-
         </div>
-
-
 
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombre">
@@ -257,7 +223,6 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Alias o apodo"
-            required
           />
         </div>
         <div className="flex flex-col">
@@ -346,8 +311,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Fecha de nacimiento"
-            required
-          /> 
+          />
         </div>
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="sexo">
@@ -361,7 +325,6 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Sexo"
-            required
           />
         </div>
         <div className="flex flex-col">
@@ -376,7 +339,6 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Género"
-            required
           />
         </div>
         <div className="flex flex-col">
@@ -391,7 +353,6 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Identidad"
-            required
           />
         </div>
         <div className="flex flex-col">
@@ -406,7 +367,6 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Número de teléfono"
-            required
           />
         </div>
         <div className="flex flex-col">
@@ -421,7 +381,6 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Dirección"
-            required
           />
         </div>
 

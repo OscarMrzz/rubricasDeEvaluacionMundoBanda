@@ -66,6 +66,7 @@ const NavBard = () => {
     setOpenUserMenu(false);
     setHaySesionIniciada(false);
     cerrarSesionStore();
+      window.location.href = "/authPage/SignInPage";
   };
 
   return (
@@ -168,10 +169,13 @@ ${openMenuHamburguesa ? "bg-gray-900/50 lg:bg-transparent" : "hidden "}
           <div className="flex gap-6 flex-col border-t-2 lg:border-t-0 pt-4 lg:pt-0 pl-4  lg:flex-row lg:border-none items-center">
 
      
-
-          <div className=" text-2xl font-bold">
+          {
+            haySesionIniciada ?
+            <div className=" text-2xl font-bold">
             <Link href="/miPerfilPage">Perfil</Link>
-          </div>
+          </div>: null
+          }
+          
           <div className="  text-2xl font-bold cursor-pointer">
             {haySesionIniciada ? (
               <button onClick={handleLogout} className=" text-2xl font-bold cursor-pointer">

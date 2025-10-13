@@ -74,7 +74,7 @@ export default function PerfilesHomePage() {
     try {
       const perfilActivo: perfilDatosAmpleosInterface =await perfilesServices.getUsuarioLogiado();
 
-      const perfilesData: perfilDatosAmpleosInterface[] =await perfilesServices.getDatosAmpleos(perfilActivo.idForaneaFederacion);
+      const perfilesData: perfilDatosAmpleosInterface[] =await perfilesServices.getDatosAmpleos(perfilActivo.idForaneaFederacion,perfilActivo.tipoUsuario);
 
       setPerfiles(perfilesData);
       setPerfiles(perfilesData);

@@ -50,45 +50,45 @@ export default function RootLayout({
   const { haySesionStore } = useInicioSesionStore();
 
   useEffect(() => {
-   
- {
-      try {
-        const perfiBruto = localStorage.getItem("perfilActivo");
-        if (perfiBruto) {
-          const perfil: perfilInterface = JSON.parse(perfiBruto);
-          equipoEvaluadorServices.current
-            .getporPerfil(perfil.idPerfil)
-            .then((EventosParaElPerfil: registroEquipoEvaluadorInterface[]) => {
-           
-              eventosServices.current.get().then((data) => {
-                const eventosFiltrados = data.filter((evento) =>
-                  EventosParaElPerfil.some(
-                    (equipo) =>
-                      equipo.idForaneaEvento === evento.idEvento && equipo.rolMiembro.toUpperCase() !== "SINPERMISOS"
-                  )
-                );
-                setEventosStore(eventosFiltrados);
-              });
-            });
+    try {
+      const perfiBruto = localStorage.getItem("perfilActivo");
+      if (!perfiBruto) {
+        if (window.location.pathname !== "/authPage/SignInPage") {
+          window.location.href = "/authPage/SignInPage";
         }
-      } catch (error) {
-        console.error("❌ Error al obtener los datos:", error);
+        return;
       }
-
-      regionesServices.current.get().then((datosRegiones) => {
-        setRegionesStore(datosRegiones);
-      });
-
-      categoriasServices.current.get().then((data) => {
-        setCategoriasStore(data);
-      });
-      rubicasServices.current.get().then((data) => {
-        setRubicasStore(data);
-      });
-      bandasServices.current.get().then((data) => {
-        setBandasStore(data);
-      });
+      const perfil: perfilInterface = JSON.parse(perfiBruto);
+      equipoEvaluadorServices.current
+        .getporPerfil(perfil.idPerfil)
+        .then((EventosParaElPerfil: registroEquipoEvaluadorInterface[]) => {
+          eventosServices.current.get().then((data) => {
+            const eventosFiltrados = data.filter((evento) =>
+              EventosParaElPerfil.some(
+                (equipo) =>
+                  equipo.idForaneaEvento === evento.idEvento && equipo.rolMiembro.toUpperCase() !== "SINPERMISOS"
+              )
+            );
+            setEventosStore(eventosFiltrados);
+          });
+        });
+    } catch (error) {
+      console.error("❌ Error al obtener los datos:", error);
     }
+
+    regionesServices.current.get().then((datosRegiones) => {
+      setRegionesStore(datosRegiones);
+    });
+
+    categoriasServices.current.get().then((data) => {
+      setCategoriasStore(data);
+    });
+    rubicasServices.current.get().then((data) => {
+      setRubicasStore(data);
+    });
+    bandasServices.current.get().then((data) => {
+      setBandasStore(data);
+    });
   }, [haySesionStore]);
 
   return (
@@ -97,9 +97,7 @@ export default function RootLayout({
         className={`bg-gray-800 w-full text-gray-50 grid grid-rows-[75px_1fr] min-h-screen font-poppins ${poppins.className} `}
       >
         <Provider store={store}>
-         
-            <NavBard />
-
+          <NavBard />
 
           <main className="w-full  ">{children}</main>
         </Provider>

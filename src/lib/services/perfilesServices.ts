@@ -11,15 +11,17 @@ const elId = "idPerfil";
 export default class PerfilesServices {
 
    
-    async getDatosAmpleos(idFederacion:string): Promise<perfilDatosAmpleosInterface[]> {
+    async getDatosAmpleos(idFederacion:string,rolusuario:string): Promise<perfilDatosAmpleosInterface[]> {
         try {
+            if(rolusuario==="superadmin"){
+                
             const { data, error } = await dataBaseSupabase
                 .from(tabla)
                 .select(` 
                     *,
                     federaciones(*)
           
-                `) .eq("idForaneaFederacion", idFederacion); 
+                `)
 
             if (error) {
                 console.error("❌ Error obteniendo bandas con datos completos:", error);
@@ -28,6 +30,29 @@ export default class PerfilesServices {
 
    
             return data as perfilDatosAmpleosInterface[];
+
+
+
+            }else{
+
+            
+            
+            const { data, error } = await dataBaseSupabase
+                .from(tabla)
+                .select(` 
+                    *,
+                    federaciones(*)
+          
+                `).eq("idForaneaFederacion", idFederacion); 
+
+            if (error) {
+                console.error("❌ Error obteniendo bandas con datos completos:", error);
+                throw error;
+            }
+
+   
+            return data as perfilDatosAmpleosInterface[];
+            }
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;

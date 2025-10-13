@@ -71,7 +71,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
 
         const PerfilLogiado  = await perfilesServices.getUsuarioLogiado()
 
-        const perfiles = await perfilesServices.getDatosAmpleos( PerfilLogiado.idForaneaFederacion);
+        const perfiles = await perfilesServices.getDatosAmpleos( PerfilLogiado.idForaneaFederacion, PerfilLogiado.tipoUsuario);
         const perfilesFiltrados = perfiles.filter((perfil) => !idsYaRegistrados.has(perfil.idPerfil));
         setListaPerfiles(perfilesFiltrados);
         setCargadorPerfiles(false);
