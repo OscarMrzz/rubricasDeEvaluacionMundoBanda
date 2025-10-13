@@ -36,11 +36,21 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
             throw new Error("No hay federación en el perfil del usuario.");
         }
         const { data, error } = await dataBaseSupabase
-            .from(tabla)
+            .from("vistacumplimientoscondatosampleosidforaneafederacion")
             .select(`
-                *,
-                criteriosEvalucion(*)
-            `).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+                idCumplimiento,
+                created_at,
+                detalleCumplimiento,
+                puntosCumplimiento,
+                idForaneaCriterio,
+                idCriterio,
+                nombreCriterio,
+                detallesCriterio,
+                puntosCriterio,
+                idForaneaRubrica
+               
+            `)
+            .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
 
 
         if (error) {
@@ -62,7 +72,18 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
             throw new Error("No hay federación en el perfil del usuario.");
         }
         const { data, error } = await dataBaseSupabase
-        .from(tabla).select("*").eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+        .from("vistacumplimientosconidforaneafederacion")
+            .select(`
+                idCumplimiento,
+                created_at,
+                detalleCumplimiento,
+                puntosCumplimiento,
+                idForaneaCriterio,
+                
+            `) 
+        
+        
+        .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
     
         if (error) throw error;
         return data;
@@ -74,9 +95,10 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
             throw new Error("No hay federación en el perfil del usuario.");
         }
         const { data, error } = await dataBaseSupabase
-            .from(tabla)
+            .from("vistacumplimientosconidforaneafederacion")
             .select("*")
-            .eq(elId, id).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq(elId, id)
+            .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
            
             .single();
 
