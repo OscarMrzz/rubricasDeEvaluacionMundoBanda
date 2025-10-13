@@ -145,7 +145,7 @@ ${
          font-bold text-lg gap-10  `}
         >
           {haySesionIniciada && <Link href="/EvaluarPage">Evaluar</Link>}
-          {haySesionIniciada && <Link href="/Reportes">Reportes</Link>}
+          {haySesionIniciada && <Link href="/ReportesPage">Reportes</Link>}
           {haySesionIniciada && <Link href="/PanelControlPage">Admin</Link>}
             <div className=" text-lg font-bold">
           <Link href="/miPerfilPage">Perfil</Link>
