@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ClipboardDocumentListIcon,
@@ -17,15 +17,29 @@ import {
   PresentationChartBarIcon,
   ListBulletIcon,
 } from "@heroicons/react/24/solid";
+import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
 
 const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
+   const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
+
+
+   useEffect(() => {
+      const perfilBruto = localStorage.getItem("perfilActivo");
+      if (perfilBruto) {
+        const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
+        if (perfil) {
+          setPerfil(perfil);
+   
+        }
+      }
+    }, []);
 
   const links = [
     {
       id: "evaluar",
       label: "Evaluar",
-           href: "/PanelControlPage/evaluarHomePage",
+           href: "/EvaluarPage",
       Icon: ClipboardDocumentCheckIcon,
     },
     {
@@ -74,8 +88,8 @@ const SidebarPanelControlComponent = () => {
 
     {
       id: "resultados",
-      label: "Resultados general",
-      href: "/PanelControlPage/resultadosGeneralesHomePege",
+      label: "Resultados",
+      href: "/ReportesPage",
       Icon: ChartBarSquareIcon,
     },
  
@@ -88,24 +102,47 @@ const SidebarPanelControlComponent = () => {
   ];
 
   return (
-    <div className="bg-gray-700 h-full w-full">
+    <div className=" h-full w-full">
       <section>
-        <div className="flex flex-col gap-2 pt-8">
-          {links.map(({ id, label, href, Icon }) => (
-            <Link key={id} href={href} passHref>
-              <button
-                onClick={() => setBotonSeleccionado(id)}
-                className={`flex items-center w-full text-left px-2 py-2 cursor-pointer hover:bg-[#035a98] ${
-                  botonSeleccionado === id
-                    ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300"
-                    : ""
-                }`}
-              >
-                <Icon className="h-6 w-6 text-white ml-3" />
-                <span className="ml-3 font-light">{label}</span>
-              </button>
-            </Link>
-          ))}
+        <div className="flex flex-col gap-6  text-2xl font-bold">
+          {links.map(({ id, label, href, Icon }) => {
+            if (id === "federacion") {
+              if (perfil.tipoUsuario === "superadmin") {
+                return (
+              <Link key={id} href={href} passHref>
+                <button
+                  onClick={() => setBotonSeleccionado(id)}
+                  className={`flex items-center text-2xl font-bold w-full text-left  cursor-pointer hover:bg-[#035a98] ${
+                    botonSeleccionado === id
+                      ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300"
+                      : ""
+                  }`}
+                >
+                  <Icon className="h-6 w-6 text-white ml-3" />
+                  <span className="ml-3 font-light">{label}</span>
+                </button>
+              </Link>
+            );
+              }else{
+                return null;
+              }
+            };
+            return (
+              <Link key={id} href={href} passHref>
+                <button
+                  onClick={() => setBotonSeleccionado(id)}
+                  className={`flex items-center text-2xl font-bold w-full text-left  cursor-pointer hover:bg-[#035a98] ${
+                    botonSeleccionado === id
+                      ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300"
+                      : ""
+                  }`}
+                >
+                  <Icon className="h-6 w-6 text-white ml-3" />
+                  <span className="ml-3 font-light">{label}</span>
+                </button>
+              </Link>
+            );
+          })}
         </div>
       </section>
     </div>

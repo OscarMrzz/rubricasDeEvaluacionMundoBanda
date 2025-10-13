@@ -9,7 +9,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex w-full min-h-screen">
-        <div className="-500 w-60 ">
+        <div className=" hidden lg:block lg:bg-gray-900  ">
             <SidebarPanelControlComponent />
 
         </div>

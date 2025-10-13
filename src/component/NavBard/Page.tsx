@@ -10,6 +10,7 @@ import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import SidebarPanelControlComponent from "../SidebarPanelControlComponent/Page";
 
 const NavBard = () => {
   const [haySesionIniciada, setHaySesionIniciada] = useState<boolean>(false);
@@ -88,11 +89,7 @@ const NavBard = () => {
       <div
         onClick={() => setOpenMenuHamburguesa(false)}
         className={`
-${
-  openMenuHamburguesa
-    ? "bg-gray-900/50 lg:bg-transparent"
-    : "hidden "
-      }
+${openMenuHamburguesa ? "bg-gray-900/50 lg:bg-transparent" : "hidden "}
       
       w-full
       h-screen
@@ -101,6 +98,8 @@ ${
       lg:static
       top-0
       left-0
+      max-h-screen
+      overflow-hidden
 
     
       
@@ -114,11 +113,17 @@ ${
           `}
       >
         <div
+          style={{
+            scrollbarWidth: "none" /* Firefox */,
+            msOverflowStyle: "none" /* IE and Edge */,
+          }}
           className={`
       ${openMenuHamburguesa ? "" : ""}  
      
         bg-gray-900
         lg:bg-transparent
+        
+        [&::-webkit-scrollbar]:hidden
 
   
         top-0
@@ -130,8 +135,10 @@ ${
         
         w-xs
         lg:w-full
-        h-screen
+        h-full
         lg:h-full
+        max-h-screen
+        overflow-y-auto
 
         flex
         flex-col
@@ -140,32 +147,47 @@ ${
         lg:justify-end
         px-4
     lg:px-0
-       
+
+    items-center
       
-         font-bold text-lg gap-10  `}
+         font-bold text-lg gap-8 pt-10 pb-10   `}
         >
-          {haySesionIniciada && <Link href="/EvaluarPage">Evaluar</Link>}
-          {haySesionIniciada && <Link href="/ReportesPage">Reportes</Link>}
-          {haySesionIniciada && <Link href="/PanelControlPage">Admin</Link>}
-            <div className=" text-lg font-bold">
-          <Link href="/miPerfilPage">Perfil</Link>
-        </div>
-           <div className="  text-lg font-bold cursor-pointer">
-          {
-            haySesionIniciada?<button onClick={handleLogout} className="text-lg font-bold  cursor-pointer">
-                    Cerrar sesión
-                  </button>:  
-                  <Link className="text-lg font-bold"  href="/authPage/SignInPage">Iniciar sesión</Link>
-          }
-      
-        </div>
+          {haySesionIniciada && perfil.tipoUsuario === "jurado" ?   <div className=" text-2xl font-bold ">  <Link href="/EvaluarPage">Evaluar</Link> </div> : null}
+          {haySesionIniciada && perfil.tipoUsuario === "fiscal" ? <Link href="/ReportesPage">Reportes</Link> : null}
 
-        </div>
-          
-        </div>
-      
-           
+          {haySesionIniciada && (perfil.tipoUsuario === "admin" || perfil.tipoUsuario === "presidenteJurado" || perfil.tipoUsuario === "superadmin") ? (
+            <div className=" border-t-2 border-gray-400 pt-4 flex gap-4 flex-col lg:border-none ">
+              
+                <Link className="text-2xl pl-4" href="/PanelControlPage">
+                  Admin
+                </Link>
+             <div className="lg:hidden">
 
+              <SidebarPanelControlComponent />
+             </div>
+            </div>
+          ) : null}
+          <div className="flex gap-6 flex-col border-t-2 lg:border-t-0 pt-4 lg:pt-0 pl-4  lg:flex-row lg:border-none items-center">
+
+     
+
+          <div className=" text-2xl font-bold">
+            <Link href="/miPerfilPage">Perfil</Link>
+          </div>
+          <div className="  text-2xl font-bold cursor-pointer">
+            {haySesionIniciada ? (
+              <button onClick={handleLogout} className=" text-2xl font-bold cursor-pointer">
+                Cerrar sesión
+              </button>
+            ) : (
+              <Link className="text-2xl font-bold cursor-pointer" href="/authPage/SignInPage">
+                Iniciar sesión
+              </Link>
+            )}
+          </div>
+        </div>
+             </div>
+      </div>
     </header>
   );
 };
