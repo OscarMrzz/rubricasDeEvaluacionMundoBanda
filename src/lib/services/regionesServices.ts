@@ -20,6 +20,7 @@ export default class RegionService {
         if (perilBruto) {
          
         this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+       
         }
     }
    
@@ -51,7 +52,7 @@ export default class RegionService {
     }
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*");
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
         return data;
     }

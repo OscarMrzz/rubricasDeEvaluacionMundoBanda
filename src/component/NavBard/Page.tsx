@@ -154,9 +154,9 @@ ${openMenuHamburguesa ? "bg-gray-900/50 lg:bg-transparent" : "hidden "}
           {haySesionIniciada && perfil.tipoUsuario === "fiscal" ? <Link href="/ReportesPage">Reportes</Link> : null}
 
           {haySesionIniciada && (perfil.tipoUsuario === "admin" || perfil.tipoUsuario === "presidenteJurado" || perfil.tipoUsuario === "superadmin") ? (
-            <div className=" border-t-2 border-gray-400 pt-4 flex gap-4 flex-col lg:border-none ">
+            <div className=" border-t-2 border-gray-400  pt-4 lg:pt-0 flex gap-4 flex-col lg:border-none  justify-center items-center lg:flex-row">
               
-                <Link className="text-2xl pl-4" href="/PanelControlPage">
+                <Link className="text-2xl pl-4 flex justify-center items-center" href="/PanelControlPage">
                   Admin
                 </Link>
              <div className="lg:hidden">

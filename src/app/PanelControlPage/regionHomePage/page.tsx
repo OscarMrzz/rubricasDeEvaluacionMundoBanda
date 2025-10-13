@@ -25,7 +25,7 @@ const RegionHomePage = () => {
     const regionService = new RegionService();
     try {
       const regionesData: regionesDatosAmpleosInterface[] =
-        await regionService.get();
+        await regionService.get(); 
       setRegiones(regionesData);
       setLoading(false);
     

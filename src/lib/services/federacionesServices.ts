@@ -25,7 +25,7 @@ export default class FederacionesService {
  
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*");
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*")
         if (error) throw error;
         return data;
     }
@@ -35,6 +35,7 @@ export default class FederacionesService {
             .from(tabla)
             .select("*")
             .eq(Elid, id)
+            
             .single();
 
         if (error) throw error;

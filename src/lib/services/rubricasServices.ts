@@ -32,7 +32,7 @@ export default class RubricasServices {
                     *,
                     federaciones(*),
                     categorias(*)
-                `);
+                `).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
@@ -53,7 +53,7 @@ export default class RubricasServices {
                     *,
                     federaciones(*),
                     categorias(*)
-                `) .eq("idForaneaCategoria", idCategoria);
+                `) .eq("idForaneaCategoria", idCategoria).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
@@ -68,7 +68,7 @@ export default class RubricasServices {
     }
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*");
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
         return data;
     }
@@ -77,7 +77,7 @@ export default class RubricasServices {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id)
+            .eq(elId, id).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
             .single();
 
         if (error) throw error;
