@@ -242,8 +242,8 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             <option className="bg-white text-gray-400" value="">
               Seleccione un rol
             </option>
-            <option className="bg-white text-gray-800" value="presidenteJurado">
-              Presidente jurados
+            <option className="bg-white text-gray-800" value="admin">
+              admin
             </option>
             <option className="bg-white text-gray-800" value="jurado">
               Jurado
