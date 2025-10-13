@@ -82,7 +82,7 @@ const NavBard = () => {
         </div>
       </div>
       <div className="flex font-bold text-lg gap-10">
-        {haySesionIniciada && <Link href="/PanelControlPage">Evaluar</Link>}
+        {haySesionIniciada && <Link href="/EvaluarPage">Evaluar</Link>}
         {haySesionIniciada && <Link href="/Reportes">Reportes</Link>}
         {haySesionIniciada && <Link href="/PanelControlPage">Admin</Link>}
         {haySesionIniciada ? (
