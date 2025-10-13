@@ -9,17 +9,15 @@ const initialState: CumplimientoState = {
   CumplimientoSeleccionado: {
     idCumplimiento: "",
     created_at: "",
-     detalleCumplimiento: "",
+    detalleCumplimiento: "",
     puntosCumplimiento: 0,
     idForaneaCriterio: "",
-    criteriosEvalucion: {   
-        idCriterio: "",
-        created_at: "",
-        nombreCriterio: "",
-        detallesCriterio: "",
-        puntosCriterio: 0,
-        idForaneaRubrica: "",
-    }
+    idCriterio: "",
+    nombreCriterio: "",
+    detallesCriterio: "",
+    puntosCriterio: 0,
+    idForaneaRubrica: "",
+    idForaneaFederacion: "",
   }
 };
 
