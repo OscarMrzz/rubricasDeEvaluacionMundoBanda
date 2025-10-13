@@ -96,7 +96,7 @@ const SidebarPanelControlComponent = () => {
     {
       id: "reporte",
       label: "Reporte por banda",
-      href: "/PanelControlPage/reportePorbadaHomePage",
+      href: "/reportePorBandaPage",
       Icon: DocumentTextIcon,
     },
   ];
