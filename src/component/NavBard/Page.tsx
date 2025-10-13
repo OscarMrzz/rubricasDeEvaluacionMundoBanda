@@ -75,7 +75,7 @@ const NavBard = () => {
   };
 
   return (
-    <div className="bg-grey-500/5 backdrop-blur-md h-full w-full flex text-white items-center justify-between px-15">
+    <header className="bg-grey-500/5 backdrop-blur-md h-full w-full flex text-white items-center justify-between px-15 sticky  top-0 z-50">
       <div className="flex gap-20">
         <div className="text-3xl font-bold " style={{ letterSpacing: "0.3em" }}>
           <Link href="/">{perfil.federaciones?.nombreFederacion || ""}</Link>
@@ -113,7 +113,7 @@ const NavBard = () => {
           <Link href="/authPage/SignInPage">Iniciar sesión</Link>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 

@@ -97,9 +97,9 @@ export default function RootLayout({
         className={`bg-gray-800 w-screen text-gray-50 grid grid-rows-[75px_1fr] min-h-screen font-poppins ${poppins.className} `}
       >
         <Provider store={store}>
-          <header className="flex flex-col sticky  top-0 z-50">
+         
             <NavBard />
-          </header>
+
 
           <main className="w-full  overflow-y-auto-auto ">{children}</main>
         </Provider>
