@@ -69,7 +69,7 @@ export default function ResultadosGeneralesHomePage() {
           dispatch(desactivarOverleyInformacionResultados());
         }}
       />
-      <div className="px-20">
+      <div className="px-4 lg:px-25">
         <div>
           <div>
             <div className="flex justify-between items-center mb-4">
