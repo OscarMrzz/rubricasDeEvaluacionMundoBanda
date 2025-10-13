@@ -25,9 +25,7 @@ const NavBard = () => {
   const { recetiarRubicasStore } = useRubicasStore();
   const { recetiarBandasStore } = useBandasStore();
 
-  const abrirMenuUsuario = () => {
-    setOpenUserMenu(!openUserMenu);
-  };
+
 
   useEffect(() => {
     if (!openUserMenu) return;

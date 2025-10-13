@@ -2,14 +2,17 @@
 
 import { activarRefrescarDataEventos } from "@/feacture/Eventos/refrescadorDataEventos";
 import {
+  federacionInterface,
   perfilDatosAmpleosInterface,
   perfilInterface,
 } from "@/interfaces/interfaces"; // Update the path as needed
 import PerfilesServices from "@/lib/services/perfilesServices";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { dataBaseSupabase } from "@/lib/supabase"; // Import supabase client
 import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
+import FederacionesService from "@/lib/services/federacionesServices";
+import { u } from "framer-motion/client";
 
 
 
@@ -55,6 +58,41 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
   });
 
   const [loading, setLoading] = useState(false);
+    const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
+    const [listFederaciones, setListFederaciones] = useState<federacionInterface[]>([]);
+    const [federacionSelecionada, setFederacionSeleccionada] = useState<federacionInterface | null>(null);
+
+    const federacionesServices = useRef(new FederacionesService());
+
+    useEffect(() => {
+      const fetchFederaciones = async () =>{
+
+      try{
+        const federaciones =await federacionesServices.current.get();
+        if(federaciones){
+          setListFederaciones(federaciones);
+        }
+      }catch(error){
+        console.error("❌ Error cargando las federaciones:", error);
+      }
+    };
+
+    fetchFederaciones();
+
+    }, []);
+
+
+   useEffect(() => {
+      const perfilBruto = localStorage.getItem("perfilActivo");
+      if (perfilBruto) {
+        const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
+        if (perfil) {
+          setPerfil(perfil);
+         
+        }
+      }
+    }, []);
+  
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -96,6 +134,12 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
         return;
       }
         const perfilesServices = new PerfilesServices();
+        let federacionAAplicar: string;
+        if (perfilActivo.tipoUsuario === "superadmin") {
+          federacionAAplicar = federacionSelecionada?.idFederacion ?? "";
+        } else {
+          federacionAAplicar = perfilActivo.idForaneaFederacion ?? "";
+        }
 
         const nuevoPerfil: Omit<perfilInterface, "idPerfil" | "created_at"> = {
           nombre: formData.nombre,
@@ -103,7 +147,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
           fechaNacimiento: formData.fechaNacimiento,
           sexo: formData.sexo,
           genero: formData.genero,
-          idForaneaFederacion: perfilActivo.idForaneaFederacion,
+          idForaneaFederacion: federacionAAplicar,
           identidad: formData.identidad,
           numeroTelefono: formData.numeroTelefono,
           direccion: formData.direccion,
@@ -152,6 +196,40 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
   
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <label className="text-gray-200 mb-1" htmlFor="federacion">
+            Federación
+          </label>
+          <select
+            id="federacion"
+            name="federacion"
+            value={federacionSelecionada ? federacionSelecionada.idFederacion : ""}
+            onChange={(e) => {
+              const federacion = listFederaciones.find(f => f.idFederacion === e.target.value) || null;
+              setFederacionSeleccionada(federacion);
+            }}
+            className="border border-gray-200 p-2 rounded w-full"
+  
+       
+          >
+            <option className="bg-white text-gray-400" value="" disabled>
+              { "Federacion"}
+            </option>
+            {listFederaciones.map((federacion) => (
+              <option
+                key={federacion.idFederacion}
+                className="bg-white text-gray-800"
+                value={federacion.idFederacion}
+              >
+                {federacion.nombreFederacion}
+              </option>
+            ))}
+          </select>
+
+        </div>
+
+
+
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombre">
             Nombre
@@ -269,7 +347,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             className="border border-gray-200 p-2 rounded"
             placeholder="Fecha de nacimiento"
             required
-          />
+          /> 
         </div>
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="sexo">
