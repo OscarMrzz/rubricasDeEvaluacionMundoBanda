@@ -247,9 +247,9 @@ export default function EvaluarHomePage() {
      
         {
 campoSeleccionadoActual !=="evaluar" && 
-<section className=" flex w-full h-full justify-center items-center">
+<section className=" flex w-full h-full justify-center pt-45">
         { campoSeleccionadoActual==="" &&  <div>
-          <button onClick={()=>onclickIniciar()} className="flex justify-center items-center px-4 py-2 bg-emerald-700 text-3xl font-bold rounded-2xl">
+          <button onClick={()=>onclickIniciar()} className="w-60 h-20 flex justify-center items-center px-8 py-4 bg-emerald-700 text-3xl font-bold rounded-2xl">
             <ClipboardDocumentCheckIcon className="h-8 w-8 text-white mr-2" />
             INICIAR
           </button>
@@ -260,7 +260,7 @@ campoSeleccionadoActual !=="evaluar" &&
    <div className="w-60 ">
           <div className="w-full">
             <select
-              className="border-2 w-full h-20 text-3xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
+              className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
               name=""
               id=""
               value={regionSelecionada?.idRegion ?? ""}
@@ -273,7 +273,7 @@ campoSeleccionadoActual !=="evaluar" &&
               </option>
               {listaRegiones.map((evento) => {
                 return (
-                  <option className="text-gray-700" key={evento.idRegion} value={evento.idRegion}>
+                  <option className="text-gray-700 font-light " key={evento.idRegion} value={evento.idRegion}>
                     {evento.nombreRegion}
                   </option>
                 );
@@ -288,7 +288,7 @@ campoSeleccionadoActual !=="evaluar" &&
 
     campoSeleccionadoActual==="evento" &&  <div className="w-60 ">
           <select
-            className="border-2 w-full h-20 text-3xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
+            className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
             name=""
             id=""
             value={eventoSelecionado?.idEvento || ""}
@@ -322,7 +322,7 @@ campoSeleccionadoActual !=="evaluar" &&
           <select
             name=""
             id=""
-            className="border-2 w-full h-20 text-3xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
+            className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
             value={categoriaSelecionada?.idCategoria || ""}
             onChange={(evento) => {
               selecionarCategoria(evento.target.value);
@@ -347,7 +347,7 @@ campoSeleccionadoActual !=="evaluar" &&
           <select
             name=""
             id=""
-            className="border-2 w-full h-20 text-3xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
+            className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
             value={rubricaSelecionada?.idRubrica || ""}
             onChange={(evento) => {
               selecionarRubrica(evento.target.value);
@@ -388,7 +388,7 @@ campoSeleccionadoActual !=="evaluar" &&
           <select
             name=""
             id=""
-            className="border-2 w-full h-20 text-3xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
+            className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
             value={bandaSelecionada?.idBanda || ""}
             onChange={(evento) => {
               const selected = listBandasNoEvaluadas.find((banda) => banda.idBanda === evento.target.value);

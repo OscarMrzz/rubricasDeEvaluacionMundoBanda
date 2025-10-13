@@ -73,7 +73,7 @@ export default function EvaluarCriterioComponent({
 
   return (
     <div 
-    className={`w-full h-120 shadow-2xl  bg-gray-700 p-4
+    className={` min-h-120 shadow-2xl  bg-gray-700 p-8
       ${criterioSelecionado.idCriterio === criterioNoEvaluado? "border-2 border-red-800" : "border-2 border-transparent"}
     `}>
       <div>
@@ -86,9 +86,9 @@ export default function EvaluarCriterioComponent({
       {cargandoCumplimientos ? (
         <div className="w-full">
           <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-500  w-3/4"></div>
-            <div className="h-8 bg-gray-500  w-5/6"></div>
-            <div className="h-8 bg-gray-500  w-2/3"></div>
+            <div className="h-10 bg-gray-500  w-3/4"></div>
+            <div className="h-10 bg-gray-500  w-5/6"></div>
+            <div className="h-10 bg-gray-500  w-2/3"></div>
           </div>
         </div>
       ) : (
@@ -111,7 +111,7 @@ export default function EvaluarCriterioComponent({
                 onChange={() => onclickCumplimientoSelecionado(cumplimiento)}
                 className="hidden"
               />
-              <div className="flex flex-row gap-4 ml-4">
+              <div className="flex  h-16 flex-row gap-4 ml-4">
                 <span>{cumplimiento.puntosCumplimiento}</span>
                 <span>|</span>
                 <span>{cumplimiento.detalleCumplimiento}</span>

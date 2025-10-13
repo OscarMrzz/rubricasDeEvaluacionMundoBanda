@@ -44,7 +44,7 @@ export default function TablaResultadosGeneralesComponent({ resutadosGenerales, 
               <th className="px-4 py-2 border text-left" scope="col">
                 Banda
               </th>
-              <th className="px-4 py-2 border text-left" scope="col">
+              <th className="px-4 py-2 border text-left flex justify-center items-center" scope="col">
                 Puntos 
               </th>
             </tr>
@@ -58,7 +58,7 @@ export default function TablaResultadosGeneralesComponent({ resutadosGenerales, 
               >
                 <td className="px-4 py-2 border">{index + 1}</td>
                 <td className="px-4 py-2 border">{filaResultado.banda.nombreBanda}</td>
-                <td className="px-4 py-2 border">{filaResultado.totalPuntos}</td>
+                <td className="px-4 py-2 border flex justify-center items-center">{filaResultado.totalPuntos}</td>
               </tr>
             ))}
           </tbody>

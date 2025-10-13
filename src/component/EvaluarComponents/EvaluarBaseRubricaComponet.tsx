@@ -251,8 +251,11 @@ export default function EvaluarBaseRubricaComponet({
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 items-center bg-gray-800 px-35">
-      <section className="flex flex-col gap-2 items-center mb-4 bg-gray-700 w-full">
+    <div className="flex flex-col gap-4 p-4 items-center bg-gray-800 px-6 lg:px-60 ">
+      <div className="w-full">
+
+    
+      <section className="flex flex-col gap-2 items-center mb-4 bg-gray-700  ">
         <h2 className="text-2xl font-bold ">{bandaSelecionada.nombreBanda}</h2>
         <p>{eventoSelecionado.LugarEvento}</p>
         <p>{categoriaSelecionada.nombreCategoria}</p>
@@ -264,7 +267,7 @@ export default function EvaluarBaseRubricaComponet({
         </div>
       ) : null}
 
-      <div className=" w-full flex flex-col gap-4 ">
+      <div className="  flex flex-col gap-4 ">
         {cargandoCriterios ? (
           <p>Cargando Criterios...</p>
         ) : (
@@ -280,13 +283,13 @@ export default function EvaluarBaseRubricaComponet({
 
       {Object.keys(dataCriteriosEvaluar).length === 0 ? null : (
         <>
-          <div className="w-full bg-gray-500 h-120 shadow-2xl  p-4 border-2 border-gray-400 text-gray-800">
-            <div className="border-b-2 border-gray-700 mb-4 pb-2 flex justify-between">
+          <div className="mt-4 lg:w-full bg-[#274c77] grid grid-cols-1 grid-rows-[60px_auto_160px] h-full px-2  min-h-120 shadow-2xl    text-gray-100">
+            <div className="border-b-2 border-gray-300/50 mb-4 pb-2 flex justify-between items-center">
               <h2 className="text-2xl font-bold">{bandaSelecionada.nombreBanda}</h2>
               <p className="pr-5"> Total: {totalPuntos}</p>
             </div>
 
-            <div className="flex flex-row gap-4 justify-between">
+            <div className="flex  flex-col lg:flex-row gap-4 justify-between p-4">
               <div>
                 <div className="flex flex-row flex-wrap gap-10 justify-start items-start">
                   {Object.keys(dataCriteriosEvaluar).length > 0 ? (
@@ -308,37 +311,41 @@ export default function EvaluarBaseRubricaComponet({
                   )}
                 </div>
               </div>
-              <div className="">
+            
+            </div>
+              <div className="  flex justify-center items-center py-4 px-4">
                 <textarea
                   name=""
                   id=""
                   value={comentarios}
                   onChange={(evento) => agregarComentario(evento.target.value)}
                   cols={30}
-                  maxLength={255}
-                  style={{ height: "350px" }}
-                  className={`w-80 p-3 border  rounded-lg resize-none focus:outline-none
+                  maxLength={250}
+                  style={{  }}
+                  className={`w-full h-35 lg:h-full   p-3 border  rounded-lg resize-none focus:outline-none
                 ${comentarios.length === 0 && sePrecionoElBotoGuardar ? "border-2 border-red-800" : "border-gray-300"}
                 `}
                   placeholder="Observaciones comentarios y sugerencias..."
                 ></textarea>
               </div>
-            </div>
           </div>
 
-          <div className="w-full flex justify-end items-center bg-gray-500 h-25 p-2 gap-4 border-2 border-gray-400 shadow-2xl">
-            <button className="bg-gray-600 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
-              Cancelar
-            </button>
-            <button
+          <div className=" mt-2 flex flex-col  md:flex-row justify-end items-center bg-[#274c77] h-full py-4 px-4 gap-4  shadow-2xl">
+             <button
               onClick={() => guardarEvaluacion()}
               className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer"
             >
-              Guardar Evaluación
+              Guardar
+            </button> 
+            
+            <button className="bg-gray-600/10 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
+              Cancelar
             </button>
+          
           </div>
         </>
       )}
+        </div>
     </div>
   );
 }
