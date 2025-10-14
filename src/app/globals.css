@@ -32,3 +32,11 @@
   background: #ff8400;
 }
 
+/* Clase para fondo de login */
+.login {
+  background-image: url('/imgs/fondoLogin2.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+

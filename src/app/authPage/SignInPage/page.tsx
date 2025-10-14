@@ -71,11 +71,11 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="px-4 lg:p-12 ">
-      <div className="bg-gray-900 text-white p-8 rounded-lg shadow-md max-w-md mx-auto">
+    <div className="login  h-full flex justify-center items-center px-4 lg:px-12 ">
+<div className=" backdrop-blur-3xl  text-white p-8 rounded-lg shadow-md max-w-md mx-auto">
         <h1 className="text-3xl font-bold text-gray-100">Iniciar Sesión</h1>
         <p className="text-gray-400 mt-4">
-          Esta es la página de inicio de sesión. Aquí puedes ingresar tus credenciales para acceder a tu cuenta.
+          Ingresa tus credenciales para acceder a tu cuenta.
         </p>
         <form className="mt-8" onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -85,7 +85,7 @@ const SignInPage = () => {
             <input
               type="email"
               id="email"
-              className="w-full p-2 bg-gray-700 text-white rounded"
+              className="w-full p-2 bg-gray-100/10 text-white rounded"
               placeholder="Ingresa tu correo electrónico"
               value={form.email}
               onChange={handleChange}
@@ -99,7 +99,7 @@ const SignInPage = () => {
             <input
               type="password"
               id="password"
-              className="w-full p-2 bg-gray-700 text-white rounded"
+              className="w-full p-2  bg-gray-100/10 text-white rounded"
               placeholder="Ingresa tu contraseña"
               value={form.password}
               onChange={handleChange}
@@ -108,7 +108,7 @@ const SignInPage = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-600 text-white px-4 py-2  w-full rounded hover:bg-blue-700 transition-colors"
+            className="bg-gray-900/40 text-white px-4 py-2  w-full rounded hover:bg-gray-800/40 transition-colors"
             disabled={loading}
           >
             {loading ? "Entrando..." : "Iniciar Sesión"}
