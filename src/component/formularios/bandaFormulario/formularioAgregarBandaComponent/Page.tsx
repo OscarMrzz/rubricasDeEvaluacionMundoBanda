@@ -107,6 +107,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="p-2 lg:px-25 ">

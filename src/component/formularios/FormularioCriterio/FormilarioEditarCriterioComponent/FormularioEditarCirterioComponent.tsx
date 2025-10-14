@@ -122,7 +122,7 @@ export default  function FormularioEditarCriterioComponet  ({criterioAEditar, re
   };
 
   return (
-    <div className="px-25 ">
+    <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">editar Criterio</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="flex flex-col">
