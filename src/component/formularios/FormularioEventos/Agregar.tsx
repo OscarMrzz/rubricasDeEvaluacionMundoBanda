@@ -52,6 +52,7 @@ export default function FormularioAgregarEventoComponet({ onClose }: Props) {
 
   useEffect(() => {
     cargarListaRegiones();
+    console.log("Lista de regiones actual:");
   }, []);
 
   const [formData, setFormData] = useState({
@@ -117,7 +118,13 @@ export default function FormularioAgregarEventoComponet({ onClose }: Props) {
     try {
       const regionesServices = new RegionService();
       const regiones = await regionesServices.getDatosAmpleos();
+      console.log("Regiones cargadas:", regiones);
       if (regiones) {
+        SetlistaRegiones([]);
+        setListaRegionesOriginal(regiones);
+        SetlistaRegiones(regiones);
+
+        
       
 
       }
