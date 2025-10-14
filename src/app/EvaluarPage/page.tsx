@@ -227,7 +227,7 @@ export default function EvaluarHomePage() {
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full pt-25 pb-10">
       <ApprovateMessage
         open={ActivadorApprovateMessage}
         onClose={() => {

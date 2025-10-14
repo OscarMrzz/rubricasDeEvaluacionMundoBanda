@@ -10,7 +10,7 @@ const Page = () => {
 
 
   return (
-    <div className="w-full h-screen p-10 justify-center  flex">
+    <div className=" pt-25 w-full h-screen  justify-center  flex">
       <div className="flex flex-col gap-4 w-full lg:w-lg ">
 
      
