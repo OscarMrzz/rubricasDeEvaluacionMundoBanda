@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { dataBaseSupabase } from "@/lib/supabase"; // Import supabase client
 import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
 import FederacionesService from "@/lib/services/federacionesServices";
-import { u } from "framer-motion/client";
+
 
 type Props = {
   onClose: () => void;
@@ -168,7 +168,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
   }
 
   return (
-    <div className="px-25 ">
+    <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div>
