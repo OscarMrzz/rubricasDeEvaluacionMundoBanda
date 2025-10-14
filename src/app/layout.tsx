@@ -94,7 +94,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-gray-800 w-full text-gray-50 grid grid-rows-[75px_1fr] min-h-screen font-poppins ${poppins.className} `}
+        className={`bg-gray-800 pt-10 lg:pt-0 w-full text-gray-50 grid grid-rows-[75px_1fr] min-h-screen font-poppins ${poppins.className} `}
       >
         <Provider store={store}>
           <NavBard />
