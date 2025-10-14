@@ -59,8 +59,8 @@ export default function TablaRubricasComponent({ rubricas, onRefresh }: Props) {
 
  
 
-      <div className="">
-        <table className="min-w-full border">
+      <div className="w-full">
+        <table className="w-full border">
           <thead>
             <tr>
               <th className="px-4 py-2 border w-1" scope="col">

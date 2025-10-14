@@ -211,7 +211,7 @@ export default function RubricaHomePage() {
   }
 
   return (
-    <div className="px-20">
+    <div className="px-2 lg:px-20 ">
       {/*---------------01 RURBICA----------------- */}
       <OverleyModal
         open={activadorInformacionRubrica}
