@@ -61,7 +61,7 @@ export default function FormularioAgregarFederacionComponent  ({refresacar, onCl
   // Aquí puedes agregar más funciones para manejar el formulario
   return (
     < >
-    <div className='p-25'>
+    <div className='p-2 lg:px-25 '>
 
 
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
