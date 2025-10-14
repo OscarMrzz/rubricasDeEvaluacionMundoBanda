@@ -1,4 +1,4 @@
-import SidebarPanelControlComponent from '@/component/SidebarPanelControlComponent/Page'
+
 
 import {ReactNode} from 'react'
 
@@ -8,12 +8,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex w-full min-h-screen">
-        <div className=" hidden lg:block lg:bg-gray-900  ">
-            <SidebarPanelControlComponent />
-
-        </div>
-      <div className="  w-full">
+    <div className="flex w-full  min-h-screen">
+     
+      <div className="  w-full px-2 lg:px-48">
         {children}
       </div>
     </div>
