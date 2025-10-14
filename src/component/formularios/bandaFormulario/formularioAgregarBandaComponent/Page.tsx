@@ -12,6 +12,7 @@ import {
   federacionInterface,
   categoriaInterface,
   regionesInterface,
+  perfilDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
 
 type Props = {
@@ -34,10 +35,22 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
   const [categorias, setCategorias] = useState<categoriaInterface[]>([]);
   const [regiones, setRegiones] = useState<regionesInterface[]>([]);
   const [loading, setLoading] = useState(false);
+    const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
 
   useEffect(() => {
-    cargarDatosIniciales();
+    cargarDatosIniciales(); 
   }, []);
+
+    useEffect(() => {
+      const perfilBruto = localStorage.getItem("perfilActivo");
+      if (perfilBruto) {
+        const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
+        if (perfil) {
+          setPerfil(perfil);
+          
+        }
+      }
+    }, []);
 
   const cargarDatosIniciales = async () => {
     try {
@@ -58,7 +71,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
     } catch (error) {
       console.error("Error cargando datos iniciales:", error);
     }
-  };
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -86,7 +99,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
         AliasBanda: formData.AliasBanda,
         idForaneaCategoria: formData.idForaneaCategoria,
         idForaneaRegion: formData.idForaneaRegion,
-        idForaneaFederacion: formData.idForaneaFederacion,
+        idForaneaFederacion: perfil.idForaneaFederacion,
       };
 
       await bandasServices.create(nuevaBanda as bandaInterface);
@@ -140,10 +153,10 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Ingrese alias de la banda"
-            required
+      
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col"> 
           <label className="text-gray-200 mb-1" htmlFor="idForaneaFederacion">
             Federación
           </label>

@@ -89,7 +89,7 @@ export default function RootLayout({
     bandasServices.current.get().then((data) => {
       setBandasStore(data);
     });
-  }, [haySesionStore]);
+  }, [haySesionStore])
 
   return (
     <html lang="en">
