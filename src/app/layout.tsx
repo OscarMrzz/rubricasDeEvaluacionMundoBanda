@@ -99,7 +99,7 @@ export default function RootLayout({
         <Provider store={store}>
           <NavBard />
 
-          <main className="w-full pt-25  ">{children}</main>
+          <main className="w-full   ">{children}</main>
         </Provider>
       </body>
     </html>
