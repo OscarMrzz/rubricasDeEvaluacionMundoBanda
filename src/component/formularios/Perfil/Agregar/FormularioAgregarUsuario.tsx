@@ -187,6 +187,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
           >
             <option className="bg-white text-gray-400" value="" disabled>
               {"Federacion"}
+              
             </option>
             {listFederaciones.map((federacion) => (
               <option key={federacion.idFederacion} className="bg-white text-gray-800" value={federacion.idFederacion}>
