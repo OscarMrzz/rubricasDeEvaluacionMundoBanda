@@ -32,7 +32,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
     } catch (error) {
       console.error("❌ Error cargando el perfil activo:", error);
     }
-  };
+  }
 
   const [formData, setFormData] = useState({
     nombre: "",

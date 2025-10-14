@@ -156,29 +156,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
       
           />
         </div>
-        <div className="flex flex-col"> 
-          <label className="text-gray-200 mb-1" htmlFor="idForaneaFederacion">
-            Federación
-          </label>
-          <select
-            id="idForaneaFederacion"
-            name="idForaneaFederacion"
-            value={formData.idForaneaFederacion}
-            onChange={handleInputChange}
-            className="border text-gray-700 bg-gray-200 p-2 rounded"
-            required
-          >
-            <option value="">Seleccione una federación</option>
-            {federaciones.map((federacion) => (
-              <option
-                key={federacion.idFederacion}
-                value={federacion.idFederacion}
-              >
-                {federacion.nombreFederacion}
-              </option>
-            ))}
-          </select>
-        </div>
+       
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="idForaneaCategoria">
             Categoría
