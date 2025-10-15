@@ -171,6 +171,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
+        {perfilActivo.tipoUsuario === "superadmin" && (   
         <div>
           <label className="text-gray-200 mb-1" htmlFor="federacion">
             Federación
@@ -196,6 +197,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
             ))}
           </select>
         </div>
+        )}
 
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombre">

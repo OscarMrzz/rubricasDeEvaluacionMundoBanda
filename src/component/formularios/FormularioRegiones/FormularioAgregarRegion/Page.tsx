@@ -93,8 +93,8 @@ export default  function FormularioAgregarRegionComponent  ({ refresacar, onClos
         idForaneaFederacion: "",
       });
     } catch (error) {
-      console.error("❌ Error al crear la Federacion:", error);
-      alert("Error al agregar la federacion");
+      console.error("❌ Error al crear la region :", error);
+      alert("Error al agregar la region");
     } finally {
       setLoading(false);
         refresacar();
