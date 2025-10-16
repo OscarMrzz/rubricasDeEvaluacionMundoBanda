@@ -32,7 +32,7 @@ const InformacionRegionesComponent = ({ region, onClose, onRefresh ,openFormEdit
             <div className='flex p-8 justify-between'>
                 <div>
                     <h2>{region.nombreRegion}</h2>
-                    <p>Federacion: {region.federaciones?.nombreFederacion || 'federacion no encontrada'}</p>
+                    
 
                 </div> 
                 <div className='flex flex-col gap-2'>

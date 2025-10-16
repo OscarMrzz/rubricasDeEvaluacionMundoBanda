@@ -25,9 +25,21 @@ const OverleyModal = ({open, onClose, children}:OverleyModalProps) => {
 <>
   {open ? (
     <div onDoubleClick={onClose}  className="bg-gray-950/50 inset-0 z-100 fixed w-screen h-screen flex justify-center items-center">
-      <div className={`w-2xl h-120 bg-[#065b98] ${Animar ? 'scale-100' : 'scale-75'}  transition-all duration-500 ease-in-out`}>
+      <div className={`w-2xl h-120 bg-[#415a77] ${Animar ? 'scale-100' : 'scale-75'}  transition-all duration-500 ease-in-out`}>
+      
+      
+     
+
+  
+
      
         {children}
+       
+        
+        
+          
+      
+        
       </div>
     </div>
   ) : null}
