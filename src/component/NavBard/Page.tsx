@@ -7,10 +7,12 @@ import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
 import { useRegionesStore } from "@/Store/listRegionesStore";
 import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
 import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import SidebarPanelControlComponent from "../SidebarPanelControlComponent/Page";
+import { UsersIcon } from "@heroicons/react/16/solid";
 
 const NavBard = () => {
   const [haySesionIniciada, setHaySesionIniciada] = useState<boolean>(false);
@@ -24,8 +26,6 @@ const NavBard = () => {
   const { recetiarCategoriasStore } = useCategoriasStore();
   const { recetiarRubicasStore } = useRubicasStore();
   const { recetiarBandasStore } = useBandasStore();
-
-
 
   useEffect(() => {
     if (!openUserMenu) return;
@@ -66,7 +66,7 @@ const NavBard = () => {
     setOpenUserMenu(false);
     setHaySesionIniciada(false);
     cerrarSesionStore();
-      window.location.href = "/authPage/SignInPage";
+    window.location.href = "/authPage/SignInPage";
   };
 
   return (
@@ -82,7 +82,7 @@ const NavBard = () => {
           setOpenMenuHamburguesa(true);
         }}
       >
-        Menu
+        <Bars3Icon className="w-12" />
       </button>
 
       <div
@@ -151,44 +151,47 @@ ${openMenuHamburguesa ? "bg-gray-900/50 lg:bg-transparent" : "hidden "}
       
          font-bold text-lg gap-8 pt-10 pb-10   `}
         >
-          {haySesionIniciada && perfil.tipoUsuario === "jurado" ?   <div className=" text-2xl font-bold ">  <Link href="/EvaluarPage">Evaluar</Link> </div> : null}
+          {haySesionIniciada && perfil.tipoUsuario === "jurado" ? (
+            <div className=" text-2xl font-bold ">
+              {" "}
+              <Link href="/EvaluarPage">Evaluar</Link>{" "}
+            </div>
+          ) : null}
           {haySesionIniciada && perfil.tipoUsuario === "fiscal" ? <Link href="/ReportesPage">Reportes</Link> : null}
 
-          {haySesionIniciada && (perfil.tipoUsuario === "admin" || perfil.tipoUsuario === "presidenteJurado" || perfil.tipoUsuario === "superadmin") ? (
+          {haySesionIniciada &&
+          (perfil.tipoUsuario === "admin" ||
+            perfil.tipoUsuario === "presidenteJurado" ||
+            perfil.tipoUsuario === "superadmin") ? (
             <div className=" border-t-2 border-gray-400  pt-4 lg:pt-0 flex gap-4 flex-col lg:border-none  justify-center items-center lg:flex-row">
-              
-                <Link className="text-2xl pl-4 flex justify-center items-center" href="/PanelControlPage">
-                  Admin
-                </Link>
-             <div className="lg:hidden">
-
-              <SidebarPanelControlComponent />
-             </div>
+              <Link className="text-2xl pl-4 flex justify-center items-center" href="/PanelControlPage">
+                Admin
+              </Link>
+              <div className="lg:hidden">
+                <SidebarPanelControlComponent />
+              </div>
             </div>
           ) : null}
           <div className="flex gap-6 flex-col border-t-2 lg:border-t-0 pt-4 lg:pt-0 pl-4  lg:flex-row lg:border-none items-center">
-
-     
-          {
-            haySesionIniciada ?
-            <div className=" text-2xl font-bold">
-            <Link href="/miPerfilPage">Perfil</Link>
-          </div>: null
-          }
-          
-          <div className="  text-2xl font-bold cursor-pointer">
             {haySesionIniciada ? (
-              <button onClick={handleLogout} className=" text-2xl font-bold cursor-pointer">
-                Cerrar sesión
-              </button>
-            ) : (
-              <Link className="text-2xl font-bold cursor-pointer" href="/authPage/SignInPage">
-                Iniciar sesión
-              </Link>
-            )}
+              <div className=" text-2xl font-bold">
+                <Link href="/miPerfilPage">Perfil</Link>
+              </div>
+            ) : null}
+
+            <div className="  text-2xl font-bold cursor-pointer">
+              {haySesionIniciada ? (
+                <button onClick={handleLogout} className=" text-2xl font-bold cursor-pointer">
+                  Cerrar sesión
+                </button>
+              ) : (
+                <Link className="text-2xl font-bold cursor-pointer" href="/authPage/SignInPage">
+                  Iniciar sesión
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-             </div>
       </div>
     </header>
   );
