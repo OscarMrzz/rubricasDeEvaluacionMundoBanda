@@ -1,4 +1,5 @@
 import { agregarCriterioEvaluar } from "@/feacture/evaluar/evaluarSlice";
+import useGuard from "@/hooks/useGuard";
 import {
   criterioEvaluacionDatosAmpleosInterface,
   cumplimientosDatosAmpleosInterface,
@@ -17,6 +18,8 @@ export default function EvaluarCriterioComponent({
   criterioSelecionado,
   criterioNoEvaluado
 }: Props) {
+
+
 
   const dispatch = useDispatch();
 
