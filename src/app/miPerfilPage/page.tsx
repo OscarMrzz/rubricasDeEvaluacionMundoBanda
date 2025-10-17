@@ -10,9 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { activarOverleyFormularioCambiarPassword, activarOverleyFormularioEditarPerfiles, desactivarOverleyFormularioCambiarPassword, desactivarOverleyFormularioEditarPerfiles } from "@/feacture/Perfil/overleyPerfil";
 import FormularioCambiarPassword from "@/component/formularios/Perfil/CambierContraseña/CambiarPassword";
 import ApprovateMessage from "@/component/Message/ApprovateMessage";
-import ErrorMessage from "@/component/Message/ErrorMessage";
+
 
 export default function MiPerfilPage() {
+     
 
       const [ActivadorApprovateMessage, setActivadorApprovateMessage] = useState(false);
       const [mensajeApprovate, setMensajeApprovate] = useState({titulo:"Exito", texto:""});

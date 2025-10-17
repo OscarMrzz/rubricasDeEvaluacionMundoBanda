@@ -18,12 +18,15 @@ import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
 import { useRegionesStore } from "@/Store/listRegionesStore";
 import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
 import { ClipboardDocumentCheckIcon, PlayIcon } from "@heroicons/react/16/solid";
+import useGuard from "@/hooks/useGuard";
 //hola
 import React, { useEffect, useCallback, useRef, useState, use } from "react";
 
 type campos = "region" | "evento" | "categoria" | "rubrica" | "banda" | "inicio"|"evaluar" |"";
 
 export default function EvaluarHomePage() {
+
+
   const [listaRegiones, setListaRegiones] = React.useState<regionesInterface[]>([]);
   const [listeventos, setListEventos] = React.useState<RegistroEventoInterface[]>([]);
   const [eventosOriginales, setEventosOriginales] = React.useState<RegistroEventoInterface[]>([]);
