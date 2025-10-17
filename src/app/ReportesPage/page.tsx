@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 import { RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
@@ -22,6 +22,8 @@ export default function ResultadosGeneralesHomePage() {
 
   const { listEventosStore } = useEventosStore();
 
+  
+
   useEffect(() => {
     if (listEventosStore.length > 0) {
       setCargandoEventos(true);
@@ -37,15 +39,35 @@ export default function ResultadosGeneralesHomePage() {
   const [eventoSeleccionado, setEventoSeleccionado] = useState<RegistroEventoInterface>();
   const [eventosLista, setEventosLista] = useState<RegistroEventoInterface[]>([]);
 
-  // Removed duplicate declaration of cerrarFormularioAgregarCriterio
+
+
+  useEffect(() => {
+       const eventoLocalStorage = localStorage.getItem("EventoSelecionado");
+    if (eventoLocalStorage && eventoLocalStorage !== "undefined") {
+
+   setEventoSeleccionado(JSON.parse(eventoLocalStorage));
+ 
+    }else{
+      traerDatosTabla("");
+
+
+    }
+
+
+  }, []);
+
+
+
 
   async function traerDatosTabla(idEvento: string) {
     if (idEvento !== "") {
+   
       try {
         const resultadosData: resultadosGeneralesInterface[] =
           await registroCumpliminetoServices.current.getResultadosEvento(idEvento);
 
         setResultados(resultadosData);
+    
         setCargandoDatosTabla(false);
       } catch (error) {
         console.error("❌ Error al obtener las Rubricas:", error);
@@ -53,10 +75,23 @@ export default function ResultadosGeneralesHomePage() {
       }
     }
   }
+  useEffect(() => {
+    const eventoLocalStorage = localStorage.getItem("EventoSelecionado");
+
+    if (eventoLocalStorage && eventoLocalStorage !== "undefined") {
+
+      setEventoSeleccionado(JSON.parse(eventoLocalStorage)  );
+      traerDatosTabla(JSON.parse(eventoLocalStorage).idEvento );
+    }
+
+
+
+  }, []);
 
   const selecionarEvento = (idEvento: string) => {
     const evento = eventosLista.find((evento) => evento.idEvento === idEvento);
     setEventoSeleccionado(evento);
+    localStorage.setItem("EventoSelecionado", JSON.stringify(evento));
     setResultados([]);
     traerDatosTabla(idEvento);
   };
@@ -111,11 +146,7 @@ export default function ResultadosGeneralesHomePage() {
           <h2 className="text-3xl font-black">SELECCIONA REGION Y EVENTO</h2>
         ) : (
           <>
-            {cargandoDatosTabla ? (
-              <SkeletonTabla />
-            ) : (
-              <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />
-            )}
+         <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />
           </>
         )}
       </div>

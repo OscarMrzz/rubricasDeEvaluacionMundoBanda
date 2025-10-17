@@ -66,6 +66,10 @@ const NavBard = () => {
   const handleLogout = async () => {
     localStorage.removeItem("perfilActivo");
 
+document.cookie = 'rolPerfil=; path=/; max-age=0;'
+localStorage.removeItem("EventoSelecionado");
+
+
     recetiarRegionesStore();
     recetiarEventosStore();
     recetiarCategoriasStore();
