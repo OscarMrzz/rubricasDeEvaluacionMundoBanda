@@ -17,6 +17,7 @@ import { UsersIcon } from "@heroicons/react/16/solid";
 const NavBard = () => {
   const [haySesionIniciada, setHaySesionIniciada] = useState<boolean>(false);
   const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
+  const [direcionHomesegunRol, setDirecionHomesegunRol] = useState<string>("/");
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const [openMenuHamburguesa, setOpenMenuHamburguesa] = useState(false);
 
@@ -48,6 +49,15 @@ const NavBard = () => {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
       if (perfil) {
         setPerfil(perfil);
+
+        if (perfil.tipoUsuario === "admin") setDirecionHomesegunRol("/PanelControlPage");
+        if (perfil.tipoUsuario === "superadmin") setDirecionHomesegunRol("/PanelControlPage");
+        if (perfil.tipoUsuario === "presidenteJurado") setDirecionHomesegunRol("/PanelControlPage");
+        if (perfil.tipoUsuario === "jurado") setDirecionHomesegunRol("/EvaluarPage");
+        if (perfil.tipoUsuario === "fiscal") setDirecionHomesegunRol("/ReportesPage");
+        
+
+
         setHaySesionIniciada(true);
       }
     }
@@ -73,7 +83,7 @@ const NavBard = () => {
     <header className=" bg-grey-500/5 backdrop-blur-md h-25  w-full flex text-white items-center justify-between px-15 fixed   top-0 z-50">
       <div className="flex flex-row  items-center  ">
         <div className="text-xl lg:text-2xl font-bold " style={{ letterSpacing: "0.3em" }}>
-          <Link href="/">{perfil.federaciones?.nombreFederacion || ""}</Link>
+          <Link href={direcionHomesegunRol}>{perfil.federaciones?.nombreFederacion || ""}</Link>
         </div>
       </div>
       <button
