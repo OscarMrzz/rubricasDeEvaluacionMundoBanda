@@ -15,6 +15,8 @@ const SignInPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(false);
+  const [direcionHomesegunRol, setDirecionHomesegunRol] = useState<string>("/");
+  const [perfil, setPerfil] = useState<perfilInterface>({} as perfilInterface);
   const router = useRouter();
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -49,11 +51,9 @@ const SignInPage = () => {
       return;
     }
 
-    // Si hay sesión, redirige al home
+  
     if (data.session) {
       await cargarPerfilUsarioActivo();
-      iniciarSesionStore();
-      router.push("/");
     }
     setLoading(false);
   };
@@ -61,10 +61,24 @@ const SignInPage = () => {
   const cargarPerfilUsarioActivo = async () => {
     try {
       const perfilServices = new PerfilesServices();
-      const perfil: perfilInterface = await perfilServices.getUsuarioLogiado();
-      if (perfil) {
-        localStorage.setItem("perfilActivo", JSON.stringify(perfil));
+      perfilServices.getUsuarioLogiado().then((perf: perfilInterface) => {
+        setPerfil(perf);
+ 
+      if (perf) {
+        localStorage.setItem("perfilActivo", JSON.stringify(perf));
+        document.cookie = `rolPerfil=${perf.tipoUsuario}; path=/; max-age=${3 * 24 * 60 * 60};`
+        
+                if (perf.tipoUsuario === "admin") router.push("/PanelControlPage");
+                if (perf.tipoUsuario === "superadmin") router.push("/PanelControlPage");
+                if (perf.tipoUsuario === "presidenteJurado") router.push("/PanelControlPage");
+                if (perf.tipoUsuario === "jurado") router.push("/EvaluarPage");
+                if (perf.tipoUsuario === "fiscal") router.push("/ReportesPage");
+
+          iniciarSesionStore();
+ 
+ 
       }
+    });
     } catch (error) {
       console.error("❌ Error cargando el perfil del usuario activo:", error);
     }
