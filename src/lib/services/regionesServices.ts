@@ -1,5 +1,6 @@
 import { dataBaseSupabase } from "../supabase";
 import { regionesDatosAmpleosInterface, regionesInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
+import PerfilesServices from "./perfilesServices";
 
 type Interface = regionesInterface;
 
@@ -21,7 +22,11 @@ export default class RegionService {
          
         this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
        
-        }
+        }else{
+                    const perfilServices = new PerfilesServices();
+                    this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;
+        
+                }
     }
    
     async getDatosAmpleos(): Promise<regionesDatosAmpleosInterface[]> {

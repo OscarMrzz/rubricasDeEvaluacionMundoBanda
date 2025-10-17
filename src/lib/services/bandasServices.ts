@@ -1,5 +1,6 @@
 import { dataBaseSupabase } from "../supabase";
 import { bandaDatosAmpleosInterface,bandaInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
+import PerfilesServices from "./perfilesServices";
 
 type Interface = bandaInterface;
 
@@ -21,6 +22,10 @@ export default class BandasServices {
         if (perilBruto) {
          
         this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+        }else{
+            const perfilServices = new PerfilesServices();
+            this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;
+
         }
     }
 

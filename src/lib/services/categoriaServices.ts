@@ -1,5 +1,6 @@
 import { dataBaseSupabase } from "../supabase";
 import { categoriaDatosAmpleosInterface, categoriaInterface, perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces";
+import PerfilesServices from "./perfilesServices";
 
 
 
@@ -23,6 +24,11 @@ async initPerfil() {
      
     this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
     }
+    else{
+                const perfilServices = new PerfilesServices();
+                this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;
+    
+            }
 }
 
     

@@ -1,5 +1,6 @@
 import { dataBaseSupabase } from "../supabase";
 import { rubricaDatosAmpleosInterface, rubricaInterface, perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
+import PerfilesServices from "./perfilesServices";
 
 type Interface = rubricaInterface;
 
@@ -22,6 +23,11 @@ export default class RubricasServices {
          
         this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
         }
+        else{
+                    const perfilServices = new PerfilesServices();
+                    this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;
+        
+                }
     }
 
     async getDatosAmpleos(): Promise<rubricaDatosAmpleosInterface[]> {
