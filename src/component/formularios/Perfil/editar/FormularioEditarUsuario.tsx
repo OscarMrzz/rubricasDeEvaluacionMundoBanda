@@ -154,7 +154,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Alias o apodo"
-            required
+           
           />
         </div>
 
@@ -173,8 +173,8 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             <option className="bg-white text-gray-400" value="">
               Seleccione un rol
             </option>
-            <option className="bg-white text-gray-800" value="presidenteJurado">
-              Presidente jurados
+            <option className="bg-white text-gray-800" value="admin">
+              admin
             </option>
             <option className="bg-white text-gray-800" value="jurado">
               Jurado
@@ -199,7 +199,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Fecha de nacimiento"
-            required
+        
           />
         </div>
         <div className="flex flex-col">
@@ -214,7 +214,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Sexo"
-            required
+        
           />
         </div>
         <div className="flex flex-col">
@@ -229,7 +229,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Género"
-            required
+     
           />
         </div>
         <div className="flex flex-col">
@@ -244,7 +244,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Identidad"
-            required
+ 
           />
         </div>
         <div className="flex flex-col">
@@ -259,7 +259,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Número de teléfono"
-            required
+         
           />
         </div>
         <div className="flex flex-col">
@@ -274,7 +274,7 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Dirección"
-            required
+       
           />
         </div>
         <button
