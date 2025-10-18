@@ -184,6 +184,32 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         if (error) throw error;
         return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
     }
+    async getPorEventoCategoria( idEvento: string, idCategoria: string) {
+         
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+              .select(`
+                *
+             ,registroEventos(*),
+                bandas(*),
+                criteriosEvalucion(*),
+                cumplimientos(*),
+                categorias(*),
+                regiones(*),
+                perfiles(*),
+                federaciones(*),
+                rubricas(*)
+            `)
+            .eq("idForaneaCategoria", idCategoria)
+            .eq("idForaneaEvento", idEvento)
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+
+        if (error) throw error;
+        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+    }
     async getPorRubrica(idRubrica: string) {
          
         if (!this.perfil?.idForaneaFederacion) {
@@ -262,6 +288,65 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 rubricas(*)
             `)
             .eq("idForaneaEvento", idEvento)
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            return [];
+        }
+
+        // Agrupar por banda y sumar los puntos
+        const resultadosPorBanda = new Map<string, resultadosGeneralesInterface>();
+        
+        data.forEach((evaluacion: registroCumplimientoEvaluacionDatosAmpleosInterface) => {
+            const idBanda = evaluacion.idForaneaBanda;
+            
+            if (!resultadosPorBanda.has(idBanda)) {
+                resultadosPorBanda.set(idBanda, {
+                    banda: evaluacion.bandas,
+                    evento: evaluacion.registroEventos,
+                    categoria: evaluacion.categorias,
+                    region: evaluacion.regiones,
+                    totalPuntos: 0
+                });
+            }
+            
+            // Sumar los puntos de esta evaluación
+            const puntos = evaluacion.puntosObtenidos || 0;
+            const resultado = resultadosPorBanda.get(idBanda);
+            if (resultado) {
+                resultado.totalPuntos += puntos;
+            }
+        });
+
+        // Convertir el Map a array y ordenar por puntos descendente
+        return Array.from(resultadosPorBanda.values())
+            .sort((a, b) => b.totalPuntos - a.totalPuntos);
+    }
+    async getResultadosEventoYCategoria(idEvento: string, idCategoria: string): Promise<resultadosGeneralesInterface[]> {
+         
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        
+        // Obtener todas las evaluaciones del evento
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .select(`
+                *,
+                registroEventos(*),
+                bandas(*),
+                criteriosEvalucion(*),
+                cumplimientos(*),
+                categorias(*),
+                regiones(*),
+                perfiles(*),
+                federaciones(*),
+                rubricas(*)
+            `)
+            .eq("idForaneaEvento", idEvento)
+            .eq("idForaneaCategoria", idCategoria)
             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
