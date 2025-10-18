@@ -1,76 +1,33 @@
 "use client";
 
-import { use, useEffect, useRef, useState } from "react";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import {  useEffect, useRef, useState } from "react";
+
 import React from "react";
-import { categoriaInterface, RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import {resultadosGeneralesInterface } from "@/interfaces/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
 import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
-import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
-import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
+import { uselistaEventosFiltro  } from "@/hooks/useListaEventosFiltro";
+import { useListaCategoriaFiltro} from "@/hooks/useListaCategoriasFiltro";
+
+
+
+
 export default function ResultadosGeneralesHomePage() {
+
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
-
   const [resultados, setResultados] = useState<resultadosGeneralesInterface[]>([]);
-
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
-  const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<categoriaInterface>();
-  const { listCategoriasStore } = useCategoriasStore();
 
   const dispatch = useDispatch();
 
-  const { listEventosStore } = useEventosStore();
 
-  
-  const [cargandoEventos, setCargandoEventos] = useState(false);
-  const [cargandoCategorias, setCargandoCategorias] = useState(false);
-  const [cargandoDatosTabla, setCargandoDatosTabla] = useState(false);
-  const [eventoSeleccionado, setEventoSeleccionado] = useState<RegistroEventoInterface>();
-  const [eventosLista, setEventosLista] = useState<RegistroEventoInterface[]>([]);
-  const [categoriasLista, setCategoriasLista] = useState<categoriaInterface[]>();
+ const { eventosLista, cargandoEventos, eventoSeleccionado, setEventoSeleccionado  } = uselistaEventosFiltro();
+  const {categoriasLista, cargandoCategorias,categoriasSeleccionadas, setCategoriasSeleccionadas} = useListaCategoriaFiltro();
 
-  useEffect(() => {
-    if (listEventosStore.length > 0) {
-      setCargandoEventos(true);
-      setCargandoDatosTabla(true);
-      setEventosLista(listEventosStore);
-      setCargandoEventos(false);
-    }
-  
-  }, [listEventosStore]);
-
-  useEffect(() => {
-    if (listCategoriasStore.length > 0) {
-      setCargandoCategorias(true);
-      setCategoriasLista(listCategoriasStore);
-      setCargandoCategorias(false);
-    }
-  }, [listCategoriasStore]);
-
-
-
-
-  useEffect(() => {
-       const eventoLocalStorage = localStorage.getItem("EventoSelecionado");
-    if (eventoLocalStorage && eventoLocalStorage !== "undefined") {
-
-   setEventoSeleccionado(JSON.parse(eventoLocalStorage));
- 
-    }
-
-
-  }, []);
-
-  useEffect(() => {
-    const categoriaLocalStorage = localStorage.getItem("CategoriaSelecionada");
-    if (categoriaLocalStorage && categoriaLocalStorage !== "undefined") {
-      setCategoriasSeleccionadas(JSON.parse(categoriaLocalStorage));
-    }
-  }, []);
 
   useEffect(() => {
     if (eventoSeleccionado && categoriasSeleccionadas) {
@@ -88,7 +45,7 @@ export default function ResultadosGeneralesHomePage() {
 
         setResultados(resultadosData);
     
-        setCargandoDatosTabla(false);
+    
       } catch (error) {
         console.error("❌ Error al obtener las Rubricas:", error);
       } finally {
@@ -105,9 +62,6 @@ export default function ResultadosGeneralesHomePage() {
       setEventoSeleccionado(JSON.parse(eventoLocalStorage)  );
       traerDatosTabla(JSON.parse(eventoLocalStorage).idEvento, JSON.parse(categoriaLocalStorage).idCategoria) 
     }
-
-
-
   }, []);
 
   const selecionarEvento = (idEvento: string) => {
@@ -210,3 +164,5 @@ export default function ResultadosGeneralesHomePage() {
     </>
   );
 }
+
+
