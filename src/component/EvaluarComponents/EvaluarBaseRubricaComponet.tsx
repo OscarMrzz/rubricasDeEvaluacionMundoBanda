@@ -1,17 +1,12 @@
 import {
-
   bandaInterface,
-
   categoriaInterface,
   criterioEvaluacionDatosAmpleosInterface,
   perfilInterface,
-
   regionesInterface,
   registroComentariosInterface,
   registroCumplimientoEvaluacionInterface,
- 
   RegistroEventoInterface,
-
   rubricaInterface,
 } from "@/interfaces/interfaces";
 
@@ -34,7 +29,7 @@ type Props = {
   categoriaSelecionada: categoriaInterface;
   rubricaSelecionada: rubricaInterface;
   bandaSelecionada: bandaInterface;
-  regionSelecionada: regionesInterface;
+  idRegionSelecionada: string;
   recetiar: () => void;
   revisandoEvluacion: () => void;
 };
@@ -43,7 +38,7 @@ export default function EvaluarBaseRubricaComponet({
   categoriaSelecionada,
   rubricaSelecionada,
   bandaSelecionada,
-  regionSelecionada,
+  idRegionSelecionada,
 
   recetiar,
   revisandoEvluacion,
@@ -160,7 +155,7 @@ export default function EvaluarBaseRubricaComponet({
       const rubricaAGurardar = rubricaSelecionada.idRubrica;
       const perfilEvaluadorAguardar = perfilActivo.idPerfil;
       const federaciónAGuardar = perfilActivo.idForaneaFederacion;
-      const regionAguardar = regionSelecionada.idRegion;
+      const regionAguardar = idRegionSelecionada;
 
       if (!perfilEvaluadorAguardar) {
         return;
@@ -219,7 +214,6 @@ export default function EvaluarBaseRubricaComponet({
             dataComentario as registroComentariosInterface
           );
           if (respuestaComentario) {
-         
             recetiar();
           } else {
             console.log("❌ Error al guardar el comentario.");
@@ -253,66 +247,63 @@ export default function EvaluarBaseRubricaComponet({
   return (
     <div className="flex flex-col gap-4 p-4 items-center bg-gray-800 px-6 lg:px-60 ">
       <div className="w-full">
+        <section className="flex flex-col gap-2 items-center mb-4 bg-gray-700  ">
+          <h2 className="text-2xl font-bold ">{bandaSelecionada.nombreBanda}</h2>
+          <p>{eventoSelecionado.LugarEvento}</p>
+          <p>{categoriaSelecionada.nombreCategoria}</p>
+          <p>{rubricaSelecionada.nombreRubrica}</p>
+        </section>
+        {Object.keys(dataCriteriosEvaluar).length === 0 ? (
+          <div>
+            <Lottie animationData={loading2} loop={true} className=" " />
+          </div>
+        ) : null}
 
-    
-      <section className="flex flex-col gap-2 items-center mb-4 bg-gray-700  ">
-        <h2 className="text-2xl font-bold ">{bandaSelecionada.nombreBanda}</h2>
-        <p>{eventoSelecionado.LugarEvento}</p>
-        <p>{categoriaSelecionada.nombreCategoria}</p>
-        <p>{rubricaSelecionada.nombreRubrica}</p>
-      </section>
-      {Object.keys(dataCriteriosEvaluar).length === 0 ? (
-        <div>
-          <Lottie animationData={loading2} loop={true} className=" " />
+        <div className="  flex flex-col gap-4 ">
+          {cargandoCriterios ? (
+            <p>Cargando Criterios...</p>
+          ) : (
+            listCriterios.map((criterio) => (
+              <EvaluarCriterioComponent
+                key={criterio.idCriterio}
+                criterioSelecionado={criterio}
+                criterioNoEvaluado={campoImcompleto}
+              />
+            ))
+          )}
         </div>
-      ) : null}
 
-      <div className="  flex flex-col gap-4 ">
-        {cargandoCriterios ? (
-          <p>Cargando Criterios...</p>
-        ) : (
-          listCriterios.map((criterio) => (
-            <EvaluarCriterioComponent
-              key={criterio.idCriterio}
-              criterioSelecionado={criterio}
-              criterioNoEvaluado={campoImcompleto}
-            />
-          ))
-        )}
-      </div>
+        {Object.keys(dataCriteriosEvaluar).length === 0 ? null : (
+          <>
+            <div className="mt-4 lg:w-full bg-[#274c77] grid grid-cols-1 grid-rows-[60px_auto_160px] h-full px-2  min-h-120 shadow-2xl    text-gray-100">
+              <div className="border-b-2 border-gray-300/50 mb-4 pb-2 flex justify-between items-center">
+                <h2 className="text-2xl font-bold">{bandaSelecionada.nombreBanda}</h2>
+                <p className="pr-5"> Total: {totalPuntos}</p>
+              </div>
 
-      {Object.keys(dataCriteriosEvaluar).length === 0 ? null : (
-        <>
-          <div className="mt-4 lg:w-full bg-[#274c77] grid grid-cols-1 grid-rows-[60px_auto_160px] h-full px-2  min-h-120 shadow-2xl    text-gray-100">
-            <div className="border-b-2 border-gray-300/50 mb-4 pb-2 flex justify-between items-center">
-              <h2 className="text-2xl font-bold">{bandaSelecionada.nombreBanda}</h2>
-              <p className="pr-5"> Total: {totalPuntos}</p>
-            </div>
-
-            <div className="flex  flex-col lg:flex-row gap-4 justify-between p-4">
-              <div>
-                <div className="flex flex-row flex-wrap gap-10 justify-start items-start">
-                  {Object.keys(dataCriteriosEvaluar).length > 0 ? (
-                    Object.entries(dataCriteriosEvaluar).map(([idCriterio, item]) => {
-                      const criterio = listCriterios.find((c) => c.idCriterio === idCriterio);
-                      return (
-                        <div key={idCriterio} className="flex flex-row items-center gap-1 ">
-                          {criterio ? (
-                            <>
-                              <span className="font-bold">{criterio.nombreCriterio}:</span>
-                              <span className="font-light">{item.valor}</span>
-                            </>
-                          ) : null}
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p>No hay criterios para evaluar.</p>
-                  )}
+              <div className="flex  flex-col lg:flex-row gap-4 justify-between p-4">
+                <div>
+                  <div className="flex flex-row flex-wrap gap-10 justify-start items-start">
+                    {Object.keys(dataCriteriosEvaluar).length > 0 ? (
+                      Object.entries(dataCriteriosEvaluar).map(([idCriterio, item]) => {
+                        const criterio = listCriterios.find((c) => c.idCriterio === idCriterio);
+                        return (
+                          <div key={idCriterio} className="flex flex-row items-center gap-1 ">
+                            {criterio ? (
+                              <>
+                                <span className="font-bold">{criterio.nombreCriterio}:</span>
+                                <span className="font-light">{item.valor}</span>
+                              </>
+                            ) : null}
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <p>No hay criterios para evaluar.</p>
+                    )}
+                  </div>
                 </div>
               </div>
-            
-            </div>
               <div className="  flex justify-center items-center py-4 px-4">
                 <textarea
                   name=""
@@ -321,31 +312,30 @@ export default function EvaluarBaseRubricaComponet({
                   onChange={(evento) => agregarComentario(evento.target.value)}
                   cols={30}
                   maxLength={250}
-                  style={{  }}
+                  style={{}}
                   className={`w-full h-35 lg:h-full   p-3 border  rounded-lg resize-none focus:outline-none
                 ${comentarios.length === 0 && sePrecionoElBotoGuardar ? "border-2 border-red-800" : "border-gray-300"}
                 `}
                   placeholder="Observaciones comentarios y sugerencias..."
                 ></textarea>
               </div>
-          </div>
+            </div>
 
-          <div className=" mt-2 flex flex-col  md:flex-row justify-end items-center bg-[#274c77] h-full py-4 px-4 gap-4  shadow-2xl">
-             <button
-              onClick={() => guardarEvaluacion()}
-              className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer"
-            >
-              Guardar
-            </button> 
-            
-            <button className="bg-gray-600/10 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
-              Cancelar
-            </button>
-          
-          </div>
-        </>
-      )}
-        </div>
+            <div className=" mt-2 flex flex-col  md:flex-row justify-end items-center bg-[#274c77] h-full py-4 px-4 gap-4  shadow-2xl">
+              <button
+                onClick={() => guardarEvaluacion()}
+                className="bg-cyan-800 hover:bg-cyan-700 border-2 border-cyan-500 h-10 w-52 text-white px-4 py-2 rounded-xl cursor-pointer"
+              >
+                Guardar
+              </button>
+
+              <button className="bg-gray-600/10 border-2 border-gray-400 hover:bg-gray-500 text-gray-300 h-10 w-52  px-4 py-2 rounded-xl cursor-pointer">
+                Cancelar
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
