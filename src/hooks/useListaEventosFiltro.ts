@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
  export function uselistaEventosFiltro() {
   const { listEventosStore } = useEventosStore();
   const [cargandoEventos, setCargandoEventos] = useState(false);
-    const [eventosLista, setEventosLista] = useState<RegistroEventoInterface[]>([]);
+    const [eventosList, setEventosList] = useState<RegistroEventoInterface[]>([]);
 
       const [eventoSeleccionado, setEventoSeleccionado] = useState<RegistroEventoInterface>();
 
@@ -15,25 +15,16 @@ import { useEffect, useState } from "react";
     if (listEventosStore.length > 0) {
       setCargandoEventos(true);
     
-      setEventosLista(listEventosStore);
+      setEventosList(listEventosStore);
       setCargandoEventos(false);
     }
     }, [listEventosStore]);
 
     
-      useEffect(() => {
-           const eventoLocalStorage = localStorage.getItem("EventoSelecionado");
-        if (eventoLocalStorage && eventoLocalStorage !== "undefined") {
-    
-       setEventoSeleccionado(JSON.parse(eventoLocalStorage));
-     
-        }
-    
-    
-      }, []);
+  
 
 
 
 
-    return { eventosLista, cargandoEventos, eventoSeleccionado, setEventoSeleccionado };
+    return { eventosList, cargandoEventos, eventoSeleccionado, setEventoSeleccionado };
 }
