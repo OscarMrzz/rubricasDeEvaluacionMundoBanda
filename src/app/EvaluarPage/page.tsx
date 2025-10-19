@@ -13,24 +13,25 @@ import {
 import RegistroCumplimientoServices from "@/lib/services/RegistroComentariosServices";
 
 import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
-import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
-import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
-import { useRegionesStore } from "@/Store/listRegionesStore";
+
 import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
-import { ClipboardDocumentCheckIcon, PlayIcon } from "@heroicons/react/16/solid";
-import useGuard from "@/hooks/useGuard";
+import { ClipboardDocumentCheckIcon } from "@heroicons/react/16/solid";
+
 //hola
 import React, { useEffect, useCallback, useRef, useState, use } from "react";
 
-type campos = "region" | "evento" | "categoria" | "rubrica" | "banda" | "inicio"|"evaluar" |"";
+import { uselistaEventosFiltro } from "@/hooks/useListaEventosFiltro";
+import { useListaCategoriaFiltro } from "@/hooks/useListaCategoriasFiltro";
+
+type campos =  "evento" | "categoria" | "rubrica" | "banda" | "inicio"|"evaluar" |"";
 
 export default function EvaluarHomePage() {
 
 
-  const [listaRegiones, setListaRegiones] = React.useState<regionesInterface[]>([]);
-  const [listeventos, setListEventos] = React.useState<RegistroEventoInterface[]>([]);
-  const [eventosOriginales, setEventosOriginales] = React.useState<RegistroEventoInterface[]>([]);
-  const [listCategorias, setListCategorias] = React.useState<categoriaInterface[]>([]);
+
+  
+
+
   const [listRubricas, setListRubricas] = React.useState<rubricaInterface[]>([]);
   const [seCargoListaRubicas, setSeCargoListaRubricas] = React.useState<boolean>(false);
 
@@ -40,9 +41,9 @@ export default function EvaluarHomePage() {
   const [ActivadorApprovateMessage, setActivadorApprovateMessage] = useState(false);
   const [ActivadorLoadingMessage, setActivadorLoadingMessage] = useState(false);
 
-  const [regionSelecionada, setRegionSeleccionada] = React.useState<regionesInterface>();
-  const [eventoSelecionado, setEventoSelecionado] = React.useState<RegistroEventoInterface>();
-  const [categoriaSelecionada, setCategoriaSelecionada] = React.useState<categoriaInterface>();
+
+
+
   const [rubricaSelecionada, setRubricaSelecionada] = React.useState<rubricaInterface>();
   const [bandaSelecionada, setBandaSelecionada] = React.useState<bandaInterface>();
   const [yaseFiltraronBandas, setYaseFiltraronBandas] = React.useState<boolean>(false);
@@ -50,6 +51,11 @@ export default function EvaluarHomePage() {
   const [campoSelecionadoAnterior, setCampoSelecionadoAnterior] = React.useState<campos>("");
 
   const registroCumplimientoEvaluadosServices = useRef(new RegistroCumplimientoServices());
+
+  /* CUSTON */
+
+  const { eventosList, cargandoEventos, eventoSeleccionado, setEventoSeleccionado  } = uselistaEventosFiltro();
+  const {categoriasList, cargandoCategorias,categoriaSelecionada, setcategoriaSelecionada} = useListaCategoriaFiltro();
 
   const obtenerBandasYaEvaluadas = async (idEvento: string, idRubrica: string) => {
     const bandasUnicasList: bandaInterface[] = [];
@@ -81,42 +87,17 @@ export default function EvaluarHomePage() {
 
   //Aqui vamos a trabajar
 
-  const { listRegionesStore } = useRegionesStore();
-  const { listEventosStore } = useEventosStore();
-  const { listCategoriasStore } = useCategoriasStore();
+
+
   const { listRubicasStore } = useRubicasStore();
   const { listBandasStore } = useBandasStore();
 
-  useEffect(() => {
-    if (listRegionesStore.length > 0) {
-      setListaRegiones(listRegionesStore);
-    }
-  }, [listRegionesStore]);
 
-  useEffect(() => {
-    if (listEventosStore.length > 0) {
-      setListEventos([]);
-      setEventosOriginales(listEventosStore);
-    }
-  }, [listEventosStore]);
 
-  useEffect(() => {
-    if (regionSelecionada) {
-      setEventoSelecionado(undefined);
-      const datosFiltrados = eventosOriginales.filter(
-        (evento) => evento.idForaneaRegion === regionSelecionada.idRegion
-      );
-      setListEventos(datosFiltrados);
-    } else {
-      setListEventos(eventosOriginales);
-    }
-  }, [regionSelecionada, eventosOriginales]);
 
-  useEffect(() => {
-    if (listCategoriasStore.length > 0) {
-      setListCategorias(listCategoriasStore);
-    }
-  }, [listCategoriasStore]);
+
+
+
 
   useEffect(() => {
     if (listRubicasStore.length > 0) {
@@ -146,10 +127,10 @@ export default function EvaluarHomePage() {
     setYaseFiltraronBandas(false);
     setBandaSelecionada(undefined);
     const cargarBandasNoEvaluadas = async () => {
-      if (eventoSelecionado && rubricaSelecionada) {
+      if (eventoSeleccionado && rubricaSelecionada) {
         setListBandasNoEvaluadas([]); // Limpiar la lista antes de cargar nuevas bandas
         const listaBandasNoEvaluadass: bandaInterface[] = await ObtenerBandasNoEvaluadas(
-          eventoSelecionado.idEvento,
+          eventoSeleccionado.idEvento,
           rubricaSelecionada.idRubrica
         );
         setListBandasNoEvaluadas(listaBandasNoEvaluadass);
@@ -157,9 +138,9 @@ export default function EvaluarHomePage() {
       }
     };
     cargarBandasNoEvaluadas();
-  }, [eventoSelecionado, rubricaSelecionada]);
+  }, [eventoSeleccionado, rubricaSelecionada]);
 
-  const filtrarEventosPorRegion = useCallback(() => {}, [regionSelecionada, eventosOriginales]);
+
 
   const filtrarBandasPorCategoria = useCallback(() => {
     if (categoriaSelecionada) {
@@ -177,9 +158,7 @@ export default function EvaluarHomePage() {
     filtrarBandasPorCategoria();
   }, [filtrarBandasPorCategoria]);
 
-  useEffect(() => {
-    filtrarEventosPorRegion();
-  }, [filtrarEventosPorRegion]);
+
 
   const recetiar = () => {
     setActivadorLoadingMessage(false);
@@ -194,25 +173,20 @@ export default function EvaluarHomePage() {
   };
 
   const onclickIniciar = () => {
-    setCampoSeleccionadoActual("region");
+    setCampoSeleccionadoActual("evento");
 
   }
 
-  const selecionarRegion = (idRegion: string) => {
-    const regionSeleccionada = listaRegiones.find((region) => region.idRegion === idRegion);
-    setRegionSeleccionada(regionSeleccionada);
-    setCampoSeleccionadoActual("evento");
-    setCampoSelecionadoAnterior("region");
-  };
+
   const selecionarEvento = (idEvento: string) => {
-    const eventoSeleccionado = listeventos.find((evento) => evento.idEvento === idEvento);
-    setEventoSelecionado(eventoSeleccionado);
+    const eventoSeleccionado = eventosList.find((evento) => evento.idEvento === idEvento);
+    setEventoSeleccionado(eventoSeleccionado);
     setCampoSeleccionadoActual("categoria");
     setCampoSelecionadoAnterior("evento");
   };
   const selecionarCategoria = (idCategoria: string) => {
-    const categoriaSeleccionada = listCategorias.find((categoria) => categoria.idCategoria === idCategoria);
-    setCategoriaSelecionada(categoriaSeleccionada);
+    const categoriaSeleccionada = categoriasList?.find((categoria) => categoria.idCategoria === idCategoria);
+    setcategoriaSelecionada(categoriaSeleccionada);
     setCampoSeleccionadoActual("rubrica");
     setCampoSelecionadoAnterior("categoria");
   };
@@ -259,33 +233,7 @@ campoSeleccionadoActual !=="evaluar" &&
         </div>}
       
 
-   { campoSeleccionadoActual==="region" &&
-   <div className="w-60 ">
-          <div className="w-full">
-            <select
-              className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
-              name=""
-              id=""
-              value={regionSelecionada?.idRegion ?? ""}
-              onChange={(evento) => {
-                selecionarRegion(evento.target.value);
-              }}
-            >
-              <option value="" className="text-gray-700" disabled>
-                Region
-              </option>
-              {listaRegiones.map((evento) => {
-                return (
-                  <option className="text-gray-700 font-light " key={evento.idRegion} value={evento.idRegion}>
-                    {evento.nombreRegion}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </div>
-
-}
+ 
 
 {
 
@@ -294,27 +242,22 @@ campoSeleccionadoActual !=="evaluar" &&
             className="border-2 w-full h-20 text-xl font-bold rounded-2xl bg-blue-400 text-blu-700 "
             name=""
             id=""
-            value={eventoSelecionado?.idEvento || ""}
+            value={eventoSeleccionado?.idEvento || ""}
             onChange={(evento) => {
               selecionarEvento(evento.target.value);
             }}
           >
-            {!regionSelecionada ? (
-              <option value="" className="text-gray-700" disabled>
-                Seleccione region...
-              </option>
-            ) : (
-              <>
+            
                 <option value="" className="text-gray-700" disabled>
                   Evento
                 </option>
-                {listeventos.map((evento) => (
+                {eventosList.map((evento) => (
                   <option className="text-gray-700" key={evento.idEvento} value={evento.idEvento}>
                     {evento.LugarEvento}
                   </option>
                 ))}
-              </>
-            )}
+            
+            
           </select>
         </div>
 }
@@ -335,7 +278,7 @@ campoSeleccionadoActual !=="evaluar" &&
               Categorias
             </option>
 
-            {listCategorias.map((categoria) => (
+            {categoriasList?.map((categoria) => (
               <option className="text-gray-700" key={categoria.idCategoria} value={categoria.idCategoria}>
                 {categoria.nombreCategoria}
               </option>
@@ -427,10 +370,10 @@ campoSeleccionadoActual !=="evaluar" &&
       
 
       <section>
-        {eventoSelecionado && regionSelecionada && categoriaSelecionada && rubricaSelecionada && bandaSelecionada ? (
+        {eventoSeleccionado && categoriaSelecionada && rubricaSelecionada && bandaSelecionada ? (
           <EvaluarBaseRubricaComponet
-            eventoSelecionado={eventoSelecionado}
-            regionSelecionada={regionSelecionada}
+            eventoSelecionado={eventoSeleccionado}
+            idRegionSelecionada={eventoSeleccionado.idForaneaRegion}
             categoriaSelecionada={categoriaSelecionada}
             rubricaSelecionada={rubricaSelecionada}
             bandaSelecionada={bandaSelecionada}
