@@ -10,8 +10,9 @@ import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosSe
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
 import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
-import { uselistaEventosFiltro  } from "@/hooks/useListaEventosFiltro";
-import { useListaCategoriaFiltro} from "@/hooks/useListaCategoriasFiltro";
+
+import { uselistaEventosFiltroConMemoria } from "@/hooks/useListaEventosFiltroConMemoria";
+import { useListaCategoriaFiltroConMemoria } from "@/hooks/useListaCategoriaFiltroConMemoria";
 
 
 
@@ -25,13 +26,13 @@ export default function ResultadosGeneralesHomePage() {
   const dispatch = useDispatch();
 
 
- const { eventosLista, cargandoEventos, eventoSeleccionado, setEventoSeleccionado  } = uselistaEventosFiltro();
-  const {categoriasLista, cargandoCategorias,categoriasSeleccionadas, setCategoriasSeleccionadas} = useListaCategoriaFiltro();
+ const { eventosListConMemoria, cargandoEventosConMemoria, eventoSeleccionadoConMemoria, setEventoSeleccionadoConMemoria  } = uselistaEventosFiltroConMemoria();
+  const {categoriasListConMemoria, cargandoCategoriasConMemoria,categoriaSelecionadaConMemoria, setCategoriaSelecionadaConMemoria} = useListaCategoriaFiltroConMemoria();
 
 
   useEffect(() => {
-    if (eventoSeleccionado && categoriasSeleccionadas) {
-      traerDatosTabla(eventoSeleccionado.idEvento, categoriasSeleccionadas.idCategoria);
+    if (eventoSeleccionadoConMemoria && categoriaSelecionadaConMemoria) {
+      traerDatosTabla(eventoSeleccionadoConMemoria.idEvento, categoriaSelecionadaConMemoria.idCategoria);
     }
   }, []);
 
@@ -59,24 +60,24 @@ export default function ResultadosGeneralesHomePage() {
     if (eventoLocalStorage && eventoLocalStorage !== "undefined" &&
         categoriaLocalStorage && categoriaLocalStorage !== "undefined") {
 
-      setEventoSeleccionado(JSON.parse(eventoLocalStorage)  );
+      setEventoSeleccionadoConMemoria(JSON.parse(eventoLocalStorage)  );
       traerDatosTabla(JSON.parse(eventoLocalStorage).idEvento, JSON.parse(categoriaLocalStorage).idCategoria) 
     }
   }, []);
 
   const selecionarEvento = (idEvento: string) => {
-    const evento = eventosLista.find((evento) => evento.idEvento === idEvento);
-    setEventoSeleccionado(evento);
+    const evento = eventosListConMemoria.find((evento) => evento.idEvento === idEvento);
+    setEventoSeleccionadoConMemoria(evento);
     localStorage.setItem("EventoSelecionado", JSON.stringify(evento));
     setResultados([]);
-    traerDatosTabla(idEvento, categoriasSeleccionadas ? categoriasSeleccionadas.idCategoria : "");
+    traerDatosTabla(idEvento, categoriaSelecionadaConMemoria ? categoriaSelecionadaConMemoria.idCategoria : "");
   };
   const selecionarCategoria = (idCategoria: string) => {
-    const categoria = categoriasLista?.find((categoria) => categoria.idCategoria === idCategoria);
-    setCategoriasSeleccionadas(categoria);
+    const categoria = categoriasListConMemoria?.find((categoria) => categoria.idCategoria === idCategoria);
+    setCategoriaSelecionadaConMemoria(categoria);
     localStorage.setItem("CategoriaSelecionada", JSON.stringify(categoria));
     setResultados([]);
-    traerDatosTabla(eventoSeleccionado ? eventoSeleccionado.idEvento : "", idCategoria);
+    traerDatosTabla(eventoSeleccionadoConMemoria ? eventoSeleccionadoConMemoria.idEvento : "", idCategoria);
   }
 
   return (
@@ -99,12 +100,12 @@ export default function ResultadosGeneralesHomePage() {
                   className=" w-40 h-6 bg-red-500 border-0"
                   name=""
                   id=""
-                  value={eventoSeleccionado?.idEvento}
+                  value={eventoSeleccionadoConMemoria?.idEvento}
                   onChange={(event) => {
                     selecionarEvento(event.target.value);
                   }}
                 >
-                  {cargandoEventos ? (
+                  {cargandoEventosConMemoria ? (
                     <option className="bg-white text-gray-400" value="">
                       Eventos...
                     </option>
@@ -113,7 +114,7 @@ export default function ResultadosGeneralesHomePage() {
                       <option className="bg-white text-gray-400" value="">
                         Eventos
                       </option>
-                      {eventosLista.map((evento) => (
+                      {eventosListConMemoria.map((evento) => (
                         <option className="bg-white text-gray-800" key={evento.idEvento} value={evento.idEvento}>
                           {evento.LugarEvento}
                         </option>
@@ -127,12 +128,12 @@ export default function ResultadosGeneralesHomePage() {
                   className=" w-40 h-6 bg-red-500 border-0"
                   name=""
                   id=""
-                  value={categoriasSeleccionadas?.idCategoria}
+                  value={categoriaSelecionadaConMemoria?.idCategoria}
                   onChange={(event) => {
                     selecionarCategoria(event.target.value);
                   }}
                 >
-                  {cargandoEventos ? (
+                  {cargandoEventosConMemoria ? (
                     <option className="bg-white text-gray-400" value="">
                       Categorias...
                     </option>
@@ -141,7 +142,7 @@ export default function ResultadosGeneralesHomePage() {
                       <option className="bg-white text-gray-400" value="">
                         Categorias
                       </option>
-                      {categoriasLista?.map((categoria) => (
+                      {categoriasListConMemoria?.map((categoria) => (
                         <option className="bg-white text-gray-800" key={categoria.idCategoria} value={categoria.idCategoria}>
                           {categoria.nombreCategoria}
                         </option>
@@ -153,7 +154,7 @@ export default function ResultadosGeneralesHomePage() {
             </div>
           </div>
         </div>
-        {cargandoEventos ? (
+        {cargandoEventosConMemoria ? (
           <h2 className="text-3xl font-black">SELECCIONA REGION Y EVENTO</h2>
         ) : (
           <>
