@@ -12,16 +12,15 @@ export default class FederacionesService {
      
       
     constructor() {
-        // No inicializar perfil en constructor para evitar problemas con SSR
+        this.initPerfil()
     }
     
     async initPerfil() {
-        if (typeof window === 'undefined') return; // Solo en el cliente
-        
-        const perilBruto = localStorage.getItem("perfilActivo");
-        if (perilBruto) {
+     const perfilCookie = document.cookie.split(';').find(c => c.trim().startsWith('perfilActivo='));
+        const perfilBruto = perfilCookie ? decodeURIComponent(perfilCookie.split('=')[1]) : null;
+        if (perfilBruto) {
          
-        this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+        this.perfil = JSON.parse(perfilBruto) as perfilDatosAmpleosInterface;
         }
         else{
                     const perfilServices = new PerfilesServices();
