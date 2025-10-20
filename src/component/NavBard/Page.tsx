@@ -181,6 +181,7 @@ ${openMenuHamburguesa ? "bg-gray-900/50 lg:bg-transparent" : "hidden "}
               <Link className="text-2xl pl-4 flex justify-center items-center" href="/PanelControlPage">
                 Admin
               </Link>
+              
               <div className="lg:hidden">
                 <SidebarPanelControlComponent />
               </div>
