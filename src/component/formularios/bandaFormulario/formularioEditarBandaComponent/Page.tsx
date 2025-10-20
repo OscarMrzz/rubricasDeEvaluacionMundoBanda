@@ -129,7 +129,7 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
 
     try {
       if(urlLogoBanda !== previewUrl){
-      const urlLogoParaDB = await bandaServices.current.subirLogoBanda(
+      const urlLogoParaDB = await bandaServices.current.editarLogoBanda(
         selectedFile as File,
         `${formData.nombreBanda.replace(/\s+/g, "_")}_logo`
       );

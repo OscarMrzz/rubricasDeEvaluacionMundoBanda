@@ -151,7 +151,7 @@ export default class BandasServices {
 
     async subirLogoBanda(file: File, nombreArchivo: string): Promise<string | null> {
 
-        const nombreFinal = `${Date.now()}-${nombreArchivo}`;
+        const nombreFinal = `${nombreArchivo}`;
         const { data, error } = await dataBaseSupabase.storage
             .from('imgLogoBandas')
             .upload(nombreFinal , file, {
@@ -176,6 +176,22 @@ export default class BandasServices {
             .createSignedUrl(path, 60*60*24*365);
 
         return data?.signedUrl ?? "";
+    }
+
+    async editarLogoBanda(file: File, nombreArchivo: string): Promise<string | null> {
+
+        const nombreFinal = `${nombreArchivo}`;
+        const { data, error } = await dataBaseSupabase.storage
+            .from('imgLogoBandas')
+            .update(nombreFinal , file, {
+                cacheControl: '3600',
+                upsert: true
+            });
+        if (error) {
+            console.error("❌ Error editando el logo de la banda:", error);
+            throw error;
+        }
+        return data.path;
     }
 
 }
