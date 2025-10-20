@@ -14,16 +14,16 @@ import PerfilesServices from "./perfilesServices";
   private perfilInitialized = false;
   
 constructor() {
-    // No inicializar perfil en constructor para evitar problemas con SSR
+    this.initPerfil()
 }
 
 async initPerfil() {
-    if (this.perfilInitialized) return;
-    if (typeof window === 'undefined') return; // Solo en el cliente
+   
     
-    const perilBruto = localStorage.getItem("perfilActivo");
-    if (perilBruto) {
-        this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+    const perfilCookie = document.cookie.split(';').find(c => c.trim().startsWith('perfilActivo='));
+        const perfilBruto = perfilCookie ? decodeURIComponent(perfilCookie.split('=')[1]) : null;
+    if (perfilBruto) {
+        this.perfil = JSON.parse(perfilBruto) as perfilDatosAmpleosInterface;
     } else {
         const perfilServices = new PerfilesServices();
         this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;

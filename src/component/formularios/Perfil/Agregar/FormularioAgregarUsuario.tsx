@@ -71,10 +71,8 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
   }, []);
 
   useEffect(() => {
-    // Solo ejecutar en el cliente
-    if (typeof window === "undefined") return;
-
-    const perfilBruto = localStorage.getItem("perfilActivo");
+   const perfilCookie = document.cookie.split(';').find(c => c.trim().startsWith('perfilActivo='));
+  const perfilBruto = perfilCookie ? decodeURIComponent(perfilCookie.split('=')[1]) : null;
     if (perfilBruto) {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
       if (perfil) {

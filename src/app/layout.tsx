@@ -53,7 +53,8 @@ export default function RootLayout({
 
     const initializeServices = async () => {
       try {
-        const perfiBruto = localStorage.getItem("perfilActivo");
+        const perfilCookie = document.cookie.split(";").find((c) => c.trim().startsWith("perfilActivo="));
+        const perfiBruto = perfilCookie ? decodeURIComponent(perfilCookie.split("=")[1]) : null;
         if (!perfiBruto) {
           if (window.location.pathname !== "/authPage/SignInPage") {
             window.location.href = "/authPage/SignInPage";
@@ -63,14 +64,7 @@ export default function RootLayout({
         const perfil: perfilInterface = JSON.parse(perfiBruto);
 
         // Initialize all services with profile data first
-        await Promise.all([
-          regionesServices.current.initPerfil(),
-          categoriasServices.current.initPerfil(),
-          rubicasServices.current.initPerfil(),
-          bandasServices.current.initPerfil(),
-          equipoEvaluadorServices.current.initPerfil(),
-          eventosServices.current.initPerfil(),
-        ]);
+    
 
         // Now load data from services that don't require specific federation
         regionesServices.current.get().then((datosRegiones) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@supabase/ssr";
 import { useDispatch } from "react-redux";
@@ -58,14 +58,17 @@ const SignInPage = () => {
     setLoading(false);
   };
 
+  const perfilServices = useRef(new PerfilesServices());
+
   const cargarPerfilUsarioActivo = async () => {
     try {
-      const perfilServices = new PerfilesServices();
-      perfilServices.getUsuarioLogiado().then((perf: perfilInterface) => {
+      await
+      perfilServices.current.getUsuarioLogiado().then((perf: perfilInterface) => {
         setPerfil(perf);
  
       if (perf) {
-        localStorage.setItem("perfilActivo", JSON.stringify(perf));
+        
+        document.cookie = `perfilActivo=${encodeURIComponent(JSON.stringify(perf))}; path=/; max-age=${3 * 24 * 60 * 60};`;
         document.cookie = `rolPerfil=${perf.tipoUsuario}; path=/; max-age=${3 * 24 * 60 * 60};`
         
                 if (perf.tipoUsuario === "admin") router.push("/PanelControlPage");

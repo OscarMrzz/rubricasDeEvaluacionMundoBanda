@@ -44,10 +44,8 @@ const NavBard = () => {
   }, [openUserMenu]);
 
   useEffect(() => {
-    // Solo ejecutar en el cliente
-    if (typeof window === "undefined") return;
-
-    const perfilBruto = localStorage.getItem("perfilActivo");
+    const perfilCookie = document.cookie.split(';').find(c => c.trim().startsWith('perfilActivo='));
+        const perfilBruto = perfilCookie ? decodeURIComponent(perfilCookie.split('=')[1]) : null;
     if (perfilBruto) {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
       if (perfil) {
@@ -65,9 +63,10 @@ const NavBard = () => {
   }, [haySesionStore]);
 
   const handleLogout = async () => {
-    localStorage.removeItem("perfilActivo");
+ 
 
     document.cookie = "rolPerfil=; path=/; max-age=0;";
+    document.cookie = "perfilActivo=; path=/; max-age=0;";
     localStorage.removeItem("EventoSelecionado");
 
     recetiarRegionesStore();
