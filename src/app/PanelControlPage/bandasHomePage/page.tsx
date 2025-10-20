@@ -28,6 +28,7 @@ const BandasHomePage = () => {
  
   const [loading, setLoading] = useState(true);
   const [formularioAgregarHabierto, setFormularioAgregarHabierto] = useState(false);
+  const [urlLogoBanda, setUrlLogoBanda] = useState<string>("");
 
    const [open, setOpen] = React.useState(false);
 
@@ -68,7 +69,9 @@ const BandasHomePage = () => {
 
   };
 
-  const abrirModalInformacion = (banda: bandaDatosAmpleosInterface) => {
+  const  abrirModalInformacion =async  (banda: bandaDatosAmpleosInterface) => {
+    const urlLogoBanda = await bandasServices.current.obtenerUrlLogoBanda(banda.urlLogoBanda);
+    setUrlLogoBanda(urlLogoBanda || "");
     setSelectedBanda(banda);
     setOpen(true);
   };
@@ -94,6 +97,7 @@ const BandasHomePage = () => {
               onClose={cerrarModal}
               onRefresh={traerDatosTabla}
               openFormEditar={abrirModalEditar}
+              urlLogoBanda={urlLogoBanda}
             /> 
           )}
         </OverleyModal>
@@ -115,7 +119,7 @@ const BandasHomePage = () => {
         />
       )}
     </OverleyModalFormulario>
-
+ 
       {loading ? (
         <SkeletonTabla />
       ) : <>
