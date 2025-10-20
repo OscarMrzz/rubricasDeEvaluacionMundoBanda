@@ -8,11 +8,10 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="pt-25 flex w-full  min-h-screen">
+    <div className="pt-25 px-4 lg:px-90 w-full  min-h-screen ">
      
-      <div className="  w-full px-2 lg:px-48">
         {children}
-      </div>
+ 
     </div>
   )
 }
