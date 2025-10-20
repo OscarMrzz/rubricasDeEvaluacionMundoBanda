@@ -1,6 +1,7 @@
 import { bandaDatosAmpleosInterface } from "@/interfaces/interfaces";
 import BandasServices from "@/lib/services/bandasServices";
 import React from "react";
+import Image from "next/image";
 
 type Props = {
   Banda: bandaDatosAmpleosInterface;
@@ -46,7 +47,7 @@ const InformacionBandaComponent = ({
       <div className="flex px-10 pt-4 justify-between">
         <div className=" ">
           <div className="w-25 aspect-square  object-cover">
-            {urlLogoBanda ? <img src={urlLogoBanda} alt="Logo Banda" className="object-cover" /> : null}
+            {urlLogoBanda ? <Image fill src={urlLogoBanda} alt="Logo Banda" className="object-cover" /> : null}
           </div>
           <h2 className="text-2xl text-gray-300 font-bold pb-4">{Banda.nombreBanda}</h2>
         </div>

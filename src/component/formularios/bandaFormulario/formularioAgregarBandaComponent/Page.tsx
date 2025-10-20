@@ -14,7 +14,7 @@ import {
   regionesInterface,
   perfilDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
-import { url } from "inspector";
+import Image from 'next/image'
 
 type Props = {
   refresacar: () => void;
@@ -346,7 +346,11 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
           
             />
             {previewUrl ? (
-              <img src={previewUrl} alt="Logo de la Banda" className="w-full h-full object-cover rounded" />
+              <Image   
+            fill
+              src={previewUrl} 
+              alt="Logo de la Banda" 
+              className="w-full h-full object-cover rounded" />
             ) : (
               <span className="text-gray-600 text-6xl font-black w-full h-full flex justify-center items-center ">
                 LOGO
