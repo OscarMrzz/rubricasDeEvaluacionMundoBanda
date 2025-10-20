@@ -166,4 +166,13 @@ export default class BandasServices {
     }
        
 
+    async obtenerUrlLogoBanda(path: string): Promise<string | null> {
+
+        const { data } = await dataBaseSupabase.storage
+            .from('imgLogoBandas')
+            .createSignedUrl(path, 60*60*24*365);
+
+        return data?.signedUrl ?? null;
+    }
+
 }

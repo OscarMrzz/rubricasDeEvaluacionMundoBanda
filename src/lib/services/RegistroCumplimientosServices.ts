@@ -433,4 +433,106 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         if (error) throw error;
         return true;
     }
+
+   async puntosTemporadabanda(idBanda: string, anio: number): Promise<number> {
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        if (!anio || typeof anio !== 'number' || anio < 1900) {
+            throw new Error("Año inválido proporcionado para el cálculo de puntos.");
+        }
+
+        // Construir rango para created_at: desde el inicio del año hasta el inicio del siguiente año (exclusive)
+        const fechaInicio = new Date(Date.UTC(anio, 0, 1)).toISOString(); // 00:00:00 UTC del 1 de enero
+        const fechaFin = new Date(Date.UTC(anio+1 , 0, 1)).toISOString(); // 00:00:00 UTC del 1 de enero del siguiente año
+
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .select("puntosObtenidos")
+            .eq("idForaneaBanda", idBanda)
+            .gte("created_at", fechaInicio)
+            .lt("created_at", fechaFin)
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+        if (error) throw error;
+
+        const totalPuntos = data?.reduce((total, registro) => total + (registro.puntosObtenidos || 0), 0) || 0;
+        return totalPuntos;
+
+    }
+
+    async promedioBandaTemporada(idBanda: string, anio: number, decimales?: number): Promise<number> {
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        if (!anio || typeof anio !== 'number' || anio < 1900) {
+            throw new Error("Año inválido proporcionado para el cálculo de promedio.");
+        }
+
+        // Construir rango para created_at: desde el inicio del año hasta el inicio del siguiente año (exclusive)
+        const fechaInicio = new Date(Date.UTC(anio, 0, 1)).toISOString();
+        const fechaFin = new Date(Date.UTC(anio + 1, 0, 1)).toISOString();
+
+        // Solicitamos también el idForaneaEvento para poder agrupar por evento
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .select("puntosObtenidos, idForaneaEvento")
+            .eq("idForaneaBanda", idBanda)
+            .gte("created_at", fechaInicio)
+            .lt("created_at", fechaFin)
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+
+        if (error) throw error;
+        if (!data || data.length === 0) {
+            return 0;
+        }
+
+        // Agrupar por evento y sumar puntos por cada evento
+        const puntosPorEvento = new Map<string, number>();
+        data.forEach((registro: { idForaneaEvento?: string | null; puntosObtenidos?: number | null }) => {
+            const idEvento = registro.idForaneaEvento ?? 'sin_evento';
+            const puntos = Number(registro.puntosObtenidos ?? 0) || 0;
+            const actual = puntosPorEvento.get(idEvento) || 0;
+            puntosPorEvento.set(idEvento, actual + puntos);
+        });
+
+        // Calcular promedio entre eventos
+        const sumaEventos = Array.from(puntosPorEvento.values()).reduce((t, v) => t + v, 0);
+        const cantidadEventos = puntosPorEvento.size;
+        if (cantidadEventos === 0) return 0;
+        const promedio = sumaEventos / cantidadEventos;
+
+        if (typeof decimales === 'number') {
+            return Number(promedio.toFixed(decimales));
+        }
+
+        return promedio;
+    }
+
+    async posicionTablaBandaTemporada(idBanda: string, anio: number): Promise<number> {
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const puntosBanda = await this.puntosTemporadabanda(idBanda, anio);
+
+        // Obtener todas las bandas en la federación
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .select("idForaneaBanda")
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .neq("idForaneaBanda", idBanda); // Excluir la banda actual
+        if (error) throw error;
+
+        const bandasUnicas = Array.from(new Set(data?.map(item => item.idForaneaBanda)));
+        let posicion = 1; // Comenzar en posición 1 (mejor posición)
+
+        // Comparar puntos con cada banda
+        for (const otraBandaId of bandasUnicas) {
+            const puntosOtraBanda = await this.puntosTemporadabanda(otraBandaId, anio);
+            if (puntosOtraBanda > puntosBanda) {
+                posicion++;
+            }
+        }
+        return posicion;
+    }
+     
 }
