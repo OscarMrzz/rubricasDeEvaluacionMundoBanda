@@ -7,6 +7,12 @@ export interface bandaInterface{
     idForaneaCategoria: string;
     idForaneaRegion: string;
     idForaneaFederacion: string;
+    ciudadBanda: string;
+    urlLogoBanda: string;
+    fechaFundacionBanda: string;
+    fechaInscripcionAFederacion: string;
+    ubicacionSedeBanda: string;
+
 }
 export interface bandaDatosAmpleosInterface extends bandaInterface{
     federaciones: federacionInterface;
