@@ -1,6 +1,5 @@
 "use client";
 
-import type { Metadata } from "next";
 import "./globals.css";
 
 import NavBard from "@/component/NavBard/Page";
@@ -9,7 +8,7 @@ import { Provider } from "react-redux";
 import store from "@/app/store"; // 👈 ajusta la ruta según tu proyecto
 
 import { Poppins } from "next/font/google";
-import { use, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import RegionService from "@/lib/services/regionesServices";
 import { useRegionesStore } from "@/Store/listRegionesStore";
 import RegistroEventossServices from "@/lib/services/registroEventosServices";
@@ -34,11 +33,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { listRegionesStore, setRegionesStore, recetiarRegionesStore } = useRegionesStore();
-  const { listEventosStore, setEventosStore, recetiarEventosStore } = useEventosStore();
-  const { listCategoriasStore, setCategoriasStore, recetiarCategoriasStore } = useCategoriasStore();
-  const { listRubicasStore, setRubicasStore, recetiarRubicasStore } = useRubicasStore();
-  const { listBandasStore, setBandasStore, recetiarBandasStore } = useBandasStore();
+  const { setRegionesStore } = useRegionesStore();
+  const { setEventosStore } = useEventosStore();
+  const { setCategoriasStore } = useCategoriasStore();
+  const { setRubicasStore } = useRubicasStore();
+  const { setBandasStore } = useBandasStore();
 
   const regionesServices = useRef(new RegionService());
   const eventosServices = useRef(new RegistroEventossServices());
@@ -50,53 +49,78 @@ export default function RootLayout({
   const { haySesionStore } = useInicioSesionStore();
 
   useEffect(() => {
-      if (typeof window === 'undefined') return;
-    try {
-      const perfiBruto = localStorage.getItem("perfilActivo");
-      if (!perfiBruto) {
-        if (window.location.pathname !== "/authPage/SignInPage") {
-          window.location.href = "/authPage/SignInPage";
+    if (typeof window === "undefined") return;
+
+    const initializeServices = async () => {
+      try {
+        const perfiBruto = localStorage.getItem("perfilActivo");
+        if (!perfiBruto) {
+          if (window.location.pathname !== "/authPage/SignInPage") {
+            window.location.href = "/authPage/SignInPage";
+          }
+          return;
         }
-        return;
-      }
-      const perfil: perfilInterface = JSON.parse(perfiBruto);
-      equipoEvaluadorServices.current
-        .getporPerfil(perfil.idPerfil)
-        .then((EventosParaElPerfil: registroEquipoEvaluadorInterface[]) => {
-          eventosServices.current.get().then((data) => {
-            const eventosFiltrados = data.filter((evento) =>
-              EventosParaElPerfil.some(
-                (equipo) =>
-                  equipo.idForaneaEvento === evento.idEvento && equipo.rolMiembro.toUpperCase() !== "SINPERMISOS"
-              )
-            );
-            setEventosStore(eventosFiltrados);
-          });
+        const perfil: perfilInterface = JSON.parse(perfiBruto);
+
+        // Initialize all services with profile data first
+        await Promise.all([
+          regionesServices.current.initPerfil(),
+          categoriasServices.current.initPerfil(),
+          rubicasServices.current.initPerfil(),
+          bandasServices.current.initPerfil(),
+          equipoEvaluadorServices.current.initPerfil(),
+          eventosServices.current.initPerfil(),
+        ]);
+
+        // Now load data from services that don't require specific federation
+        regionesServices.current.get().then((datosRegiones) => {
+          setRegionesStore(datosRegiones);
         });
-    } catch (error) {
-      console.error("❌ Error al obtener los datos:", error);
-    }
 
-    regionesServices.current.get().then((datosRegiones) => {
-      setRegionesStore(datosRegiones);
-    });
+        categoriasServices.current.get().then((data) => {
+          setCategoriasStore(data);
+        });
 
-    categoriasServices.current.get().then((data) => {
-      setCategoriasStore(data);
-    });
-    rubicasServices.current.get().then((data) => {
-      setRubicasStore(data);
-    });
-    bandasServices.current.get().then((data) => {
-      setBandasStore(data);
-    });
-  }, [haySesionStore])
+        rubicasServices.current.get().then((data) => {
+          setRubicasStore(data);
+        });
+
+        // Load events and filter them based on profile
+        equipoEvaluadorServices.current
+          .getporPerfil(perfil.idPerfil)
+          .then((EventosParaElPerfil: registroEquipoEvaluadorInterface[]) => {
+            eventosServices.current.get().then((data) => {
+              const eventosFiltrados = data.filter((evento) =>
+                EventosParaElPerfil.some(
+                  (equipo) =>
+                    equipo.idForaneaEvento === evento.idEvento && equipo.rolMiembro.toUpperCase() !== "SINPERMISOS"
+                )
+              );
+              setEventosStore(eventosFiltrados);
+            });
+          });
+
+        // Load bands data (requires federation in profile)
+        bandasServices.current
+          .get()
+          .then((data) => {
+            setBandasStore(data);
+          })
+          .catch((error) => {
+            console.warn("⚠️ No se pudieron cargar las bandas:", error.message);
+            setBandasStore([]); // Set empty array if federation is missing
+          });
+      } catch (error) {
+        console.error("❌ Error al obtener los datos:", error);
+      }
+    };
+
+    initializeServices();
+  }, [haySesionStore, setBandasStore, setCategoriasStore, setEventosStore, setRegionesStore, setRubicasStore]);
 
   return (
     <html lang="en">
-      <body
-        className={`bg-gray-800  lg:pt-0 w-full text-gray-50 flex min-h-screen font-poppins ${poppins.className} `}
-      >
+      <body className={`bg-gray-800  lg:pt-0 w-full text-gray-50 flex min-h-screen font-poppins ${poppins.className} `}>
         <Provider store={store}>
           <NavBard />
 
