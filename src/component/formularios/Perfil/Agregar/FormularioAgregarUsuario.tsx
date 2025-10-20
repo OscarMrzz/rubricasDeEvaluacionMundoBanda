@@ -9,7 +9,6 @@ import { dataBaseSupabase } from "@/lib/supabase"; // Import supabase client
 import { activarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
 import FederacionesService from "@/lib/services/federacionesServices";
 
-
 type Props = {
   onClose: () => void;
 };
@@ -32,7 +31,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
     } catch (error) {
       console.error("❌ Error cargando el perfil activo:", error);
     }
-  }
+  };
 
   const [formData, setFormData] = useState({
     nombre: "",
@@ -72,6 +71,9 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
   }, []);
 
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === "undefined") return;
+
     const perfilBruto = localStorage.getItem("perfilActivo");
     if (perfilBruto) {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
@@ -171,32 +173,35 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
-        {perfilActivo.tipoUsuario === "superadmin" && (   
-        <div>
-          <label className="text-gray-200 mb-1" htmlFor="federacion">
-            Federación
-          </label>
-          <select
-            id="federacion"
-            name="federacion"
-            value={federacionSelecionada ? federacionSelecionada.idFederacion : ""}
-            onChange={(e) => {
-              const federacion = listFederaciones.find((f) => f.idFederacion === e.target.value) || null;
-              setFederacionSeleccionada(federacion);
-            }}
-            className="border border-gray-200 p-2 rounded w-full"
-          >
-            <option className="bg-white text-gray-400" value="" disabled>
-              {"Federacion"}
-              
-            </option>
-            {listFederaciones.map((federacion) => (
-              <option key={federacion.idFederacion} className="bg-white text-gray-800" value={federacion.idFederacion}>
-                {federacion.nombreFederacion}
+        {perfilActivo.tipoUsuario === "superadmin" && (
+          <div>
+            <label className="text-gray-200 mb-1" htmlFor="federacion">
+              Federación
+            </label>
+            <select
+              id="federacion"
+              name="federacion"
+              value={federacionSelecionada ? federacionSelecionada.idFederacion : ""}
+              onChange={(e) => {
+                const federacion = listFederaciones.find((f) => f.idFederacion === e.target.value) || null;
+                setFederacionSeleccionada(federacion);
+              }}
+              className="border border-gray-200 p-2 rounded w-full"
+            >
+              <option className="bg-white text-gray-400" value="" disabled>
+                {"Federacion"}
               </option>
-            ))}
-          </select>
-        </div>
+              {listFederaciones.map((federacion) => (
+                <option
+                  key={federacion.idFederacion}
+                  className="bg-white text-gray-800"
+                  value={federacion.idFederacion}
+                >
+                  {federacion.nombreFederacion}
+                </option>
+              ))}
+            </select>
+          </div>
         )}
 
         <div className="flex flex-col">

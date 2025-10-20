@@ -14,7 +14,7 @@ import {
   regionesInterface,
   perfilDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
-import Image from 'next/image'
+import Image from "next/image";
 
 type Props = {
   refresacar: () => void;
@@ -60,6 +60,9 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
   }, []);
 
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === "undefined") return;
+
     const perfilBruto = localStorage.getItem("perfilActivo");
     if (perfilBruto) {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
@@ -137,17 +140,18 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
         `${formData.nombreBanda.replace(/\s+/g, "_")}_logo`
       );
 
-      if(!urlLogoParaDB){
+      if (!urlLogoParaDB) {
         throw new Error("Error al subir el logo de la banda.");
       }
-    
+
       const nuevaBanda: Omit<bandaInterface, "idBanda" | "created_at"> = {
         nombreBanda: formData.nombreBanda,
         AliasBanda: formData.AliasBanda,
         idForaneaCategoria: formData.idForaneaCategoria,
         idForaneaRegion: formData.idForaneaRegion,
-        idForaneaFederacion: perfil.tipoUsuario==="superadmin"? formData.idForaneaFederacion : perfil.idForaneaFederacion,
-        urlLogoBanda:  urlLogoParaDB,
+        idForaneaFederacion:
+          perfil.tipoUsuario === "superadmin" ? formData.idForaneaFederacion : perfil.idForaneaFederacion,
+        urlLogoBanda: urlLogoParaDB,
         ciudadBanda: formData.ciudadBanda,
         fechaFundacionBanda: formData.fechaFundacionBanda,
         fechaInscripcionAFederacion: formData.fechaInscripcionAFederacion,
@@ -188,31 +192,28 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Banda</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
-           {
-          perfil.tipoUsuario==="superadmin" &&
-
-           <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="idForaneaFederacion">
-            Federación
-          </label>
-          <select
-            id="idForaneaFederacion"
-            name="idForaneaFederacion"
-            value={formData.idForaneaFederacion}
-            onChange={handleInputChange}
-            className="border text-gray-700 bg-gray-200 p-2 rounded"
-            required
-          >
-            <option value="">Federacion</option>
-            {federaciones.map((federacion) => (
-              <option key={federacion.idFederacion} value={federacion.idFederacion}>
-                {federacion.nombreFederacion}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        }
+        {perfil.tipoUsuario === "superadmin" && (
+          <div className="flex flex-col">
+            <label className="text-gray-200 mb-1" htmlFor="idForaneaFederacion">
+              Federación
+            </label>
+            <select
+              id="idForaneaFederacion"
+              name="idForaneaFederacion"
+              value={formData.idForaneaFederacion}
+              onChange={handleInputChange}
+              className="border text-gray-700 bg-gray-200 p-2 rounded"
+              required
+            >
+              <option value="">Federacion</option>
+              {federaciones.map((federacion) => (
+                <option key={federacion.idFederacion} value={federacion.idFederacion}>
+                  {federacion.nombreFederacion}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombreBanda">
             Nombre de la Banda
@@ -263,8 +264,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             ))}
           </select>
         </div>
-     
-       
+
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="idForaneaRegion">
             Región
@@ -285,9 +285,9 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             ))}
           </select>
         </div>
-           <div className="flex flex-col">
+        <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="fechaFundacionBanda">
-           Fecha de fundacion
+            Fecha de fundacion
           </label>
           <input
             type="date"
@@ -296,13 +296,11 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             value={formData.fechaFundacionBanda}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
-      
-        
           />
         </div>
-           <div className="flex flex-col">
+        <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="fechaInscripcionAFederacion">
-           Fecha de de inscripcion
+            Fecha de de inscripcion
           </label>
           <input
             type="date"
@@ -311,13 +309,11 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             value={formData.fechaInscripcionAFederacion}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
-      
-        
           />
         </div>
-            <div className="flex flex-col">
+        <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="ubicacionSedeBanda">
-           URL google maps de la sede de la banda
+            URL google maps de la sede de la banda
           </label>
           <input
             type="text"
@@ -327,7 +323,6 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Ingrese nombre de la banda"
-           
           />
         </div>
         <div className="flex flex-col">
@@ -343,14 +338,9 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
               onChange={handleFileChange}
               className="hidden"
               accept="image/*"
-          
             />
             {previewUrl ? (
-              <Image   
-            fill
-              src={previewUrl} 
-              alt="Logo de la Banda" 
-              className="w-full h-full object-cover rounded" />
+              <Image fill src={previewUrl} alt="Logo de la Banda" className="w-full h-full object-cover rounded" />
             ) : (
               <span className="text-gray-600 text-6xl font-black w-full h-full flex justify-center items-center ">
                 LOGO

@@ -22,6 +22,9 @@ export function useListaCategoriaFiltroConMemoria() {
 
 
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === 'undefined') return;
+    
     const categoriaLocalStorage = localStorage.getItem("CategoriaSelecionada");
     if (categoriaLocalStorage && categoriaLocalStorage !== "undefined") {
       setCategoriaSelecionadaConMemoria(JSON.parse(categoriaLocalStorage));

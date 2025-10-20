@@ -22,25 +22,26 @@ import { UserIcon } from "@heroicons/react/16/solid";
 
 const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
-   const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
+  const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
 
+  useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === "undefined") return;
 
-   useEffect(() => {
-      const perfilBruto = localStorage.getItem("perfilActivo");
-      if (perfilBruto) {
-        const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
-        if (perfil) {
-          setPerfil(perfil);
-   
-        }
+    const perfilBruto = localStorage.getItem("perfilActivo");
+    if (perfilBruto) {
+      const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
+      if (perfil) {
+        setPerfil(perfil);
       }
-    }, []);
+    }
+  }, []);
 
   const links = [
     {
       id: "evaluar",
       label: "Evaluar",
-           href: "/EvaluarPage",
+      href: "/EvaluarPage",
       Icon: ClipboardDocumentCheckIcon,
     },
     {
@@ -79,7 +80,7 @@ const SidebarPanelControlComponent = () => {
       href: "/PanelControlPage/rubricaHomePage",
       Icon: AdjustmentsHorizontalIcon,
     },
-    
+
     {
       id: "evento",
       label: "Evento",
@@ -93,16 +94,13 @@ const SidebarPanelControlComponent = () => {
       href: "/ReportesPage",
       Icon: ChartBarSquareIcon,
     },
- 
+
     {
       id: "reporte",
       label: "Resultados por banda",
       href: "/reportePorBandaPage",
       Icon: DocumentTextIcon,
-    }
-    
-
-
+    },
   ];
 
   return (
@@ -113,32 +111,28 @@ const SidebarPanelControlComponent = () => {
             if (id === "federacion") {
               if (perfil.tipoUsuario === "superadmin") {
                 return (
-              <Link key={id} href={href} passHref>
-                <button
-                  onClick={() => setBotonSeleccionado(id)}
-                  className={`flex items-center text-2xl font-bold w-full text-left  cursor-pointer hover:bg-[#035a98] ${
-                    botonSeleccionado === id
-                      ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300"
-                      : ""
-                  }`}
-                >
-                  <Icon className="h-6 w-6 text-white ml-3" />
-                  <span className="ml-3 font-light">{label}</span>
-                </button>
-              </Link>
-            );
-              }else{
+                  <Link key={id} href={href} passHref>
+                    <button
+                      onClick={() => setBotonSeleccionado(id)}
+                      className={`flex items-center text-2xl font-bold w-full text-left  cursor-pointer hover:bg-[#035a98] ${
+                        botonSeleccionado === id ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300" : ""
+                      }`}
+                    >
+                      <Icon className="h-6 w-6 text-white ml-3" />
+                      <span className="ml-3 font-light">{label}</span>
+                    </button>
+                  </Link>
+                );
+              } else {
                 return null;
               }
-            };
+            }
             return (
               <Link key={id} href={href} passHref>
                 <button
                   onClick={() => setBotonSeleccionado(id)}
                   className={`flex items-center text-2xl font-bold w-full text-left  cursor-pointer hover:bg-[#035a98] ${
-                    botonSeleccionado === id
-                      ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300"
-                      : ""
+                    botonSeleccionado === id ? "border-l-4 border-white bg-blue-400 hover:bg-blue-300" : ""
                   }`}
                 >
                   <Icon className="h-6 w-6 text-white ml-3" />

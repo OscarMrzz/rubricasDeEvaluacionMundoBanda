@@ -14,21 +14,18 @@ import {
   regionesInterface,
   perfilDatosAmpleosInterface,
 } from "@/interfaces/interfaces";
-import Image from 'next/image'
-
+import Image from "next/image";
 
 type Props = {
   refresacar: () => void;
   onClose: () => void;
-   bandaAEditar: bandaInterface,
-   urlLogoBanda: string,
+  bandaAEditar: bandaInterface;
+  urlLogoBanda: string;
 };
 
-
-
-const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLogoBanda }: Props) => {
+const FormularioEditarBandaComponent = ({ refresacar, onClose, bandaAEditar, urlLogoBanda }: Props) => {
   const [formData, setFormData] = useState({
-    nombreBanda: bandaAEditar.nombreBanda, 
+    nombreBanda: bandaAEditar.nombreBanda,
     AliasBanda: bandaAEditar.AliasBanda,
     idForaneaCategoria: bandaAEditar.idForaneaCategoria,
     idForaneaRegion: bandaAEditar.idForaneaRegion,
@@ -38,7 +35,6 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
     fechaFundacionBanda: bandaAEditar.fechaFundacionBanda,
     fechaInscripcionAFederacion: bandaAEditar.fechaInscripcionAFederacion,
     ubicacionSedeBanda: bandaAEditar.ubicacionSedeBanda,
-   
   });
 
   const [federaciones, setFederaciones] = useState<federacionInterface[]>([]);
@@ -54,6 +50,9 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
   }, []);
 
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === "undefined") return;
+
     const perfilBruto = localStorage.getItem("perfilActivo");
     if (perfilBruto) {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
@@ -125,56 +124,49 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
     refresacar();
     onClose();
 
-
-
     try {
-      if(urlLogoBanda !== previewUrl){
-      const urlLogoParaDB = await bandaServices.current.editarLogoBanda(
-        selectedFile as File,
-        `${formData.nombreBanda.replace(/\s+/g, "_")}_logo`
-      );
+      if (urlLogoBanda !== previewUrl) {
+        const urlLogoParaDB = await bandaServices.current.editarLogoBanda(
+          selectedFile as File,
+          `${formData.nombreBanda.replace(/\s+/g, "_")}_logo`
+        );
 
-      if(!urlLogoParaDB){
-        throw new Error("Error al subir el logo de la banda.");
+        if (!urlLogoParaDB) {
+          throw new Error("Error al subir el logo de la banda.");
+        }
+
+        const nuevaBanda: Omit<bandaInterface, "idBanda" | "created_at"> = {
+          nombreBanda: formData.nombreBanda,
+          AliasBanda: formData.AliasBanda,
+          idForaneaCategoria: formData.idForaneaCategoria,
+          idForaneaRegion: formData.idForaneaRegion,
+          idForaneaFederacion:
+            perfil.tipoUsuario === "superadmin" ? formData.idForaneaFederacion : perfil.idForaneaFederacion,
+          urlLogoBanda: urlLogoParaDB,
+          ciudadBanda: formData.ciudadBanda,
+          fechaFundacionBanda: formData.fechaFundacionBanda,
+          fechaInscripcionAFederacion: formData.fechaInscripcionAFederacion,
+          ubicacionSedeBanda: formData.ubicacionSedeBanda,
+        };
+
+        await bandaServices.current.update(bandaAEditar.idBanda, nuevaBanda as bandaInterface);
+      } else {
+        const nuevaBanda: Omit<bandaInterface, "idBanda" | "created_at"> = {
+          nombreBanda: formData.nombreBanda,
+          AliasBanda: formData.AliasBanda,
+          idForaneaCategoria: formData.idForaneaCategoria,
+          idForaneaRegion: formData.idForaneaRegion,
+          idForaneaFederacion:
+            perfil.tipoUsuario === "superadmin" ? formData.idForaneaFederacion : perfil.idForaneaFederacion,
+          urlLogoBanda: bandaAEditar.urlLogoBanda,
+          ciudadBanda: formData.ciudadBanda,
+          fechaFundacionBanda: formData.fechaFundacionBanda,
+          fechaInscripcionAFederacion: formData.fechaInscripcionAFederacion,
+          ubicacionSedeBanda: formData.ubicacionSedeBanda,
+        };
+        await bandaServices.current.update(bandaAEditar.idBanda, nuevaBanda as bandaInterface);
       }
-   
-    
-      const nuevaBanda: Omit<bandaInterface, "idBanda" | "created_at"  > = {
-        nombreBanda: formData.nombreBanda,
-        AliasBanda: formData.AliasBanda,
-        idForaneaCategoria: formData.idForaneaCategoria,
-        idForaneaRegion: formData.idForaneaRegion,
-       idForaneaFederacion: perfil.tipoUsuario==="superadmin"? formData.idForaneaFederacion : perfil.idForaneaFederacion,
-        urlLogoBanda:  urlLogoParaDB,
-        ciudadBanda: formData.ciudadBanda,
-        fechaFundacionBanda: formData.fechaFundacionBanda,
-        fechaInscripcionAFederacion: formData.fechaInscripcionAFederacion,
-        ubicacionSedeBanda: formData.ubicacionSedeBanda,
-      };
 
-        await bandaServices.current.update(bandaAEditar.idBanda, nuevaBanda as bandaInterface);
-       }
-       
-       else{
-          const nuevaBanda: Omit<bandaInterface, "idBanda" | "created_at" > = {
-        nombreBanda: formData.nombreBanda,
-        AliasBanda: formData.AliasBanda,
-        idForaneaCategoria: formData.idForaneaCategoria,
-        idForaneaRegion: formData.idForaneaRegion,
-       idForaneaFederacion: perfil.tipoUsuario==="superadmin"? formData.idForaneaFederacion : perfil.idForaneaFederacion,
-        urlLogoBanda:  bandaAEditar.urlLogoBanda,
-        ciudadBanda: formData.ciudadBanda,
-        fechaFundacionBanda: formData.fechaFundacionBanda,
-        fechaInscripcionAFederacion: formData.fechaInscripcionAFederacion,
-        ubicacionSedeBanda: formData.ubicacionSedeBanda,
-      };
-        await bandaServices.current.update(bandaAEditar.idBanda, nuevaBanda as bandaInterface);
-
-       }
-
- 
-
-      
       setFormData({
         nombreBanda: "",
         AliasBanda: "",
@@ -194,47 +186,40 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
       }
       setPreviewUrl("");
       setSelectedFile(null);
-    } 
-
-    
-    catch (error) {
+    } catch (error) {
       console.error("❌ Error al crear la banda:", error);
       alert("Error al agregar la banda");
     } finally {
       setLoading(false);
     }
-  }
-
+  };
 
   return (
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Banda</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
-           {
-          perfil.tipoUsuario==="superadmin" &&
-
-           <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="id">
-            Federación
-          </label>
-          <select
-            id="id"
-            name="idForaneaFederacion"
-            value={formData.idForaneaFederacion}
-            onChange={handleInputChange}
-            className="border text-gray-700 bg-gray-200 p-2 rounded"
-            required
-          >
-            <option value="">Federacion</option>
-            {federaciones.map((federacion) => (
-              <option key={federacion.idFederacion} value={federacion.idFederacion}>
-                {federacion.nombreFederacion}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        }
+        {perfil.tipoUsuario === "superadmin" && (
+          <div className="flex flex-col">
+            <label className="text-gray-200 mb-1" htmlFor="id">
+              Federación
+            </label>
+            <select
+              id="id"
+              name="idForaneaFederacion"
+              value={formData.idForaneaFederacion}
+              onChange={handleInputChange}
+              className="border text-gray-700 bg-gray-200 p-2 rounded"
+              required
+            >
+              <option value="">Federacion</option>
+              {federaciones.map((federacion) => (
+                <option key={federacion.idFederacion} value={federacion.idFederacion}>
+                  {federacion.nombreFederacion}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombreBanda">
             Nombre de la Banda
@@ -305,9 +290,9 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
             ))}
           </select>
         </div>
-           <div className="flex flex-col">
+        <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="fechaFundacionBanda">
-           Fecha de fundacion
+            Fecha de fundacion
           </label>
           <input
             type="date"
@@ -316,13 +301,11 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
             value={formData.fechaFundacionBanda}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
-      
-        
           />
         </div>
-           <div className="flex flex-col">
+        <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="fechaInscripcionAFederacion">
-           Fecha de de inscripcion
+            Fecha de de inscripcion
           </label>
           <input
             type="date"
@@ -331,13 +314,11 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
             value={formData.fechaInscripcionAFederacion}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
-      
-        
           />
         </div>
-            <div className="flex flex-col">
+        <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="ubicacionSedeBanda">
-           URL google maps de la sede de la banda
+            URL google maps de la sede de la banda
           </label>
           <input
             type="text"
@@ -347,7 +328,6 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
             placeholder="Ingrese nombre de la banda"
-           
           />
         </div>
         <div className="flex flex-col">
@@ -363,7 +343,6 @@ const FormularioEditarBandaComponent = ({ refresacar, onClose,bandaAEditar,urlLo
               onChange={handleFileChange}
               className="hidden"
               accept="image/*"
-       
             />
             {previewUrl ? (
               <Image fill src={previewUrl} alt="Logo de la Banda" className="w-full h-full object-cover rounded" />

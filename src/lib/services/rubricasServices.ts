@@ -10,24 +10,24 @@ const elId = "idRubrica";
 export default class RubricasServices {
 
       perfil: perfilDatosAmpleosInterface | null = null;
-     
+      private perfilInitialized = false;
       
     constructor() {
-      
-        this.initPerfil();
+      // No inicializar perfil en constructor para evitar problemas con SSR
     }
     
     async initPerfil() {
+        if (this.perfilInitialized) return;
+        if (typeof window === 'undefined') return; // Solo en el cliente
+        
         const perilBruto = localStorage.getItem("perfilActivo");
         if (perilBruto) {
-         
-        this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+            this.perfil = JSON.parse(perilBruto) as perfilDatosAmpleosInterface;
+        } else {
+            const perfilServices = new PerfilesServices();
+            this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;
         }
-        else{
-                    const perfilServices = new PerfilesServices();
-                    this.perfil = await perfilServices.getUsuarioLogiado() as perfilDatosAmpleosInterface;
-        
-                }
+        this.perfilInitialized = true;
     }
 
     async getDatosAmpleos(): Promise<rubricaDatosAmpleosInterface[]> {

@@ -22,6 +22,9 @@ export function uselistaEventosFiltroConMemoria() {
 
 
     useEffect(() => {
+        // Solo ejecutar en el cliente
+        if (typeof window === 'undefined') return;
+        
         const eventoLocalStorage = localStorage.getItem("EventoSelecionado");
         if (eventoLocalStorage && eventoLocalStorage !== "undefined") {
 

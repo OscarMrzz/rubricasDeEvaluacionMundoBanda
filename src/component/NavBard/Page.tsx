@@ -44,6 +44,9 @@ const NavBard = () => {
   }, [openUserMenu]);
 
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === "undefined") return;
+
     const perfilBruto = localStorage.getItem("perfilActivo");
     if (perfilBruto) {
       const perfil: perfilDatosAmpleosInterface = JSON.parse(perfilBruto);
@@ -55,8 +58,6 @@ const NavBard = () => {
         if (perfil.tipoUsuario === "presidenteJurado") setDirecionHomesegunRol("/PanelControlPage");
         if (perfil.tipoUsuario === "jurado") setDirecionHomesegunRol("/EvaluarPage");
         if (perfil.tipoUsuario === "fiscal") setDirecionHomesegunRol("/ReportesPage");
-        
-
 
         setHaySesionIniciada(true);
       }
@@ -66,9 +67,8 @@ const NavBard = () => {
   const handleLogout = async () => {
     localStorage.removeItem("perfilActivo");
 
-document.cookie = 'rolPerfil=; path=/; max-age=0;'
-localStorage.removeItem("EventoSelecionado");
-
+    document.cookie = "rolPerfil=; path=/; max-age=0;";
+    localStorage.removeItem("EventoSelecionado");
 
     recetiarRegionesStore();
     recetiarEventosStore();
@@ -181,7 +181,7 @@ ${openMenuHamburguesa ? "bg-gray-900/50 lg:bg-transparent" : "hidden "}
               <Link className="text-2xl pl-4 flex justify-center items-center" href="/PanelControlPage">
                 Admin
               </Link>
-              
+
               <div className="lg:hidden">
                 <SidebarPanelControlComponent />
               </div>

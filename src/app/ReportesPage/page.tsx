@@ -1,9 +1,9 @@
 "use client";
 
-import {  useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import React from "react";
-import {resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import { resultadosGeneralesInterface } from "@/interfaces/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
@@ -14,21 +14,25 @@ import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGen
 import { uselistaEventosFiltroConMemoria } from "@/hooks/useListaEventosFiltroConMemoria";
 import { useListaCategoriaFiltroConMemoria } from "@/hooks/useListaCategoriaFiltroConMemoria";
 
-
-
-
 export default function ResultadosGeneralesHomePage() {
-
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const [resultados, setResultados] = useState<resultadosGeneralesInterface[]>([]);
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
 
   const dispatch = useDispatch();
 
-
- const { eventosListConMemoria, cargandoEventosConMemoria, eventoSeleccionadoConMemoria, setEventoSeleccionadoConMemoria  } = uselistaEventosFiltroConMemoria();
-  const {categoriasListConMemoria, cargandoCategoriasConMemoria,categoriaSelecionadaConMemoria, setCategoriaSelecionadaConMemoria} = useListaCategoriaFiltroConMemoria();
-
+  const {
+    eventosListConMemoria,
+    cargandoEventosConMemoria,
+    eventoSeleccionadoConMemoria,
+    setEventoSeleccionadoConMemoria,
+  } = uselistaEventosFiltroConMemoria();
+  const {
+    categoriasListConMemoria,
+    cargandoCategoriasConMemoria,
+    categoriaSelecionadaConMemoria,
+    setCategoriaSelecionadaConMemoria,
+  } = useListaCategoriaFiltroConMemoria();
 
   useEffect(() => {
     if (eventoSeleccionadoConMemoria && categoriaSelecionadaConMemoria) {
@@ -36,17 +40,13 @@ export default function ResultadosGeneralesHomePage() {
     }
   }, []);
 
-
   async function traerDatosTabla(idEvento: string, idCategoria: string) {
     if (idEvento !== "" && idEvento !== "") {
-   
       try {
         const resultadosData: resultadosGeneralesInterface[] =
           await registroCumpliminetoServices.current.getResultadosEventoYCategoria(idEvento, idCategoria);
 
         setResultados(resultadosData);
-    
-    
       } catch (error) {
         console.error("❌ Error al obtener las Rubricas:", error);
       } finally {
@@ -54,14 +54,20 @@ export default function ResultadosGeneralesHomePage() {
     }
   }
   useEffect(() => {
+    // Solo ejecutar en el cliente
+    if (typeof window === "undefined") return;
+
     const eventoLocalStorage = localStorage.getItem("EventoSelecionado");
     const categoriaLocalStorage = localStorage.getItem("CategoriaSelecionada");
 
-    if (eventoLocalStorage && eventoLocalStorage !== "undefined" &&
-        categoriaLocalStorage && categoriaLocalStorage !== "undefined") {
-
-      setEventoSeleccionadoConMemoria(JSON.parse(eventoLocalStorage)  );
-      traerDatosTabla(JSON.parse(eventoLocalStorage).idEvento, JSON.parse(categoriaLocalStorage).idCategoria) 
+    if (
+      eventoLocalStorage &&
+      eventoLocalStorage !== "undefined" &&
+      categoriaLocalStorage &&
+      categoriaLocalStorage !== "undefined"
+    ) {
+      setEventoSeleccionadoConMemoria(JSON.parse(eventoLocalStorage));
+      traerDatosTabla(JSON.parse(eventoLocalStorage).idEvento, JSON.parse(categoriaLocalStorage).idCategoria);
     }
   }, []);
 
@@ -78,7 +84,7 @@ export default function ResultadosGeneralesHomePage() {
     localStorage.setItem("CategoriaSelecionada", JSON.stringify(categoria));
     setResultados([]);
     traerDatosTabla(eventoSeleccionadoConMemoria ? eventoSeleccionadoConMemoria.idEvento : "", idCategoria);
-  }
+  };
 
   return (
     <>
@@ -143,7 +149,11 @@ export default function ResultadosGeneralesHomePage() {
                         Categorias
                       </option>
                       {categoriasListConMemoria?.map((categoria) => (
-                        <option className="bg-white text-gray-800" key={categoria.idCategoria} value={categoria.idCategoria}>
+                        <option
+                          className="bg-white text-gray-800"
+                          key={categoria.idCategoria}
+                          value={categoria.idCategoria}
+                        >
                           {categoria.nombreCategoria}
                         </option>
                       ))}
@@ -158,12 +168,10 @@ export default function ResultadosGeneralesHomePage() {
           <h2 className="text-3xl font-black">SELECCIONA REGION Y EVENTO</h2>
         ) : (
           <>
-         <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />
+            <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />
           </>
         )}
       </div>
     </>
   );
 }
-
-
