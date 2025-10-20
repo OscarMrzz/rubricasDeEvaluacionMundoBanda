@@ -50,6 +50,7 @@ export default function RootLayout({
   const { haySesionStore } = useInicioSesionStore();
 
   useEffect(() => {
+      if (typeof window === 'undefined') return;
     try {
       const perfiBruto = localStorage.getItem("perfilActivo");
       if (!perfiBruto) {
