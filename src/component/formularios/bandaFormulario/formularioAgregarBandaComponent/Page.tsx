@@ -146,7 +146,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
         AliasBanda: formData.AliasBanda,
         idForaneaCategoria: formData.idForaneaCategoria,
         idForaneaRegion: formData.idForaneaRegion,
-        idForaneaFederacion: perfil.idForaneaFederacion,
+        idForaneaFederacion: perfil.tipoUsuario==="superadmin"? formData.idForaneaFederacion : perfil.idForaneaFederacion,
         urlLogoBanda:  urlLogoParaDB,
         ciudadBanda: formData.ciudadBanda,
         fechaFundacionBanda: formData.fechaFundacionBanda,
@@ -188,6 +188,31 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Banda</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>
+           {
+          perfil.tipoUsuario==="superadmin" &&
+
+           <div className="flex flex-col">
+          <label className="text-gray-200 mb-1" htmlFor="idForaneaFederacion">
+            Federación
+          </label>
+          <select
+            id="idForaneaFederacion"
+            name="idForaneaFederacion"
+            value={formData.idForaneaFederacion}
+            onChange={handleInputChange}
+            className="border text-gray-700 bg-gray-200 p-2 rounded"
+            required
+          >
+            <option value="">Federacion</option>
+            {federaciones.map((federacion) => (
+              <option key={federacion.idFederacion} value={federacion.idFederacion}>
+                {federacion.nombreFederacion}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        }
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="nombreBanda">
             Nombre de la Banda
@@ -238,6 +263,8 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
             ))}
           </select>
         </div>
+     
+       
         <div className="flex flex-col">
           <label className="text-gray-200 mb-1" htmlFor="idForaneaRegion">
             Región
@@ -316,7 +343,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
               onChange={handleFileChange}
               className="hidden"
               accept="image/*"
-              required
+          
             />
             {previewUrl ? (
               <img src={previewUrl} alt="Logo de la Banda" className="w-full h-full object-cover rounded" />

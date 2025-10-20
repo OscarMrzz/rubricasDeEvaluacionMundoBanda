@@ -121,6 +121,7 @@ const BandasHomePage = () => {
                 onClose={cerrarModalEditar}
                 refresacar={traerDatosTabla}
                 bandaAEditar={selectedBanda}
+                urlLogoBanda={urlLogoBanda}
               />
             )}
           </OverleyModalFormulario>
