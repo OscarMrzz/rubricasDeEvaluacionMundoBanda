@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ClipboardDocumentListIcon,
@@ -18,6 +18,7 @@ import {
   ListBulletIcon,
 } from "@heroicons/react/24/solid";
 import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { UserIcon } from "@heroicons/react/16/solid";
 
 const SidebarPanelControlComponent = () => {
   const [botonSeleccionado, setBotonSeleccionado] = useState("");
@@ -88,17 +89,20 @@ const SidebarPanelControlComponent = () => {
 
     {
       id: "resultados",
-      label: "Resultados",
+      label: "Resultados por evento",
       href: "/ReportesPage",
       Icon: ChartBarSquareIcon,
     },
  
     {
       id: "reporte",
-      label: "Reporte por banda",
+      label: "Resultados por banda",
       href: "/reportePorBandaPage",
       Icon: DocumentTextIcon,
-    },
+    }
+    
+
+
   ];
 
   return (
