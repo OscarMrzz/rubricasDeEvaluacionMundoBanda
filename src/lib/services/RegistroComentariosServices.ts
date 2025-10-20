@@ -18,10 +18,12 @@
      
    constructor() {
      
-       this.initPerfil();
+       // No inicializar perfil en constructor para evitar problemas con SSR
    }
    
    async initPerfil() {
+       if (typeof window === 'undefined') return; // Solo en el cliente
+       
        const perilBruto = localStorage.getItem("perfilActivo");
        if (perilBruto) {
         
