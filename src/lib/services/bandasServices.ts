@@ -147,4 +147,23 @@ export default class BandasServices {
         if (error) throw error;
         return true;
     }
+
+
+    async subirLogoBanda(file: File, nombreArchivo: string): Promise<string | null> {
+
+        const nombreFinal = `${Date.now()}-${nombreArchivo}`;
+        const { data, error } = await dataBaseSupabase.storage
+            .from('imgLogoBandas')
+            .upload(nombreFinal , file, {
+                cacheControl: '3600',
+                upsert: true
+            });
+        if (error) {
+            console.error("❌ Error subiendo el logo de la banda:", error);
+            throw error;
+        }
+        return data.path;
+    }
+       
+
 }

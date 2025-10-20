@@ -40,7 +40,7 @@ const OverleyModalFormulario = ({
         >
           <div
            onDoubleClick={e => e.stopPropagation()}
-            className={`modal-scroll w-2xl  h-[90vh] bg-[#065b98] ${
+            className={`modal-scroll w-2xl  h-[90vh]  bg-[#415a77] ${
               Animar ? "scale-100" : "scale-75"
             } transition-all duration-500 ease-in-out rounded-lg`}
           >

@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BandasServices from "@/lib/services/bandasServices";
 import FederacionesServices from "@/lib/services/federacionesServices";
 import CategoriasServices from "@/lib/services/categoriaServices";
@@ -122,6 +122,8 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
     }
   };
 
+  const bandaServices = useRef(new BandasServices());
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -130,21 +132,29 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
     onClose();
 
     try {
-      const bandasServices = new BandasServices();
+      const urlLogoParaDB = await bandaServices.current.subirLogoBanda(
+        selectedFile as File,
+        `${formData.nombreBanda.replace(/\s+/g, "_")}_logo`
+      );
+
+      if(!urlLogoParaDB){
+        throw new Error("Error al subir el logo de la banda.");
+      }
+    
       const nuevaBanda: Omit<bandaInterface, "idBanda" | "created_at"> = {
         nombreBanda: formData.nombreBanda,
         AliasBanda: formData.AliasBanda,
         idForaneaCategoria: formData.idForaneaCategoria,
         idForaneaRegion: formData.idForaneaRegion,
         idForaneaFederacion: perfil.idForaneaFederacion,
-        urlLogoBanda: formData.urlLogoBanda,
+        urlLogoBanda:  urlLogoParaDB,
         ciudadBanda: formData.ciudadBanda,
         fechaFundacionBanda: formData.fechaFundacionBanda,
         fechaInscripcionAFederacion: formData.fechaInscripcionAFederacion,
         ubicacionSedeBanda: formData.ubicacionSedeBanda,
       };
 
-      await bandasServices.create(nuevaBanda as bandaInterface);
+      await bandaServices.current.create(nuevaBanda as bandaInterface);
 
       // Limpiar formulario
       setFormData({
@@ -279,13 +289,13 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
           />
         </div>
             <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="urlSedeBanda">
+          <label className="text-gray-200 mb-1" htmlFor="ubicacionSedeBanda">
            URL google maps de la sede de la banda
           </label>
           <input
             type="text"
-            id="urlSedeBanda"
-            name="urlSedeBanda"
+            id="ubicacionSedeBanda"
+            name="ubicacionSedeBanda"
             value={formData.ubicacionSedeBanda}
             onChange={handleInputChange}
             className="border border-gray-200 p-2 rounded"
