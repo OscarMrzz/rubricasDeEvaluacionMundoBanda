@@ -18,18 +18,7 @@ type Props = {
 };
 
 
-/* 
-   idCriterio: string;
-    created_at: string;
-    nombreCriterio: string;
-    detallesCriterio: string;
-    puntosCriterio: number;
-    idForaneaRubrica: string;
 
-
-
-
-*/
 export default  function FormularioAgregarCriterioComponet  ({rubrica, refresacar, onClose }: Props)  {
   
   const dispatch = useDispatch();
@@ -106,6 +95,15 @@ export default  function FormularioAgregarCriterioComponet  ({rubrica, refresaca
     onClose();
     }
   };
+  const onClickCancelar=()=>{
+      setFormData({
+        nombreCriterio: "",
+        detallesCriterio: "",
+        puntosCriterio: 0,
+        idForaneaRubrica: "",
+      });
+    onClose();
+  }
 
   return (
     <div className="p-2 lg:px-25 ">
@@ -170,6 +168,7 @@ export default  function FormularioAgregarCriterioComponet  ({rubrica, refresaca
         >
           {loading ? "cargado..." : "Agregar"}
         </button>
+        <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );

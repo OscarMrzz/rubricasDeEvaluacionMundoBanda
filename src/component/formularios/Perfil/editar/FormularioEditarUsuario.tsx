@@ -120,6 +120,20 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
       </div>
     );
   }
+  const onClickCancelar=()=>{
+      setFormData({
+        nombre: "",
+        alias: "",
+        rolUsuario: "",
+        fechaNacimiento: "",
+        sexo: "",
+        genero: "",
+        identidad: "",
+        numeroTelefono: "",
+        direccion: "",
+      });
+    onClose();
+  }
 
   return (
     <div className="px-25 ">
@@ -283,7 +297,9 @@ export default function FormularioEditarUsuario({ onClose, perfilAEditar }: Prop
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 cursor-pointer"
         >
           {loading ? "cargado..." : "Aceptar"}
+
         </button>
+        <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );

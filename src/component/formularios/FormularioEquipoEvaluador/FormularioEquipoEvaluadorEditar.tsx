@@ -21,15 +21,7 @@ type Props = {
 };
 
 
-/* 
-  idRegistroEvaluador: string; // Corregido: nombre de campo
-    created_at: string;
-    idForaneaEvento: string;
-    idForaneaUser: string;
-    rolMiembro: string;
 
-
-*/
 export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvaluacionAEditar, onClose }: Props)  {
   
   const dispatch = useDispatch();
@@ -145,6 +137,13 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
     onClose();
     }
   };
+  const onClickCancelar=()=>{
+      setFormData({
+        idForaneaPerfil: "",
+        rolMiembro: "",
+      });
+    onClose();
+  }
 
   return (
     <div className="p-2 lg:px-25 ">
@@ -203,6 +202,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
         >
           {loading ? "cargado..." : "Editar"}
         </button>
+        <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );

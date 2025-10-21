@@ -167,6 +167,24 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
     return <div className="px-25 flex items-center justify-center min-h-[200px]">cargado...</div>;
   }
 
+  const onClickCancelar=()=>{
+      setFormData({
+        nombre: "",
+        alias: "",
+        email: "",
+        password: "",
+        password2: "",
+        rolUsuario: "",
+        fechaNacimiento: "",
+        sexo: "",
+        genero: "",
+        identidad: "",
+        numeroTelefono: "",
+        direccion: "",
+      });
+    onClose();
+  }
+
   return (
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Usuario</h2>
@@ -396,6 +414,7 @@ export default function FormularioAgregarUsuario({ onClose }: Props) {
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 cursor-pointer"
         >
           {loading ? "cargado..." : "Aceptar"}
+                          <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
         </button>
       </form>
     </div>

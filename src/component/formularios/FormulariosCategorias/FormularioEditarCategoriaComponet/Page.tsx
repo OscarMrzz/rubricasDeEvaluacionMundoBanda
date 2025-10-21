@@ -108,7 +108,15 @@ const cargaFormulario = (categoria: categoriaInterface) => {
         refresacar();
     onClose();
     }
-  };
+  }
+  const onClickCancelar=()=>{
+      setFormData({
+        nombreCategoria: "",
+        detallesCategoria: "",
+        idForaneaFederacion: "",
+      });
+    onClose();
+  }
 
   return (
     <div className="p-2 lg:px-25 ">
@@ -158,6 +166,7 @@ const cargaFormulario = (categoria: categoriaInterface) => {
         >
           {loading ? "cargado..." : "Editar"}
         </button>
+      <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );

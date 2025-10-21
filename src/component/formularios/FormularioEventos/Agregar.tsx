@@ -136,6 +136,15 @@ export default function FormularioAgregarEventoComponet({ onClose }: Props) {
     }
   };
 
+  const onClickCancelar = () => {
+    setFormData({
+      lugarEvento: "",
+      fechaEvento: "",
+      idForaneaFederacion: "",
+      idForaneaRegion: "",
+    });
+    onClose();
+  }
 
 
   return (
@@ -210,6 +219,7 @@ export default function FormularioAgregarEventoComponet({ onClose }: Props) {
         >
           {loading ? "cargado..." : "Aceptar"}
         </button>
+        <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );

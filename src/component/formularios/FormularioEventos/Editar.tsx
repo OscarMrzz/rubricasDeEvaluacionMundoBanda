@@ -131,6 +131,15 @@ export default function FormularioEditarEventoComponet({
         idForaneaRegion: EventoAEditar.idForaneaRegion,
     });
   }
+  const onClickCancelar = () => {
+    setFormData({
+      lugarEvento: "",
+      fechaEvento: "",
+      idForaneaFederacion: "",
+      idForaneaRegion: "",
+    });
+    onClose();
+  }
 
   return (
     <div className="p-2 lg:px-25 ">
@@ -197,6 +206,7 @@ export default function FormularioEditarEventoComponet({
         >
           {loading ? "cargado..." : "Aceptar"}
         </button>
+        <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );

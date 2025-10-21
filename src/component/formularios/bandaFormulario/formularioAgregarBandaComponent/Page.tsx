@@ -188,6 +188,22 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
     }
   };
 
+  const onClickCancelar = () => {
+         setFormData({
+        nombreBanda: "",
+        AliasBanda: "",
+        idForaneaCategoria: "",
+        idForaneaRegion: "",
+        idForaneaFederacion: "",
+        urlLogoBanda: "",
+        ciudadBanda: "",
+        fechaFundacionBanda: "",
+        fechaInscripcionAFederacion: "",
+        ubicacionSedeBanda: "",
+      });
+    onClose();
+  }
+
   return (
     <div className="p-2 lg:px-25 ">
       <h2 className="text-2xl font-bold mb-4">Agregar Banda</h2>
@@ -351,10 +367,12 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 cursor-pointer"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-500 disabled:bg-gray-400 cursor-pointer"
         >
           {loading ? "Agregando..." : "Agregar Banda"}
         </button>
+
+        <button onClick={()=>onClickCancelar()} className="w-full bg-gray-400 px-4 py-2 rounded-md cursor-pointer hover:bg-gray-300 hover:text-gray-700">Cancelar</button>
       </form>
     </div>
   );
