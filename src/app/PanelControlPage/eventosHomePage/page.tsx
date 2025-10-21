@@ -226,7 +226,7 @@ export default function EventosHomePage() {
   return (
     <>
 
-    <div className="px-20">
+    <div className="px-2 lg:px-20  w-full h-full  ">
       {/* EVENTOS */}
       <OverleyModal
         open={activadorInformacionEventos}
@@ -303,13 +303,13 @@ export default function EventosHomePage() {
 
 
 
-      <div>
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold mb-4">Eventos</h1>
+      <div className="">
+        <div className="">
+          <div className="flex justify-between items-center mb-4 ">
+            <h1 className="text-2xl font-bold mb-4 ">Eventos</h1>
           </div>
-          <div className="flex justify-between mb-4">
-            <div className="flex gap-4">
+          <div className="flex justify-between mb-4 ">
+            <div className="flex flex-col lg:flex-row gap-4 ">
               <select
                 className=" w-40 h-6 bg-red-500 border-0"
                 name=""
