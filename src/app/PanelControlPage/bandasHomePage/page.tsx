@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import BandasServices from "@/lib/services/bandasServices";
-import { bandaDatosAmpleosInterface, categoriaInterface } from "@/interfaces/interfaces";
+import { bandaDatosAmpleosInterface, categoriaInterface, resultadosTemporadaInterface} from "@/interfaces/interfaces";
 import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
 import React from "react";
 
@@ -29,9 +29,7 @@ const BandasHomePage = () => {
   const [loading, setLoading] = useState(true);
   const [formularioAgregarHabierto, setFormularioAgregarHabierto] = useState(false);
   const [urlLogoBanda, setUrlLogoBanda] = useState<string>("");
-  const [punstosTemporada, setPuntosTemporada] = useState<number>(0);
-  const [promedioTemporada, setPromedioTemporada] = useState<number>(0);
-  const [posicionTablaTemporada, setPosicionTablaTemporada] = useState<number>(0);
+const [resultadosTemporada, setResultadosTemporada] = useState<resultadosTemporadaInterface | null>(null);
 
   const [open, setOpen] = React.useState(false);
 
@@ -70,15 +68,16 @@ const BandasHomePage = () => {
 
   const abrirModalInformacion = async (banda: bandaDatosAmpleosInterface) => {
     const anioActual = new Date().getFullYear();
-    const puntos = await registroCumplimientosServices.current.puntosTemporadabanda(banda.idBanda, anioActual);
-    const promedio = await registroCumplimientosServices.current.promedioBandaTemporada(banda.idBanda, anioActual);
-    const posicion = await registroCumplimientosServices.current.posicionTablaBandaTemporada(banda.idBanda, anioActual);
+    const resultadosTemporada = await registroCumplimientosServices.current.resultadosTemporadaPorBanda(
+      banda.idBanda,
+      anioActual
+    )
+    setResultadosTemporada(resultadosTemporada || null);
+ 
     const urlLogoBanda = await bandasServices.current.obtenerUrlLogoBanda(banda.urlLogoBanda || "");
     setUrlLogoBanda(urlLogoBanda || "");
     setSelectedBanda(banda);
-    setPuntosTemporada(puntos);
-    setPromedioTemporada(promedio);
-    setPosicionTablaTemporada(posicion);
+
     setOpen(true);
   };
 
@@ -101,9 +100,7 @@ const BandasHomePage = () => {
                 onRefresh={traerDatosTabla}
                 openFormEditar={abrirModalEditar}
                 urlLogoBanda={urlLogoBanda}
-                puntosTemporada={punstosTemporada}
-                promedioTemporada={promedioTemporada}
-                posicionTablaTemporada={posicionTablaTemporada}
+                resultadosTemporada={resultadosTemporada}
               />
             )}
           </OverleyModal>

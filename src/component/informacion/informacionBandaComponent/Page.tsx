@@ -1,4 +1,4 @@
-import { bandaDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { bandaDatosAmpleosInterface, resultadosTemporadaInterface } from "@/interfaces/interfaces";
 import BandasServices from "@/lib/services/bandasServices";
 import React from "react";
 import Image from "next/image";
@@ -9,9 +9,7 @@ type Props = {
   onRefresh?: () => void;
   openFormEditar?: () => void;
   urlLogoBanda: string;
-  puntosTemporada: number;
-  promedioTemporada: number;
-  posicionTablaTemporada: number;
+resultadosTemporada: resultadosTemporadaInterface | null;
 };
 
 const InformacionBandaComponent = ({
@@ -20,9 +18,7 @@ const InformacionBandaComponent = ({
   onRefresh,
   openFormEditar,
   urlLogoBanda,
-  puntosTemporada,
-  promedioTemporada,
-  posicionTablaTemporada,
+ resultadosTemporada
 }: Props) => {
   const eliminarBanda = () => {
     const bandasServices = new BandasServices();
@@ -74,15 +70,15 @@ const InformacionBandaComponent = ({
               <span className="font-bold">Región:</span> {Banda.regiones.nombreRegion}
             </p>
           </div>
-          <div className="w-full h-full p-4">
-            <p className="text-gray-200">
-              <span className="font-bold">Posicion:</span> {posicionTablaTemporada}
+          <div className="w-full h-full p-4  lg:pr-25">
+            <p className="text-gray-200 flex  justify-between">
+              <span className="font-bold justify-between">Posicion:</span><span> {resultadosTemporada ? resultadosTemporada.rankinTemporada : "Pendientes"}</span>
             </p>
-            <p className="text-gray-200">
-              <span className="font-bold">Puntos:</span> {puntosTemporada}
+            <p className="text-gray-200 flex justify-between">
+              <span className="font-bold">Puntos:</span><span> {resultadosTemporada ? resultadosTemporada.totalTemporada : "Pendientes"}</span>
             </p>
-            <p className="text-gray-200">
-              <span className="font-bold">Promedio:</span> {promedioTemporada}
+            <p className="text-gray-200 flex justify-between">
+              <span className="font-bold">Promedio:</span> <span> {resultadosTemporada ? resultadosTemporada.promedioTemporada: "Pendientes"}</span>
             </p>
           </div>
         </div>
