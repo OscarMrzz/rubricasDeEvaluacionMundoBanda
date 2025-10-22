@@ -16,7 +16,7 @@ export default class BandasServices {
     
         this.initPerfil()
     }
-    
+     
     async initPerfil() {
 
         
