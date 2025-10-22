@@ -1,5 +1,5 @@
 import { dataBaseSupabase } from "../supabase";
-import {  perfilDatosAmpleosInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import {  perfilDatosAmpleosInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface, resultadosGeneralesInterface, resultadosTemporadaInterface } from "@/interfaces/interfaces";
 
 
 
@@ -458,6 +458,35 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         const totalPuntos = data?.reduce((total, registro) => total + (registro.puntosObtenidos || 0), 0) || 0;
         return totalPuntos;
 
+    }
+
+    async resultadosTemporadaPorBanda(idBanda: string, anioTemporada: number): Promise<resultadosTemporadaInterface | null> {
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+
+        try {
+            const { data, error } = await dataBaseSupabase
+                .from("vista_resultados_temporada")
+                .select("*")
+                .eq("idForaneaBanda", idBanda)
+                .eq("anioTemporada", anioTemporada)
+                .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+                .maybeSingle();
+
+            if (error) {
+                throw error;
+            }
+
+            // Si no hay datos, devuelve null
+            if (!data) {
+                return null;
+            }
+
+            return data as resultadosTemporadaInterface;
+        } catch (error) {
+            throw error;
+        }
     }
 
     async promedioBandaTemporada(idBanda: string, anio: number, decimales?: number): Promise<number> {
