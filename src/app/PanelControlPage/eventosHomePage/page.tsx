@@ -301,8 +301,6 @@ export default function EventosHomePage() {
         />
       </OverleyModalFormulario>
 
-
-
       <div className="">
         <div className="">
           <div className="flex justify-between items-center mb-4 ">
