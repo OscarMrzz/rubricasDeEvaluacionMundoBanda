@@ -255,3 +255,17 @@ export interface resultadosGeneralesInterface{
     region: regionesInterface;
     totalPuntos: number;
 }
+
+
+export interface resultadosTemporadaInterface {
+  idForaneaFederacion: string;   // uuid
+  idForaneaCategoria: string;    // uuid
+  asistenciaEventos: number;     // bigint
+  rankinTemporada: number;       // bigint
+  anioTemporada: number;         // numeric
+  idForaneaBanda: string;        // uuid
+  totalTemporada: number;        // double precision
+  promedioTemporada: number;     // double precision
+  nombreCategoria: string;       // text
+  nombreBanda: string;           // text
+}
