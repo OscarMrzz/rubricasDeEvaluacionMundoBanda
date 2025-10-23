@@ -131,7 +131,7 @@ const [resultadosTemporada, setResultadosTemporada] = useState<resultadosTempora
                 {bandasList.map((banda) => (
                   <div
                     key={banda.idBanda}
-                    className="w-full h-25 bg-gray-700 p-4 cursor-pointer hover:bg-gray-600"
+                    className="w-full h-25 bg-gray-700 p-4 cursor-pointer hover:bg-slate-600"
                     onDoubleClick={() => abrirModalInformacion(banda)}
                   >
                     <h2 className="text-xl font-bold">{banda.nombreBanda}</h2>
