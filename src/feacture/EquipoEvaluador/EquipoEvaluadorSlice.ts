@@ -11,7 +11,7 @@ const initialState: equipoEvaluadorsState= {
     created_at: "",
     idForaneaEvento: "",
     idForaneaPerfil: "",
-    rolMiembro: "",
+ 
     registroEventos: {
         idEvento: "",
         created_at: "",
