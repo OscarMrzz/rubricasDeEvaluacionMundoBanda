@@ -8,6 +8,9 @@ import Lottie from "lottie-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
+import ModalFormularioSolicitudRevicion from "./modalFormularioSolicitudRevicion";
+import { useModalSolicitudRevicionesStore } from "@/Store/revicionesStore/modalSolicitudRevicionesStore";
+import { baseSolicitudRevicionInterface, useSolicitudRevicionStore } from "@/Store/revicionesStore/solicitudRevicionStore";
 
 type OverleyModalProps = {
   open: boolean;
@@ -15,6 +18,9 @@ type OverleyModalProps = {
 };
 
 export default function ModalInformacionResultados({ open, onClose }: OverleyModalProps) {
+  const {setSolicitudRevicion} = useSolicitudRevicionStore()
+    const {activarOverleyCriteriosFormularioSolicitudRevisar} =useModalSolicitudRevicionesStore()
+    const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const registroCumplimientoServices = useRef(new RegistroCumplimientoServices());
   const [datosCumplimientosbandaSelecionada, setDatosCumplimientosbandaSelecionada] = React.useState<
     registroCumplimientoEvaluacionDatosAmpleosInterface[]
@@ -92,8 +98,32 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
     setTotalPorRubrica(totales);
   };
 
+  const onDoubleClickFila = (resultado: registroCumplimientoEvaluacionDatosAmpleosInterface) => {
+    const idRegistroCumplimientoEvaluacion = resultado.idRegistroCumplimientoEvaluacion;
+    const nombreBanda =resultado.bandas.nombreBanda;
+    const rubricaNombre= resultado.rubricas.nombreRubrica;
+    const criterioNombre= resultado.criteriosEvalucion.nombreCriterio;
+    const cumplimientoDetalles =resultado.cumplimientos.detalleCumplimiento;
+    const puntosObtenidos =resultado.puntosObtenidos;
+
+    const solicitud: baseSolicitudRevicionInterface ={
+        idRegistroCumplimiento: idRegistroCumplimientoEvaluacion,
+        nombreBanda: nombreBanda,
+        nombreRubrica: rubricaNombre,
+        nombreCriterio: criterioNombre,
+         nombreCumplimiento: cumplimientoDetalles,
+        puntosObtenidos: puntosObtenidos,
+    }
+
+
+    setSolicitudRevicion(solicitud);
+  activarOverleyCriteriosFormularioSolicitudRevisar();
+  };
+
+
   return (
     <>
+
       {open ? (
         <div
           onDoubleClick={() => cerrarModal()}
@@ -115,7 +145,7 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
                   >
                     <div className="flex flex-row gap-8 items-center mb-4">
                       <h3 className="text-xl font-semibold  text-gray-300">{rubrica.nombreRubrica}</h3>
-                      <p className="text-lg font-semibold  text-gray-300"> {totalPorRubrica[rubrica.idRubrica] || 0}</p>
+                      <p className="text-lg font-semibold  text-gray-300"> {totalPorRubrica[rubrica.idRubrica] || 0} %</p>
                     </div>
 
                     <div className="flex flex-col gap-2 ">
@@ -123,11 +153,13 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
                         .filter((dato) => dato.rubricas.idRubrica === rubrica.idRubrica)
                         .map((dato) => (
                           <div
+                          onDoubleClick={()=>onDoubleClickFila(dato)}
+
                             key={dato.idRegistroCumplimientoEvaluacion}
-                            className=" h-15   bg-gray-600 flex items-center gap-10 "
+                            className=" min-h-15   bg-gray-600 flex items-center gap-10 cursor-pointer hover:bg-slate-600 "
                           >
-                            <div className=" bg-[#274c77] flex justify-center items-center  w-15 h-full p-2 ">
-                              <p className="font-bold"> {dato.puntosObtenidos}</p>
+                            <div className="  flex justify-center items-center  w-15 h-full p-2 ">
+                              <p className="font-bold"> {dato.puntosObtenidos} %</p>
                             </div>
 
                             <p>
