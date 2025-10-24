@@ -14,8 +14,11 @@ import { activarOverleyInformacionResultados, desactivarOverleyInformacionResult
 import { uselistaEventosFiltroConMemoria } from "@/hooks/useListaEventosFiltroConMemoria";
 import { useListaCategoriaFiltroConMemoria } from "@/hooks/useListaCategoriaFiltroConMemoria";
 import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
+import ModalFormularioSolicitudRevicion from "@/component/informacion/informacionResultados/modalFormularioSolicitudRevicion";
+import { useModalSolicitudRevicionesStore } from "@/Store/revicionesStore/modalSolicitudRevicionesStore";
 
 export default function ResultadosGeneralesHomePage() {
+  const {activadorModalSolicitudReviciones,activarOverleyCriteriosFormularioSolicitudRevisar,desactivarOverleyCriteriosFormularioSolicitudRevisar} =useModalSolicitudRevicionesStore()
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const [resultados, setResultados] = useState<resultadosEventoInterface[]>([]);
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
@@ -93,8 +96,15 @@ export default function ResultadosGeneralesHomePage() {
 
   }
 
+  
+
   return (
     <>
+        <ModalFormularioSolicitudRevicion
+        open={activadorModalSolicitudReviciones}
+        onClose={desactivarOverleyCriteriosFormularioSolicitudRevisar}
+        
+    />
       <ModalInformacionResultados
         open={activadorModalIformacionResultados}
         onClose={() => {
