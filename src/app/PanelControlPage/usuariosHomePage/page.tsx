@@ -10,13 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import {} from "@/feacture/overleys/overleySlice";
 import OverleyModal from "@/component/modales/OverleyModal/Page";
-import { activarOverleyFormularioAgregarPerfiles, activarOverleyFormularioEditarPerfiles, desactivarOverleyFormularioAgregarPerfiles, desactivarOverleyFormularioEditarPerfiles, desactivarOverleyInformacionPerfiles } from "@/feacture/Perfil/overleyPerfil";
+import { activarOverleyFormularioAgregarPerfiles, activarOverleyFormularioEditarPerfiles, activarOverleyInformacionPerfiles, desactivarOverleyFormularioAgregarPerfiles, desactivarOverleyFormularioEditarPerfiles, desactivarOverleyInformacionPerfiles } from "@/feacture/Perfil/overleyPerfil";
 import { desactivarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
 import PerfilesServices from "@/lib/services/perfilesServices";
 import InformacionUsuarioComponent from "@/component/informacion/informacionUsuarioComponent/InformacionUsuarioComponent";
 import FormularioAgregarUsuario from "@/component/formularios/Perfil/Agregar/FormularioAgregarUsuario";
 import FormularioEditarUsuario from "@/component/formularios/Perfil/editar/FormularioEditarUsuario";
 import TablaRegistroPerfilesComponent from "@/component/Tablas/TablaUsuariosComponent/TablaUsuariosComponent";
+import { div } from "framer-motion/client";
+import { setPerfilSeleccionado } from "@/feacture/Perfil/PerfilSlice";
 
 export default function PerfilesHomePage() {
 
@@ -98,10 +100,16 @@ export default function PerfilesHomePage() {
   };
   const ActivarFormularioEditarPerfil = () => {
     dispatch(activarOverleyFormularioEditarPerfiles());
-  };
+  }
+
+  const onDobleClickAbrirInformacion =  (perfil: perfilDatosAmpleosInterface) => {
+    
+    dispatch(activarOverleyInformacionPerfiles());
+    dispatch(setPerfilSeleccionado(perfil));
+  }
 
   return (
-    <div className="px-20">
+    <div className="px-2 lg:px-20">
       <OverleyModal
         open={activadorOverleyInformacionPerfiles}
         onClose={cerrarInformacionPerfil}
@@ -154,7 +162,29 @@ export default function PerfilesHomePage() {
       {loading ? (
         <SkeletonTabla />
       ) : (
-        <TablaRegistroPerfilesComponent Perfiles={perfiles} />
+        <>
+        <div className="flex flex-col  gap-4 w-full ">
+
+       
+       {
+        perfiles.map((perfil) => {
+          return (
+            <div onDoubleClick ={()=>onDobleClickAbrirInformacion(perfil)}  key={perfil.idPerfil} className="h-25 p-4 flex flex-wrap justify-between w-full bg-slate-700 cursor-pointer hover:bg-slate-600">
+              <h2 className="text-xl">{perfil.nombre}</h2>
+              <p className="">{perfil.tipoUsuario}</p>
+
+            </div>
+          )
+        }
+        
+      
+      )
+  
+       }
+      
+         </div>
+        </>
+     
       )}
     </div>
   );
