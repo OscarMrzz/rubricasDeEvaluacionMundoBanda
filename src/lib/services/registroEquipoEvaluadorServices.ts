@@ -54,12 +54,17 @@ async initPerfil() {
      }
 
     async getporPerfil(idUsuario:string) {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaPerfil",idUsuario);
+        const { data, error } = await dataBaseSupabase.from(tabla).select(`
+               *,
+                     registroEventos(*),
+                     perfiles(*)
+            
+            `).eq("idForaneaPerfil",idUsuario);
         if (error) throw error;
         
         
         
-        return data as registroEquipoEvaluadorInterface[] 
+        return data as registroEquipoEvaluadorDatosAmpleosInterface[] 
      }
   
  

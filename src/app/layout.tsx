@@ -21,7 +21,7 @@ import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
 import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
 import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
 import RegistroEquipoEvaluadorServices from "@/lib/services/registroEquipoEvaluadorServices";
-import { perfilInterface, registroEquipoEvaluadorInterface } from "@/interfaces/interfaces";
+import { perfilInterface, registroEquipoEvaluadorDatosAmpleosInterface, registroEquipoEvaluadorInterface } from "@/interfaces/interfaces";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -79,15 +79,15 @@ export default function RootLayout({
           setRubicasStore(data);
         });
 
-        // Load events and filter them based on profile
+  
         equipoEvaluadorServices.current
           .getporPerfil(perfil.idPerfil)
-          .then((EventosParaElPerfil: registroEquipoEvaluadorInterface[]) => {
+          .then((EventosParaElPerfil: registroEquipoEvaluadorDatosAmpleosInterface[]) => {
             eventosServices.current.get().then((data) => {
               const eventosFiltrados = data.filter((evento) =>
                 EventosParaElPerfil.some(
-                  (equipo) =>
-                    equipo.idForaneaEvento === evento.idEvento && equipo.rolMiembro.toUpperCase() !== "SINPERMISOS"
+                  (equipo:registroEquipoEvaluadorDatosAmpleosInterface) =>
+                    equipo.idForaneaEvento === evento.idEvento && equipo.perfiles.tipoUsuario.toUpperCase() !== "SINPERMISOS"
                 )
               );
               setEventosStore(eventosFiltrados);

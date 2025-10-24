@@ -6,12 +6,17 @@ type Interface = perfilInterface;
 const tabla = "perfiles";
 const elId = "idPerfil";
 
-
-
 export default class PerfilesServices {
+         perfil: perfilDatosAmpleosInterface | null = null;
+     
+      
+    constructor() {
+       
+    }
 
-   
     async getDatosAmpleos(idFederacion:string,rolusuario:string): Promise<perfilDatosAmpleosInterface[]> {
+           
+          
         try {
             if(rolusuario==="superadmin"){
                 

@@ -154,7 +154,7 @@ export interface registroEquipoEvaluadorInterface{ // Corregido: nombre de inter
     created_at: string;
     idForaneaEvento: string;
     idForaneaPerfil: string;
-    rolMiembro: string;
+  
 }
 export interface registroEquipoEvaluadorDatosAmpleosInterface extends registroEquipoEvaluadorInterface {
 

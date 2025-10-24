@@ -48,7 +48,7 @@ export default function TablaRegistroEquipoEvaluadorComponent({
               >
                 <td className="px-4 py-2 border">{index + 1}</td>
                 <td className="px-4 py-2 border">{registro.perfiles.nombre}</td>
-                <td className="px-4 py-2 border">{registro.rolMiembro}</td>
+                <td className="px-4 py-2 border">{registro.perfiles.tipoUsuario}</td>
               </tr>
             ))}
           </tbody>
