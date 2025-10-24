@@ -1,5 +1,5 @@
 import { dataBaseSupabase } from "../supabase";
-import {  perfilDatosAmpleosInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface, resultadosGeneralesInterface, resultadosTemporadaInterface } from "@/interfaces/interfaces";
+import {  perfilDatosAmpleosInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, registroCumplimientoEvaluacionInterface, resultadosEventoDatosAmpleosInterface, resultadosEventoInterface, resultadosGeneralesInterface, resultadosTemporadaInterface } from "@/interfaces/interfaces";
 
 
 
@@ -563,5 +563,24 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
         return posicion;
     }
+
+
+    async resultadosEventoCategoria(idEvento: string, idCategoria: string): Promise<resultadosEventoInterface[]> {
+
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const { data, error } = await dataBaseSupabase
+            .from("vista_resultados_eventos")
+            .select("*")
+            .eq("idForaneaEvento", idEvento)
+            .eq("idForaneaCategoria", idCategoria)
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+           
+        if (error) throw error;
+        return data as resultadosEventoInterface[];
+
+    }
+
      
 }
