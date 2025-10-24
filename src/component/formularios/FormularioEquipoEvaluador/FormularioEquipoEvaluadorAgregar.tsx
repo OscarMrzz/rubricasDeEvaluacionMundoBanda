@@ -30,7 +30,7 @@ export default  function FormularioEquipoEvaluadorAgregar  ({ refresacar, onClos
   const [formData, setFormData] = useState({
   
   idForaneaPerfil: "",
-  rolMiembro: "",
+
    
   });
 
@@ -108,7 +108,7 @@ export default  function FormularioEquipoEvaluadorAgregar  ({ refresacar, onClos
       // Limpiar formulario
       setFormData({
         idForaneaPerfil: "",
-        rolMiembro: "",
+       
       });
     } catch (error) {
       console.error("❌ Error al crear la Registro Equipo evaluador:", error);
@@ -123,7 +123,7 @@ export default  function FormularioEquipoEvaluadorAgregar  ({ refresacar, onClos
   const onClickCancelar=()=>{
       setFormData({
         idForaneaPerfil: "",
-        rolMiembro: "",
+      
       });
     onClose();
   }

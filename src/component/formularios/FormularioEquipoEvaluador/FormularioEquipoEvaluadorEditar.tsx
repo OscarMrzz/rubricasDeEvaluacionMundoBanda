@@ -30,7 +30,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
   const [formData, setFormData] = useState({
   
   idForaneaPerfil: "",
-  rolMiembro: "",
+
    
   });
 
@@ -81,7 +81,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
       setFormData({
   
   idForaneaPerfil: registroEquipoEvaluacionAEditar.idForaneaPerfil,
-  rolMiembro: registroEquipoEvaluacionAEditar.rolMiembro
+  
    
   }
 
@@ -125,7 +125,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
       // Limpiar formulario
       setFormData({
         idForaneaPerfil: "",
-        rolMiembro: "",
+      
       });
     } catch (error) {
       console.error("❌ Error al crear la Registro Equipo evaluador:", error);
@@ -140,7 +140,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
   const onClickCancelar=()=>{
       setFormData({
         idForaneaPerfil: "",
-        rolMiembro: "",
+
       });
     onClose();
   }
@@ -157,9 +157,6 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
           
         </div>
          
-
-        
-
       
         <div className="flex flex-col">
       
