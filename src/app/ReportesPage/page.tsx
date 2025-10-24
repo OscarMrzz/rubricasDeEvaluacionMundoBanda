@@ -3,20 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 
 import React from "react";
-import { resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import { resultadosEventoDatosAmpleosInterface, resultadosEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
-import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
+import { activarOverleyInformacionResultados, desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
 
 import { uselistaEventosFiltroConMemoria } from "@/hooks/useListaEventosFiltroConMemoria";
 import { useListaCategoriaFiltroConMemoria } from "@/hooks/useListaCategoriaFiltroConMemoria";
+import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
 
 export default function ResultadosGeneralesHomePage() {
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
-  const [resultados, setResultados] = useState<resultadosGeneralesInterface[]>([]);
+  const [resultados, setResultados] = useState<resultadosEventoInterface[]>([]);
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
 
   const dispatch = useDispatch();
@@ -43,8 +44,8 @@ export default function ResultadosGeneralesHomePage() {
   async function traerDatosTabla(idEvento: string, idCategoria: string) {
     if (idEvento !== "" && idEvento !== "") {
       try {
-        const resultadosData: resultadosGeneralesInterface[] =
-          await registroCumpliminetoServices.current.getResultadosEventoYCategoria(idEvento, idCategoria);
+        const resultadosData: resultadosEventoInterface[] =
+          await registroCumpliminetoServices.current.resultadosEventoCategoria(idEvento, idCategoria);
 
         setResultados(resultadosData);
       } catch (error) {
@@ -86,6 +87,12 @@ export default function ResultadosGeneralesHomePage() {
     traerDatosTabla(eventoSeleccionadoConMemoria ? eventoSeleccionadoConMemoria.idEvento : "", idCategoria);
   };
 
+  const onDobleClickFila = (resultado: resultadosEventoInterface) => {
+    dispatch(activarOverleyInformacionResultados());
+    dispatch(setfilaResultadoItemSeleccionado({ idBanda: resultado.idForaneaBanda, idEvento: resultado.idForaneaEvento }));
+
+  }
+
   return (
     <>
       <ModalInformacionResultados
@@ -100,10 +107,10 @@ export default function ResultadosGeneralesHomePage() {
             <div className="flex justify-between items-center mb-4">
               <h1 className="text-2xl font-bold mb-4">Eventos</h1>
             </div>
-            <div className="flex  gap-4 pb-2">
+            <div className="flex flex-col lg:flex-row  gap-4 pb-4">
               <div className="flex gap-4">
                 <select
-                  className="bg-red-500  w-40 h-6  border-0"
+                  className="bg-red-500  w-40 h-12  border-0"
                   name=""
                   id=""
                   value={eventoSeleccionadoConMemoria?.idEvento}
@@ -131,7 +138,7 @@ export default function ResultadosGeneralesHomePage() {
               </div>
               <div className="flex gap-4">
                 <select
-                  className=" w-40 h-6 bg-red-500 border-0"
+                  className=" w-40 h-12 bg-red-500 border-0"
                   name=""
                   id=""
                   value={categoriaSelecionadaConMemoria?.idCategoria}
@@ -167,9 +174,20 @@ export default function ResultadosGeneralesHomePage() {
         {cargandoEventosConMemoria ? (
           <h2 className="text-3xl font-black">SELECCIONA REGION Y EVENTO</h2>
         ) : (
-          <>
-            <TablaResultadosGeneralesComponent resutadosGenerales={resultados} />
-          </>
+          
+          <div className="flex flex-col gap-4 ">
+            
+           { resultados.map((resultado:resultadosEventoInterface) => (
+              <div onDoubleClick={()=>onDobleClickFila(resultado)} key={resultado.idForaneaBanda +resultado.idForaneaEvento} className="flex gap-2 items-center min-h-25 w-full bg-slate-700 p-4 cursor-pointer hover:bg-slate-600">
+                <p className="text-3xl font-black  p-2 flex justify-center items-center">{resultado.rankin}</p>
+                <p className="w-15">{resultado.total } %</p>
+                <h2>{resultado.nombreBanda}</h2>
+            
+              </div>
+            )
+            )}
+          </div>
+       
         )}
       </div>
     </>
