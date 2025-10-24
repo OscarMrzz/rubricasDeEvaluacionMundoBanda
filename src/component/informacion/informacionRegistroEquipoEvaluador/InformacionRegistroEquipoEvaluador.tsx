@@ -45,7 +45,7 @@ export default function InformacionRegistroEquipoEvaluadorComponent({
           <div className="  ">
             <p>Miembro : {registroEquipoEvaluador.perfiles.nombre}</p>
 
-            <p className="font-light">{registroEquipoEvaluador.rolMiembro}</p>
+            <p className="font-light">{registroEquipoEvaluador.perfiles.tipoUsuario}</p>
           </div>
         </div>
         <div className="flex flex-col gap-2">
