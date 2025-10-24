@@ -103,7 +103,7 @@ export default function ResultadosGeneralesHomePage() {
             <div className="flex  gap-4 pb-2">
               <div className="flex gap-4">
                 <select
-                  className=" w-40 h-6 bg-red-500 border-0"
+                  className=" w-40 h-6  border-0"
                   name=""
                   id=""
                   value={eventoSeleccionadoConMemoria?.idEvento}

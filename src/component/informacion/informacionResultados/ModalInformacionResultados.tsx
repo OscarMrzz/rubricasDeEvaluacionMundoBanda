@@ -1,12 +1,13 @@
 import { RootState } from "@/app/store";
 import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
-import { registroCumplimientoEvaluacionDatosAmpleosInterface, rubricaInterface } from "@/interfaces/interfaces";
+import { registroComentariosDatosAmpleosInterface, registroCumplimientoEvaluacionDatosAmpleosInterface, rubricaInterface } from "@/interfaces/interfaces";
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 import loading2 from "@/animacionesJson/Loading2.json";
 
 import Lottie from "lottie-react";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
 
 type OverleyModalProps = {
   open: boolean;
@@ -18,10 +19,14 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
   const [datosCumplimientosbandaSelecionada, setDatosCumplimientosbandaSelecionada] = React.useState<
     registroCumplimientoEvaluacionDatosAmpleosInterface[]
   >([]);
+  const [datosComentariosbandaSelecionada, setDatosComentariosbandaSelecionada] = React.useState<
+  registroComentariosDatosAmpleosInterface[]
+>([]);
   const filaResultadosSelecionada = useSelector((state: RootState) => state.resultadosGeneralesReducer);
   const [cargadoDatos, setCargadoDatos] = React.useState(true);
   const [listaCRubricasUnicas, setListaRubricaUnicas] = React.useState<rubricaInterface[]>([]);
   const [totalPorRubrica, setTotalPorRubrica] = React.useState<{ [key: string]: number }>({});
+  const registroComentariosServices = useRef(new RegistroComentariosServices());
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -31,8 +36,11 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
       if (!filaResultadosSelecionada || !filaResultadosSelecionada.idEvento) return;
       const { idEvento, idBanda } = filaResultadosSelecionada;
       const data = await registroCumplimientoServices.current.getPorBandaYEvento(idBanda, idEvento);
+      const dataComentarios = await registroComentariosServices.current.getPorBandaYEvento(idBanda, idEvento);
      
       setDatosCumplimientosbandaSelecionada(data);
+      setDatosComentariosbandaSelecionada(dataComentarios);
+
       setCargadoDatos(false);
     };
     fetchData();
@@ -92,7 +100,7 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
           className="bg-gray-950/50 inset-0 z-100 fixed w-screen h-screen flex justify-center items-center"
         >
           <div
-            className={`w-4xl h-140 bg-gray-800 px-25 overflow-auto scrollbar-estetica ${
+            className={`w-4xl h-140 bg-gray-800 px-2 lg:px-25 overflow-auto scrollbar-estetica ${
               Animar ? "scale-100" : "scale-75"
             }  transition-all duration-500 ease-in-out`}
           >
@@ -103,7 +111,7 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
                 {listaCRubricasUnicas.map((rubrica) => (
                   <div
                     key={rubrica.idRubrica}
-                    className="bg-gray-700 mb-6 border-b pb-4 border-gray-500 shadow-2xl border-2 p-4"
+                    className="bg-gray-700 mb-6  pb-4  p-4"
                   >
                     <div className="flex flex-row gap-8 items-center mb-4">
                       <h3 className="text-xl font-semibold  text-gray-300">{rubrica.nombreRubrica}</h3>
@@ -128,9 +136,38 @@ export default function ModalInformacionResultados({ open, onClose }: OverleyMod
                           </div>
                         ))}
                     </div>
-                    <div></div>
+
+
+                          <div>
+                    <h4 className=" font-light mt-4 mb-2 text-gray-300">Comentarios:</h4>
+                    <div className="flex flex-col gap-2 ">
+                      {datosComentariosbandaSelecionada
+                        .filter((comentario) => comentario.rubricas.idRubrica === rubrica.idRubrica)
+                        .map((comentario) => (  
+                          <div
+                            key={comentario.idRegistroComentario}
+                            className="font-light    bg-[#72d1fa]/45 flex items-center gap-10 p-2 "
+                          >
+                            <p>
+                              <strong>{comentario.comentario}</strong>{" "}
+                            </p>
+                          </div>
+                        ))}
+                        </div>
+                    
+
+
+                    </div>
+              
                   </div>
-                ))}
+
+                  
+
+                  
+                )
+
+                
+                )}
               </div>
             ) : (
               <div className="p-4 flex justify-center items-start">
