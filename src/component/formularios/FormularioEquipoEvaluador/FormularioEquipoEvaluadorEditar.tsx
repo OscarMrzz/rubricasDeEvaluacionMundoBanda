@@ -115,7 +115,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
       const nuevaRegsitroEquipoEvaluador: Omit<registroEquipoEvaluadorInterface, "idRegistroEvaluador" | "created_at"> = {
         idForaneaEvento: registroEquipoEvaluacionAEditar.idForaneaEvento,
         idForaneaPerfil: formData.idForaneaPerfil,
-        rolMiembro: formData.rolMiembro,
+      
       };
 
       await registroEquipoEvaluadorServices.update(registroEquipoEvaluacionAEditar.idRegistroEvaluador, nuevaRegsitroEquipoEvaluador as registroEquipoEvaluadorInterface);
@@ -156,35 +156,7 @@ export default  function FormularioEquipoEvaluadorEditar  ({ registroEquipoEvalu
           </label>
           
         </div>
-          <div className="flex flex-col">
-          <label className="text-gray-200 mb-1" htmlFor="rolMiembro">
-            Rol Usuario
-          </label>
-          <select
-            id="rolMiembro"
-            name="rolMiembro"
-            value={formData.rolMiembro}
-            onChange={handleInputChange}
-            className="border border-gray-200 p-2 rounded"
-            required
-          >
-            <option className="bg-white text-gray-400" value="">
-              Seleccione un rol
-            </option>
-            <option className="bg-white text-gray-800" value="presidenteJurado">
-              Presidente jurados
-            </option>
-            <option className="bg-white text-gray-800" value="jurado">
-              Jurado
-            </option>
-            <option className="bg-white text-gray-800" value="fiscal">
-              Fiscal
-            </option>
-            <option className="bg-white text-gray-800" value="sinPermisos">
-              Sin permisos
-            </option>
-          </select>
-        </div>
+         
 
         
 
