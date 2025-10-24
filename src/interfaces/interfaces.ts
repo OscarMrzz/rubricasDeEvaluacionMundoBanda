@@ -269,3 +269,37 @@ export interface resultadosTemporadaInterface {
   nombreCategoria: string;       // text
   nombreBanda: string;           // text
 }
+
+
+export interface solicitudRevicionInterface {
+  idSolicitud: string;
+  created_at: string;
+  idForaneaRegistroCumplimiento: string;
+  idForaneaFederacion: string;
+  idForaneaSolicitanteRevicion: string;
+  detallesSolicitud: string;
+}
+
+export interface solicitudRevicionDatosAmpleosInterface extends solicitudRevicionInterface {
+  registroCumplimientos: registroCumplimientoEvaluacionInterface;
+  federaciones: federacionInterface;
+  perfiles: perfilInterface;
+}
+
+
+export interface respuestaSolicitudRevicionInterface {
+  idRespuesta: string;
+  created_at: string;
+  idForaneaFederacion: string;
+  idForaneaSolicitudRevicion: string;
+  idForaneaRevisor: string;
+  aprovacion: boolean;
+  detallesRespuesta: string;
+}
+
+export interface respuestaSolicitudRevicionDatosAmpleosInterface extends respuestaSolicitudRevicionInterface {
+  federaciones: federacionInterface;
+  solicitudReviciones: solicitudRevicionInterface;
+  perfiles: perfilInterface;
+}
+
