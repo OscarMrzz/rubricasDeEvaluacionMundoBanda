@@ -4,8 +4,8 @@ import PerfilesServices from "./perfilesServices";
 
 type Interface = solicitudRevicionInterface;
 
-const tabla = " idSolicitud";
-const elId = "solicitudRevicion";
+const tabla = "solicitudRevicion";
+const elId = "idSolicitud";
 
 export default class SolicitudRevicionServices {
 
@@ -37,7 +37,7 @@ export default class SolicitudRevicionServices {
                     *,
                     federaciones(*),
                    perfiles(*),
-                   solicitudReviciones(*)
+                   registroCumplimientos(*)
                 `).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
@@ -111,11 +111,11 @@ async getPorRegistroCumplido(idRegistroCumplido: string): Promise<solicitudRevic
                 .select(`
                     *,
                     federaciones(*),
-                    registroCumplidos(*),
+                    registroCumplimientos(*),
                     perfiles(*)
 
                 `)
-                .eq("idForaneaRegistroCumplido", idRegistroCumplido)
+                .eq("idForaneaRegistroCumplimiento", idRegistroCumplido)
                 .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion);
             if (error) {
                 console.error("❌ Error obteniendo rubricas por registro cumplido:", error);
