@@ -16,9 +16,12 @@ import { useListaCategoriaFiltroConMemoria } from "@/hooks/useListaCategoriaFilt
 import { setfilaResultadoItemSeleccionado } from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
 import ModalFormularioSolicitudRevicion from "@/component/informacion/informacionResultados/modalFormularioSolicitudRevicion";
 import { useModalSolicitudRevicionesStore } from "@/Store/revicionesStore/modalSolicitudRevicionesStore";
+import ApprovateMessage from "@/component/Message/ApprovateMessage";
+import { useModalMessageAprovateSolicitudRevicionStore } from "@/Store/revicionesStore/modalMessage/modalMessageAprovateSolicitudRevicionStore";
 
 export default function ResultadosGeneralesHomePage() {
   const {activadorModalSolicitudReviciones,activarOverleyCriteriosFormularioSolicitudRevisar,desactivarOverleyCriteriosFormularioSolicitudRevisar} =useModalSolicitudRevicionesStore()
+  const {activadorModalSolicitudRevicionesMessage,activarOverleyCriteriosFormularioSolicitudRevisarMessage,desactivarOverleyCriteriosFormularioSolicitudRevisarMessage} =useModalMessageAprovateSolicitudRevicionStore()
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const [resultados, setResultados] = useState<resultadosEventoInterface[]>([]);
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
@@ -100,6 +103,13 @@ export default function ResultadosGeneralesHomePage() {
 
   return (
     <>
+       <ApprovateMessage
+          open={activadorModalSolicitudRevicionesMessage}
+          onClose={()=>{desactivarOverleyCriteriosFormularioSolicitudRevisarMessage()}}
+          titulo={"Solicitud Enviada"}
+          texto={"Su solicitud de revisión ha sido enviada con éxito."}
+          
+          />
         <ModalFormularioSolicitudRevicion
         open={activadorModalSolicitudReviciones}
         onClose={desactivarOverleyCriteriosFormularioSolicitudRevisar}

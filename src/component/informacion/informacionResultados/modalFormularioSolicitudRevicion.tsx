@@ -19,6 +19,7 @@ import { useSolicitudRevicionStore } from "@/Store/revicionesStore/solicitudRevi
 import SolicitudRevicionServices from "@/lib/services/solicitudRevicionServices";
 import { form } from "@heroui/theme";
 import { useModalSolicitudRevicionesStore } from "@/Store/revicionesStore/modalSolicitudRevicionesStore";
+import { useModalMessageAprovateSolicitudRevicionStore } from "@/Store/revicionesStore/modalMessage/modalMessageAprovateSolicitudRevicionStore";
 
 type OverleyModalProps = {
   open: boolean;
@@ -26,6 +27,7 @@ type OverleyModalProps = {
 };
 
 export default function ModalFormularioSolicitudRevicion({ open, onClose }: OverleyModalProps) {
+  const {activarOverleyCriteriosFormularioSolicitudRevisarMessage} =useModalMessageAprovateSolicitudRevicionStore()
   const { solicitudRevicion } = useSolicitudRevicionStore();
   const registroCumplimientoServices = useRef(new RegistroCumplimientoServices());
   const [datosCumplimientosbandaSelecionada, setDatosCumplimientosbandaSelecionada] = React.useState<
@@ -133,7 +135,7 @@ export default function ModalFormularioSolicitudRevicion({ open, onClose }: Over
 
     }
     await solicitudRevicionServices.current.create(datosSolicitud as solicitudRevicionInterface);
-    console.log("Solicitud Enviada");
+    activarOverleyCriteriosFormularioSolicitudRevisarMessage();
     limpiarFormulario();
     desactivarOverleyCriteriosFormularioSolicitudRevisar();
     
