@@ -3,6 +3,8 @@ import {
   cumplimientosInterface,
   perfilDatosAmpleosInterface,
 
+  registroCumplimientoEvaluacionInterface,
+
   respuestaSolicitudRevicionInterface,
 
   solicitudRevicionInterface,
@@ -12,6 +14,8 @@ import React, { useEffect, useRef, useState } from "react";
 import SolicitudRevicionServices from "@/lib/services/solicitudRevicionServices";
 import cumplimientossServices from "@/lib/services/cumplimientosServices";
 import RespuestaSolicitudRevicionesServices from "@/lib/services/respuestaSolicitudRevicionesServices";
+import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
+import { a } from "framer-motion/client";
 
 
 type OverleyModalProps = {
@@ -32,7 +36,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
   const [justificacion, setJustificacion] = React.useState("");
   const [perfil, setPerfil] = useState<perfilDatosAmpleosInterface>({} as perfilDatosAmpleosInterface);
   const [listCumplimientos, setListCumplimientos] = useState<cumplimientosInterface[]>([]);
-  const [aprovacion, setAprovacion] = useState<string>("pendiente");
+  const [aprobacion, setaprobacion] = useState<string>("pendiente");
   const [idCumplimientoSeleccionado, setIdCumplimientoSeleccionado] = useState<string>(
     solicitudRevicion?.idForaneaCumplimiento || ""
   );
@@ -40,6 +44,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
   const cumplimientosServices = useRef(new cumplimientossServices());
   const respuestaSolicitudRevicionServices = useRef(new RespuestaSolicitudRevicionesServices());
   const solicitudRevicionServices = useRef(new SolicitudRevicionServices());
+  const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const [enviarPrecionado, setEnviarPrecionado] = useState(false);
 
   useEffect(() => {
@@ -56,10 +61,10 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
   const aprobarCambios = async () => {
     const cumplimientos = await cumplimientosServices.current.getPorCriterio(solicitudRevicion.idForaneaCriterio);
     setListCumplimientos(cumplimientos);
-    setAprovacion("aprovado");
+    setaprobacion("aprobado");
   };
   const denegarCambios = async () => {
-    setAprovacion("denegado");
+    setaprobacion("denegado");
     onClose();
   };
 
@@ -88,7 +93,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
 
   const limpiarFormulario = () => {
     setJustificacion("");
-    setAprovacion("pendiente");
+    setaprobacion("pendiente");
     setIdCumplimientoSeleccionado( "");
 
   };
@@ -97,7 +102,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
     setIdCumplimientoSeleccionado(idCumplimiento);
   }
   const cancelar = () => {
-    setAprovacion("pendiente");
+    setaprobacion("pendiente");
     
     setIdCumplimientoSeleccionado(solicitudRevicion?.idForaneaCumplimiento || "");
     onClose();
@@ -108,23 +113,25 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
 
   const enviarSolicitudRevision = async () => {
     setEnviarPrecionado(true);
-    if (justificacion.length ===0 || aprovacion==="pendiente" ) return
+    if (justificacion.length ===0 || aprobacion==="pendiente" ) return
    
 
     if(solicitudRevicion.idForaneaSolicitanteRevicion === undefined) return;
 
 
-
+    const datosRegistroCumplimiento = await registroCumpliminetoServices.current.getOne(
+      solicitudRevicion.idForaneaRegistroCumplimiento
+    );
 
      const datosSolicitudActualizada: Partial<solicitudRevicionInterface> = {
-    estado: aprovacion,
+    estado: aprobacion,
   };
     
       const datosRespuesta: Omit<respuestaSolicitudRevicionInterface, "idRespuesta" | "created_at"> = {
         idForaneaFederacion: perfil.idForaneaFederacion,
         idForaneaSolicitudRevicion: solicitudRevicion.idSolicitud,
         idForaneaRevisor: perfil.idPerfil,
-        aprovacion: aprovacion,
+        aprobacion: aprobacion,
         detallesRespuesta: justificacion,
 
     }
@@ -134,11 +141,40 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
 
       await respuestaSolicitudRevicionServices.current.create(datosRespuesta as respuestaSolicitudRevicionInterface);
       await solicitudRevicionServices.current.update(solicitudRevicion.idSolicitud, datosSolicitudActualizada as solicitudRevicionInterface);
+    
     }
     catch(error){
       console.error("Error al enviar la respuesta de la solicitud de revisión:", error);
       return;
     }
+    try{
+
+
+     if(aprobacion !== "aprobado") return;
+      const nuevosDatosRegistroCumplimiento: Partial<registroCumplimientoEvaluacionInterface> = {
+        idRegistroCumplimientoEvaluacion: datosRegistroCumplimiento.idRegistroCumplimientoEvaluacion,
+        idForaneaEvento: datosRegistroCumplimiento.idForaneaEvento,
+        idForaneaBanda: datosRegistroCumplimiento.idForaneaBanda,
+        idForaneaCriterio: datosRegistroCumplimiento.idForaneaCriterio,
+        idForaneaCumplimiento: aprobacion === "aprobado" ? idCumplimientoSeleccionado : datosRegistroCumplimiento.idForaneaCumplimiento,
+        idForaneaCategoria: datosRegistroCumplimiento.idForaneaCategoria,
+        idForaneaRegion: datosRegistroCumplimiento.idForaneaRegion,
+        puntosObtenidos: aprobacion === "aprobado"
+          ? listCumplimientos.find((cumplimiento) => cumplimiento.idCumplimiento === idCumplimientoSeleccionado)
+              ?.puntosCumplimiento || datosRegistroCumplimiento.puntosObtenidos
+          : datosRegistroCumplimiento.puntosObtenidos,
+        idForaneaPerfil: datosRegistroCumplimiento.idForaneaPerfil,
+        idForaneaFederacion: datosRegistroCumplimiento.idForaneaFederacion,
+        idForaneaRubrica: datosRegistroCumplimiento.idForaneaRubrica,
+
+      };
+      await registroCumpliminetoServices.current.update(solicitudRevicion.idForaneaRegistroCumplimiento,nuevosDatosRegistroCumplimiento as registroCumplimientoEvaluacionInterface);
+    }
+    catch(error){
+      console.error("Error al actualizar el registro de cumplimiento:", error);
+      return;
+    }
+
 
  
 
@@ -189,7 +225,7 @@ onClose();
               </div>
 
               <div className="flex   h-full ">
-                {aprovacion === "pendiente" ? (
+                {aprobacion === "pendiente" ? (
                   <div className="flex gap-4 w-full h-full justify-center items-center">
                     <button
                       onClick={() => aprobarCambios()}
@@ -206,7 +242,7 @@ onClose();
                   </div>
                 ) : (
                   <div className="mt-15 w-full ">
-                    {aprovacion === "aprovado" ? (
+                    {aprobacion === "aprobado" ? (
                       <div className="">
                         <h2 className="text-emerald-400 font-bold text-2xl">Solicitud Aprobada</h2>
                         <div className="flex flex-col gap-4">
