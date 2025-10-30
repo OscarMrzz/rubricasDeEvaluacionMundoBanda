@@ -65,7 +65,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
   };
   const denegarCambios = async () => {
     setaprobacion("denegado");
-    onClose();
+ 
   };
 
   const [Animar, setAnimar] = React.useState(false);
@@ -225,7 +225,7 @@ onClose();
               </div>
 
               <div className="flex   h-full ">
-                {aprobacion === "pendiente" ? (
+                {solicitudRevicion.estado === "pendiente" && aprobacion ==="pendiente" ? (
                   <div className="flex gap-4 w-full h-full justify-center items-center">
                     <button
                       onClick={() => aprobarCambios()}
@@ -242,10 +242,12 @@ onClose();
                   </div>
                 ) : (
                   <div className="mt-15 w-full ">
-                    {aprobacion === "aprobado" ? (
+                    {aprobacion === "aprobado" || solicitudRevicion.estado === "aprobado"  ? (
                       <div className="">
                         <h2 className="text-emerald-400 font-bold text-2xl">Solicitud Aprobada</h2>
-                        <div className="flex flex-col gap-4">
+                        {
+                          solicitudRevicion.estado !== "aprobado" ? (
+                               <div className="flex flex-col gap-4">
                           <h3 className="text-lg font-bold mt-4 mb-2">Criterio: {solicitudRevicion.nombreCriterio}</h3>
                           {listCumplimientos.map((cumplimiento) => (
                             <div
@@ -271,11 +273,16 @@ onClose();
                             </div>
                           ))}
                         </div>
+                          ) : null
+                        }
+                     
                       </div>
                     ) : (
                       <h2 className="text-red-600 font-bold text-2xl">Solicitud Denegada</h2>
                     )}
-                    <form onSubmit={(e) => {
+                    {
+                      (solicitudRevicion.estado === "pendiente") && (
+                            <form onSubmit={(e) => {
                       e.preventDefault()
                       enviarSolicitudRevision()}} className="" action="">
                     <div className="pt-5">
@@ -302,6 +309,9 @@ onClose();
                     </div>
                   
                   </form>
+                      )
+                    }
+                
                   </div>
                 )}
               </div>
