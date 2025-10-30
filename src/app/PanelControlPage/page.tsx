@@ -4,6 +4,7 @@ import {
   ChartBarSquareIcon,
   ClipboardDocumentCheckIcon,
   DocumentTextIcon,
+  EnvelopeIcon,
   ListBulletIcon,
   MapPinIcon,
   MusicalNoteIcon,
@@ -15,7 +16,7 @@ import React from "react";
 
 const PanelControlPage = () => {
   return (
-    <div className="h-screen grid grid-cols-3 grid-rows-5 p-2 gap-2 ">
+    <div className="h-screen grid grid-cols-3 grid-rows-6 p-2 gap-2 ">
       <Link
         href="/EvaluarPage"
         className="bg-slate-700 col-span-3 flex flex-col justify-center items-center text-2xl font-bold hover:bg-slate-600 cursor-pointer"
@@ -80,13 +81,22 @@ const PanelControlPage = () => {
         <UsersIcon className="w-12" />
         <h2>usuarios</h2>
       </Link>
-      <Link
+       <Link
         href="/miPerfilPage"
         className="bg-slate-700 col-span-1 flex flex-col justify-center items-center  font-bold hover:bg-slate-600 cursor-pointer"
       >
         <UserIcon className="w-12" />
         <h2>Mi perfil</h2>
       </Link>
+      <Link
+        href="/PanelControlPage/solicitudesRevicionesPage"
+        className="bg-slate-700 col-span-3 flex flex-col justify-center items-center  font-bold hover:bg-slate-600 cursor-pointer"
+      >
+        <EnvelopeIcon className="w-12" />
+        <h2>Solicitud de reviciones</h2>
+      </Link>
+     
+     
     </div>
   );
 };
