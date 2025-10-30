@@ -1,5 +1,5 @@
 import { dataBaseSupabase } from "../supabase";
-import {   perfilDatosAmpleosInterface, solicitudRevicionInterface, solicitudRevicionDatosAmpleosInterface } from "@/interfaces/interfaces";
+import {   perfilDatosAmpleosInterface, solicitudRevicionInterface, solicitudRevicionDatosAmpleosInterface, vistaSolicitudRevicionInterface } from "@/interfaces/interfaces";
 import PerfilesServices from "./perfilesServices";
 
 type Interface = solicitudRevicionInterface;
@@ -57,6 +57,11 @@ export default class SolicitudRevicionServices {
         const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
         return data;
+    }
+    async getVista() {
+        const { data, error } = await dataBaseSupabase.from("vista_solicitud_revicion").select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+        if (error) throw error;
+        return data as vistaSolicitudRevicionInterface[];
     }
 
     async getOne(id: string) {
