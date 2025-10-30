@@ -4,8 +4,8 @@ import PerfilesServices from "./perfilesServices";
 
 type Interface = respuestaSolicitudRevicionInterface;
 
-const tabla = " idSolicitud";
-const elId = "solicitudRevicion";
+const tabla = "respuestaSolicitudRevicion";
+const elId = "idRespuesta";
 
 export default class RespuestaSolicitudRevicionesServices {
 
