@@ -131,7 +131,8 @@ export default function ModalFormularioSolicitudRevicion({ open, onClose }: Over
     idForaneaRegistroCumplimiento: solicitudRevicion.idRegistroCumplimiento,
     idForaneaFederacion: perfil.idForaneaFederacion,
     idForaneaSolicitanteRevicion: perfil.idPerfil,
-    detallesSolicitud: justificacion
+    detallesSolicitud: justificacion,
+    estado: "pendiente"
 
     }
     await solicitudRevicionServices.current.create(datosSolicitud as solicitudRevicionInterface);
