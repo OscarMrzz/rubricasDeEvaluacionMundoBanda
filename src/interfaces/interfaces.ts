@@ -295,7 +295,7 @@ export interface respuestaSolicitudRevicionInterface {
   idForaneaFederacion: string;
   idForaneaSolicitudRevicion: string;
   idForaneaRevisor: string;
-  aprovacion: string;
+  aprobacion: string;
   detallesRespuesta: string;
 }
 
