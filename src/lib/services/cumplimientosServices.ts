@@ -78,7 +78,7 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
                 created_at,
                 detalleCumplimiento,
                 puntosCumplimiento,
-                idForaneaCriterio,
+                idForaneaCriterio
                 
             `) 
         
@@ -87,6 +87,29 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
     
         if (error) throw error;
         return data;
+    }
+    async getPorCriterio(idCriterio: string) {
+       
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const { data, error } = await dataBaseSupabase
+        .from("vistacumplimientosconidforaneafederacion")
+            .select(`
+                idCumplimiento,
+                created_at,
+                detalleCumplimiento,
+                puntosCumplimiento,
+                idForaneaCriterio
+                
+            `) 
+        
+        
+        .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
+        .eq('idForaneaCriterio', idCriterio);
+    
+        if (error) throw error;
+    return data as cumplimientosInterface[];
     }
 
     async getOne(id: string) {
