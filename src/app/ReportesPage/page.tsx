@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 
 import React from "react";
-import { resultadosEventoDatosAmpleosInterface, resultadosEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import {  resultadosEventoInterface } from "@/interfaces/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
-import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
+
 import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
 import { activarOverleyInformacionResultados, desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
 
@@ -20,8 +20,8 @@ import ApprovateMessage from "@/component/Message/ApprovateMessage";
 import { useModalMessageAprovateSolicitudRevicionStore } from "@/Store/revicionesStore/modalMessage/modalMessageAprovateSolicitudRevicionStore";
 
 export default function ResultadosGeneralesHomePage() {
-  const {activadorModalSolicitudReviciones,activarOverleyCriteriosFormularioSolicitudRevisar,desactivarOverleyCriteriosFormularioSolicitudRevisar} =useModalSolicitudRevicionesStore()
-  const {activadorModalSolicitudRevicionesMessage,activarOverleyCriteriosFormularioSolicitudRevisarMessage,desactivarOverleyCriteriosFormularioSolicitudRevisarMessage} =useModalMessageAprovateSolicitudRevicionStore()
+  const {activadorModalSolicitudReviciones,desactivarOverleyCriteriosFormularioSolicitudRevisar} =useModalSolicitudRevicionesStore()
+  const {activadorModalSolicitudRevicionesMessage,desactivarOverleyCriteriosFormularioSolicitudRevisarMessage} =useModalMessageAprovateSolicitudRevicionStore()
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
   const [resultados, setResultados] = useState<resultadosEventoInterface[]>([]);
   const activadorModalIformacionResultados = useSelector((state: RootState) => state.overletResultados);
@@ -36,7 +36,7 @@ export default function ResultadosGeneralesHomePage() {
   } = uselistaEventosFiltroConMemoria();
   const {
     categoriasListConMemoria,
-    cargandoCategoriasConMemoria,
+   
     categoriaSelecionadaConMemoria,
     setCategoriaSelecionadaConMemoria,
   } = useListaCategoriaFiltroConMemoria();
