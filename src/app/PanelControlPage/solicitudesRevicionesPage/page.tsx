@@ -29,12 +29,13 @@ export default function SolicitudesRevicionesPage() {
   const [solicitudesList, setSolicitudesList] = React.useState<vistaSolicitudRevicionInterface[]>([]);
   const [solicitudSeleccionada, setSolicitudSelecionada] = React.useState<vistaSolicitudRevicionInterface | null>(null);
   const [estadoSolicituSelecionado, setEstadoSolicitudSelecionado] = React.useState<string>("pendiente");
+  
 
   useEffect(() => {
     const fetchSolicitudes = async () => {
       const solicitudes = await solicitudRevicionServices.current.getVista();
       setSolicitudesSinFiltrar(solicitudes);
-      setSolicitudesList(solicitudes);
+      
     };
     fetchSolicitudes();
   }, []);
@@ -183,8 +184,9 @@ export default function SolicitudesRevicionesPage() {
           </select>
         </div>
       </div>
-
-      <div className="flex flex-col gap-4 ">
+{
+        solicitudesList.length > 0 && (
+             <div className="flex flex-col gap-4 ">
         {solicitudesList.map((solicitud: vistaSolicitudRevicionInterface, index) => (
           <div
             onDoubleClick={() => handleDobleClickSolicitud(solicitud)}
@@ -200,6 +202,9 @@ export default function SolicitudesRevicionesPage() {
           </div>
         ))}
       </div>
+        )
+}
+   
     </>
   );
 }

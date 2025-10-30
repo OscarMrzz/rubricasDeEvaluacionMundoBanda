@@ -95,6 +95,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
     setJustificacion("");
     setaprobacion("pendiente");
     setIdCumplimientoSeleccionado( "");
+      setEnviarPrecionado(false);
 
   };
 
@@ -150,7 +151,7 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
     try{
 
 
-     if(aprobacion !== "aprobado") return;
+     if(aprobacion === "aprobado") {
       const nuevosDatosRegistroCumplimiento: Partial<registroCumplimientoEvaluacionInterface> = {
         idRegistroCumplimientoEvaluacion: datosRegistroCumplimiento.idRegistroCumplimientoEvaluacion,
         idForaneaEvento: datosRegistroCumplimiento.idForaneaEvento,
@@ -166,9 +167,9 @@ export default function InformacionSolicitudRevicion({ open, onClose, solicitudR
         idForaneaPerfil: datosRegistroCumplimiento.idForaneaPerfil,
         idForaneaFederacion: datosRegistroCumplimiento.idForaneaFederacion,
         idForaneaRubrica: datosRegistroCumplimiento.idForaneaRubrica,
-
+        }
+        await registroCumpliminetoServices.current.update(solicitudRevicion.idForaneaRegistroCumplimiento,nuevosDatosRegistroCumplimiento as registroCumplimientoEvaluacionInterface);
       };
-      await registroCumpliminetoServices.current.update(solicitudRevicion.idForaneaRegistroCumplimiento,nuevosDatosRegistroCumplimiento as registroCumplimientoEvaluacionInterface);
     }
     catch(error){
       console.error("Error al actualizar el registro de cumplimiento:", error);
