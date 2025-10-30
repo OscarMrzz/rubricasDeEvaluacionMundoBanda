@@ -278,12 +278,14 @@ export interface solicitudRevicionInterface {
   idForaneaFederacion: string;
   idForaneaSolicitanteRevicion: string;
   detallesSolicitud: string;
+  estado: string;
 }
 
 export interface solicitudRevicionDatosAmpleosInterface extends solicitudRevicionInterface {
   registroCumplimientos: registroCumplimientoEvaluacionInterface;
   federaciones: federacionInterface;
   perfiles: perfilInterface;
+  
 }
 
 
@@ -293,7 +295,7 @@ export interface respuestaSolicitudRevicionInterface {
   idForaneaFederacion: string;
   idForaneaSolicitudRevicion: string;
   idForaneaRevisor: string;
-  aprovacion: boolean;
+  aprovacion: string;
   detallesRespuesta: string;
 }
 
@@ -327,6 +329,38 @@ export interface resultadosEventoDatosAmpleosInterface extends resultadosEventoI
   bandas: bandaInterface;
   federaciones: federacionInterface;
   categorias: categoriaInterface;
+}
+
+
+
+export interface vistaSolicitudRevicionInterface {
+  puntosCumplimiento: number;
+  created_at: string; // timestamp con zona horaria
+  idForaneaFederacion: string;
+  idForaneaSolicitanteRevicion: string;
+  idForaneaRegistroCumplimiento: string;
+  idForaneaRegion: string;
+  idForaneaCategoria: string;
+  idForaneaBanda: string;
+  idForaneaEvento: string;
+  idForaneaRubrica: string;
+  idForaneaCriterio: string;
+  idForaneaCumplimiento: string;
+  idforaneaevaluador: string;
+  idSolicitud: string;
+  nombresolicitante: string;
+  nombreevaluador: string;
+  nombreRegion: string;
+  detallesSolicitud: string;
+  nombreCategoria: string;
+  nombreBanda: string;
+  LugarEvento: string;
+  nombreRubrica: string;
+  datalleRubrica: string;
+  nombreCriterio: string;
+  detallesCriterio: string;
+  detalleCumplimiento: string;
+  estado: string;
 }
 
 
