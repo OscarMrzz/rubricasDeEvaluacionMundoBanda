@@ -41,6 +41,15 @@ export interface criterioEvaluacionInterface{
     puntosCriterio: number;
     idForaneaRubrica: string;
 }
+export interface vista_criterio_idForaneaCategoriaInterface{
+    idCriterio: string;
+    created_at: string;
+    nombreCriterio: string;
+    detallesCriterio: string;
+    puntosCriterio: number;
+    idForaneaRubrica: string;
+    idForaneaCategoria: string;
+}
 export interface criterioEvaluacionDatosAmpleosInterface extends criterioEvaluacionInterface {
     rubricas: rubricaInterface;
 }
@@ -362,5 +371,48 @@ export interface vistaSolicitudRevicionInterface {
   detalleCumplimiento: string;
   estado: string;
 }
+
+export interface vistaAsistenBandasModel {
+  idForaneaEvento: string;
+  created_at: string; // timestamp with time zone
+  idForaneaCategoria: string;
+  idForaneaRegion: string;
+  idForaneaFederacion: string;
+  fechaFundacionBanda: string; // formato 'YYYY-MM-DD'
+  fechaInscripcionAFederacion: string; // formato 'YYYY-MM-DD'
+  idBanda: string;
+  LugarEvento: string;
+  urlLogoBanda: string;
+  ubicacionSedeBanda: string;
+  nombreBanda: string;
+  AliasBanda: string;
+  ciudadBanda: string;
+}
+
+
+export interface vistaResultadosModel {
+  idRegistroCumplimientoEvaluacion: string;
+  idForaneaRegion: string;
+  idForaneaCategoria: string;
+  idForaneaPerfil: string;
+  idForaneaFederacion: string;
+  idForaneaEvento: string;
+  idForaneaBanda: string;
+  idForaneaRubrica: string;
+  idForaneaCumplimiento: string;
+  fechaEvento: string; // formato 'YYYY-MM-DD'
+  anioEvento: number;
+  puntosObtenidos: number;
+  nombreCriterio: string;
+  detalleCumplimiento: string;
+  LugarEvento: string;
+  nombreBanda: string;
+  nombreRubrica: string;
+  nombreRegion: string;
+  nombreCategoria: string;
+  nombre: string;
+  idForaneaCriterio: string;
+}
+
 
 
