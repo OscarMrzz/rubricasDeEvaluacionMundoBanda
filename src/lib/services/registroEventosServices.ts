@@ -1,5 +1,5 @@
  import { dataBaseSupabase } from "../supabase";
- import { perfilDatosAmpleosInterface, registroEventoDatosAmpleosInterface, RegistroEventoInterface } from "@/interfaces/interfaces";
+ import { bandaInterface, perfilDatosAmpleosInterface, registroEventoDatosAmpleosInterface, RegistroEventoInterface, vistaAsistenBandasModel } from "@/interfaces/interfaces";
 import PerfilesServices from "./perfilesServices";
  
 
@@ -104,6 +104,53 @@ async initPerfil() {
          .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
          if (error) throw error;
          return data;
+     }
+     async getAsistenciaBandasEvento(idEvento:string) {
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+
+        // Si idEvento viene vacío, evitar hacer la consulta a la vista (evita 22P02 invalid uuid)
+        if (!idEvento) {
+            return [] as bandaInterface[];
+        }
+
+        const { data, error } = await dataBaseSupabase
+            .from("vista_asistencia_bandas").select("*")
+            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            // La vista `vista_asistencia_bandas` expone el id del evento como `idForaneaEvento`
+            .eq("idForaneaEvento", idEvento)
+
+        if (error) throw error;
+
+        const datosPuros: vistaAsistenBandasModel[] = data;
+        const datosBandas: bandaInterface[] = datosPuros.map(dato => ({
+                idBanda: dato.idBanda,
+                created_at: dato.created_at,
+                AliasBanda: dato.AliasBanda,
+                nombreBanda: dato.nombreBanda,
+                idForaneaCategoria: dato.idForaneaCategoria,
+                idForaneaRegion: dato.idForaneaRegion,
+                idForaneaFederacion: dato.idForaneaFederacion,
+                ciudadBanda: dato.ciudadBanda,
+                urlLogoBanda: dato.urlLogoBanda,
+                fechaFundacionBanda: dato.fechaFundacionBanda,
+                fechaInscripcionAFederacion: dato.fechaInscripcionAFederacion,
+                ubicacionSedeBanda: dato.ubicacionSedeBanda
+
+           }));
+   
+           const bandasUnicasMap = new Map<string, bandaInterface>();
+           const datosFinales: bandaInterface[] = [];
+              datosBandas.forEach(banda => {
+                if (!bandasUnicasMap.has(banda.idBanda)) {  
+                    bandasUnicasMap.set(banda.idBanda, banda);
+                    datosFinales.push(banda);
+                }
+            });
+
+            
+         return datosFinales as bandaInterface[];
      }
  
      async getOne(id: string) {
