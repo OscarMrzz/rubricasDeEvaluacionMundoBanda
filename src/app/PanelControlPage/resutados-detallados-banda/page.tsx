@@ -100,13 +100,13 @@ export default function ReportePorBanda() {
         const puntosCriterio = resultados
           .filter((resultado) => resultado.idForaneaCriterio === criterio.idCriterio)
           .reduce((suma, resultado) => suma + resultado.puntosObtenidos, 0);
-        puntosCalculadosCriterios[criterio.idCriterio] = puntosCriterio;
+        puntosCalculadosCriterios[criterio.idCriterio] = puntosCriterio <0? 0 : puntosCriterio;
       }
       );
 
       setPuntosCriterios(puntosCalculadosCriterios);
     }
-  }, [bandaSelecionada,]);
+  }, [bandaSelecionada, criteriosList, resultados]);
 
 
 
@@ -240,7 +240,7 @@ export default function ReportePorBanda() {
                 {rubricasList.map((rubrica) => (
                   <div key={rubrica.idRubrica} className="page-body">
                     <h3 className="titulo-rubrica">
-                    {puntosRubricas[rubrica.idRubrica]} /{rubrica.puntosRubrica} - {rubrica.nombreRubrica}  
+                    {puntosRubricas[rubrica.idRubrica]} /{rubrica.puntosRubrica <0?0:rubrica.puntosRubrica} - {rubrica.nombreRubrica}  
                     </h3>
                     <div>
                       {resultados.map((resultado) =>
