@@ -61,18 +61,18 @@ const PanelControlPage = () => {
         <h2>Rubricas</h2>
       </Link>
       <Link
-        href="/ReportesPage"
+        href="/PanelControlPage/resultados-page-evento"
         className="bg-slate-700 col-span-1 flex flex-col justify-center items-center  font-bold hover:bg-slate-600 cursor-pointer"
       >
         <ChartBarSquareIcon className="w-12" />
-        <h2 className="flex justify-center items-center text-center">Resultados Evento</h2>
+        <h2 className="flex justify-center items-center text-center">Resultados por Evento</h2>
       </Link>
       <Link
-        href="/reportePorBandaPage"
+        href="/PanelControlPage/resutados-detallados-banda"
         className="bg-slate-700 col-span-1 flex flex-col justify-center items-center  font-bold hover:bg-slate-600 cursor-pointer p-4"
       >
         <DocumentTextIcon className="w-12" />
-        <h2 className="flex justify-center  text-center">Reporte bandas</h2>
+        <h2 className="flex justify-center  text-center">Resultados por bandas</h2>
       </Link>
       <Link
         href="/PanelControlPage/usuariosHomePage"
