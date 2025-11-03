@@ -64,10 +64,40 @@ async getDatosAmpleos(): Promise<criterioEvaluacionDatosAmpleosInterface[]> {
             throw new Error("No hay federación en el perfil del usuario.");
         }
         const { data, error } = await dataBaseSupabase
-        .from(tabla).select("*").eq("rubricas.idForaneaFederacion", this.perfil.idForaneaFederacion)
+        .from(tabla)
+            .select(`
+                *,
+                rubricas(*)
+            `).eq("rubricas.idForaneaFederacion", this.perfil.idForaneaFederacion)
      
         if (error) throw error;
-        return data;
+
+        const datosEnteros = data as criterioEvaluacionDatosAmpleosInterface[];
+        const datosSimples:criterioEvaluacionInterface[] = datosEnteros.map(({ rubricas, ...rest }) => rest)
+
+
+        return datosSimples as criterioEvaluacionInterface[];
+    }
+    async getByCategoria(idCategoria: string) {
+         
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const { data, error } = await dataBaseSupabase
+      .from(tabla)
+            .select(`
+                *,
+                rubricas(*)
+            `)
+            .eq("rubricas.idForaneaCategoria", idCategoria)
+            
+            .eq("rubricas.idForaneaFederacion", this.perfil.idForaneaFederacion)
+     
+        if (error) throw error;
+
+        const datosEnteros = data as criterioEvaluacionDatosAmpleosInterface[];
+        const datosSimples:criterioEvaluacionInterface[] = datosEnteros.map(({ rubricas, ...rest }) => rest)
+        return datosSimples as criterioEvaluacionInterface[];
     }
 
     async getOne(id: string) {
