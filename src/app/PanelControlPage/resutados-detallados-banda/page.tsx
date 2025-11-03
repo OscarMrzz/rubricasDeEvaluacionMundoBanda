@@ -20,6 +20,7 @@ export default function ReportePorBanda() {
   // Estado: objeto clave-valor con ID de rúbrica y puntos totales
   const [puntosRubricas, setPuntosRubricas] = React.useState<Record<string, number>>({});
   const[puntosCriterios, setPuntosCriterios]= React.useState<Record<string, number>>({});
+  const [totalGeneral, setTotalGeneral]= React.useState<number>(0);
 
   const {
     bandasList,
@@ -60,6 +61,8 @@ export default function ReportePorBanda() {
 
 
 
+
+
   useEffect(() => {
     const fetchCriterios = async () => {
       try {
@@ -90,6 +93,21 @@ export default function ReportePorBanda() {
       setPuntosRubricas(puntosCalculados);
     }
   }, [rubricasList, resultados]);
+
+
+    useEffect(() => {
+    const total = Object.values(resultados).reduce((suma, resultado) => suma + resultado.puntosObtenidos, 0);
+    setTotalGeneral(total);
+    
+
+
+
+  }, [resultados]);
+
+
+
+
+
 
 
   useEffect(() => {
@@ -231,10 +249,35 @@ export default function ReportePorBanda() {
                 <div className="page-portada__detalles-banda">
                   <h3 className="page-portada__parrafo-detalle">{bandaSelecionada.nombreBanda}</h3>
                   <p className="page-portada__parrafo-detalle">{categoriaSelecionada?.nombreCategoria}</p>
-                  <p className="page-portada__parrafo-detalle">80%</p>
+                  <p className="page-portada__parrafo-detalle">{totalGeneral}</p>
                 </div>
 
                 {}
+              </section>
+              <section className="page-body">
+                 <h3 className="titulo-rubrica">Resumen</h3>
+                 <div className="">
+
+                 <p className="caja-total__titulo">Total: </p>
+                 <span className="caja-total__total">{totalGeneral}%</span>
+                 </div>
+
+                 <div className="flex  flex-col gap-4">
+                  {
+                    rubricasList.map((rubrica) => (
+                      <div key={rubrica.idRubrica} className="page-body__resultados_fila flex ">
+                               <p className="resumen-rubrica__nombre">{rubrica.nombreRubrica}</p>
+                        <span className="resumen-rubrica__puntos">
+                          {puntosRubricas[rubrica.idRubrica]} / {rubrica.puntosRubrica <0?0:rubrica.puntosRubrica}
+                        </span>
+                 
+                      </div>
+                    ))
+                  }
+                 </div>
+
+
+
               </section>
               <section className="flex flex-col gap-4">
                 {rubricasList.map((rubrica) => (
