@@ -12,12 +12,7 @@ import React, { useEffect, useRef } from "react";
 export default function SolicitudesRevicionesPage() {
   const { eventosList, cargandoEventos, eventoSeleccionado, setEventoSeleccionado } = uselistaEventosFiltro();
 
-  const {
-    categoriasList,
-
-    categoriaSelecionada,
-    setcategoriaSelecionada,
-  } = useListaCategoriaFiltro();
+  const { categoriasList, categoriaSelecionada, setcategoriaSelecionada } = useListaCategoriaFiltro();
 
   const {
     activadorModalInformacionSolicitudReviciones,
@@ -29,13 +24,11 @@ export default function SolicitudesRevicionesPage() {
   const [solicitudesList, setSolicitudesList] = React.useState<vistaSolicitudRevicionInterface[]>([]);
   const [solicitudSeleccionada, setSolicitudSelecionada] = React.useState<vistaSolicitudRevicionInterface | null>(null);
   const [estadoSolicituSelecionado, setEstadoSolicitudSelecionado] = React.useState<string>("pendiente");
-  
 
   useEffect(() => {
     const fetchSolicitudes = async () => {
       const solicitudes = await solicitudRevicionServices.current.getVista();
       setSolicitudesSinFiltrar(solicitudes);
-      
     };
     fetchSolicitudes();
   }, []);
@@ -184,27 +177,24 @@ export default function SolicitudesRevicionesPage() {
           </select>
         </div>
       </div>
-{
-        solicitudesList.length > 0 && (
-             <div className="flex flex-col gap-4 ">
-        {solicitudesList.map((solicitud: vistaSolicitudRevicionInterface, index) => (
-          <div
-            onDoubleClick={() => handleDobleClickSolicitud(solicitud)}
-            key={solicitud.idSolicitud}
-            className=" w-full min-h-35 bg-slate-700 p-4 cursor-pointer hover:bg-slate-600"
-          >
-            <div className="flex gap-4">
-              <span className=" text-2xl font-black">{index + 1}</span>
-              <h2 className="text-2xl font-bold ">{solicitud.nombreBanda}</h2>
-            </div>
+      {solicitudesList.length > 0 && (
+        <div className="flex flex-col gap-4 ">
+          {solicitudesList.map((solicitud: vistaSolicitudRevicionInterface, index) => (
+            <div
+              onDoubleClick={() => handleDobleClickSolicitud(solicitud)}
+              key={solicitud.idSolicitud}
+              className=" w-full min-h-35 bg-slate-700 p-4 cursor-pointer hover:bg-slate-600"
+            >
+              <div className="flex gap-4">
+                <span className=" text-2xl font-black">{index + 1}</span>
+                <h2 className="text-2xl font-bold ">{solicitud.nombreBanda}</h2>
+              </div>
 
-            <p className="text-gray-400">Detalles: {solicitud.detallesSolicitud}</p>
-          </div>
-        ))}
-      </div>
-        )
-}
-   
+              <p className="text-gray-400">Detalles: {solicitud.detallesSolicitud}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </>
   );
 }
