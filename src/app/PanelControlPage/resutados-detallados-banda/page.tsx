@@ -12,7 +12,7 @@ import React, {  useEffect, useRef } from "react";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 
-import html2pdf from "html2pdf-pro";
+
 
 
 
@@ -125,39 +125,28 @@ export default function ReportePorBanda() {
   };
   const hojaReferencia = useRef<HTMLDivElement>(null);
 
-  const generarPDF = async () => {
-    if (!bandaSelecionada) return;
-    if (hojaReferencia.current) {
-      const element = hojaReferencia.current;
-
-
-      type LocalHtml2PdfOptions = {
-        margin?: number;
-        filename?: string;
-        image?: { type?: "jpeg" | "png" | "webp"; quality?: number };
-        html2canvas?: Record<string, unknown>;
-        jsPDF?: { unit?: string; format?: string; orientation?: "portrait" | "landscape" };
-      };
-
-      const opt = {
-        margin: 0,
-        filename: "Reporte.pdf",
-        image: { type: "jpeg", quality: 1 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: null, // 🔥 evita que ponga todo negro
-        },
-        jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
-      } as const;
-
- 
-  await html2pdf(element, opt);
-  console.log("PDF generado correctamente");
-       
-    }
-  };
+ const generarPDF = async () => {
+  if (!bandaSelecionada) return;
+  if (!eventoSeleccionado) return;
+  if (hojaReferencia.current) {
+    const element = hojaReferencia.current;
+    const html2pdf = (await import("html2pdf-pro")).default;
+    const opt = {
+      margin: 0,
+      filename: `Reporte-Evento-${eventoSeleccionado.LugarEvento}-Banda-${bandaSelecionada.nombreBanda}.pdf`,
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+      },
+      jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+    };
+    await html2pdf().set(opt).from(element).save();
+    console.log("PDF generado correctamente");
+  }
+};
 
   return (
     <div className="">
