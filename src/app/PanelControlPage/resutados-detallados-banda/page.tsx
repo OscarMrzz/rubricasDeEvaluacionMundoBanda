@@ -3,12 +3,18 @@ import { uselistaBandasEventoCategoriaFiltro } from "@/hooks/useListaBandasFiltr
 import { useListaCategoriaFiltro } from "@/hooks/useListaCategoriasFiltro";
 import { uselistaEventosFiltro } from "@/hooks/useListaEventosFiltro";
 import { criterioEvaluacionInterface, rubricaInterface, vistaResultadosModel } from "@/interfaces/interfaces";
-import BandasServices from "@/lib/services/bandasServices";
+
 import CriteriosServices from "@/lib/services/criteriosServices";
 import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
 import RubricasServices from "@/lib/services/rubricasServices";
-import { div, h2, style } from "framer-motion/client";
-import React, { use, useEffect, useRef } from "react";
+
+import React, {  useEffect, useRef } from "react";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+
+
+import html2pdf from "html2pdf-pro";
+
+
 
 export default function ReportePorBanda() {
   const { eventosList, cargandoEventos, eventoSeleccionado, setEventoSeleccionado } = uselistaEventosFiltro();
@@ -16,11 +22,10 @@ export default function ReportePorBanda() {
   const [rubricasList, setRubricasList] = React.useState<rubricaInterface[]>([]);
   const { categoriasList, categoriaSelecionada, setcategoriaSelecionada } = useListaCategoriaFiltro();
 
-
   // Estado: objeto clave-valor con ID de rúbrica y puntos totales
   const [puntosRubricas, setPuntosRubricas] = React.useState<Record<string, number>>({});
-  const[puntosCriterios, setPuntosCriterios]= React.useState<Record<string, number>>({});
-  const [totalGeneral, setTotalGeneral]= React.useState<number>(0);
+  const [puntosCriterios, setPuntosCriterios] = React.useState<Record<string, number>>({});
+  const [totalGeneral, setTotalGeneral] = React.useState<number>(0);
 
   const {
     bandasList,
@@ -55,14 +60,6 @@ export default function ReportePorBanda() {
     fetchCumplimientos();
   }, [bandaSelecionada]);
 
-
-
-
-
-
-
-
-
   useEffect(() => {
     const fetchCriterios = async () => {
       try {
@@ -76,10 +73,8 @@ export default function ReportePorBanda() {
     fetchCriterios();
   }, [bandaSelecionada]);
 
-
   useEffect(() => {
     if (rubricasList.length > 0 && resultados.length > 0) {
-
       const puntosCalculados: Record<string, number> = {};
 
       rubricasList.forEach((rubrica) => {
@@ -94,43 +89,24 @@ export default function ReportePorBanda() {
     }
   }, [rubricasList, resultados]);
 
-
-    useEffect(() => {
+  useEffect(() => {
     const total = Object.values(resultados).reduce((suma, resultado) => suma + resultado.puntosObtenidos, 0);
     setTotalGeneral(total);
-    
-
-
-
   }, [resultados]);
-
-
-
-
-
-
 
   useEffect(() => {
     if (criteriosList.length > 0 && resultados.length > 0) {
-
       const puntosCalculadosCriterios: Record<string, number> = {};
       criteriosList.forEach((criterio) => {
         const puntosCriterio = resultados
           .filter((resultado) => resultado.idForaneaCriterio === criterio.idCriterio)
           .reduce((suma, resultado) => suma + resultado.puntosObtenidos, 0);
-        puntosCalculadosCriterios[criterio.idCriterio] = puntosCriterio <0? 0 : puntosCriterio;
-      }
-      );
+        puntosCalculadosCriterios[criterio.idCriterio] = puntosCriterio < 0 ? 0 : puntosCriterio;
+      });
 
       setPuntosCriterios(puntosCalculadosCriterios);
     }
   }, [bandaSelecionada, criteriosList, resultados]);
-
-
-
-
-
-
 
   const selecionarEvento = (idEvento: string) => {
     const evento = eventosList.find((evento) => evento.idEvento === idEvento);
@@ -147,10 +123,45 @@ export default function ReportePorBanda() {
     const banda = bandasList?.find((banda) => banda.idBanda === idBanda);
     setBandaSeleccionada(banda);
   };
+  const hojaReferencia = useRef<HTMLDivElement>(null);
+
+  const generarPDF = async () => {
+    if (!bandaSelecionada) return;
+    if (hojaReferencia.current) {
+      const element = hojaReferencia.current;
+
+
+      type LocalHtml2PdfOptions = {
+        margin?: number;
+        filename?: string;
+        image?: { type?: "jpeg" | "png" | "webp"; quality?: number };
+        html2canvas?: Record<string, unknown>;
+        jsPDF?: { unit?: string; format?: string; orientation?: "portrait" | "landscape" };
+      };
+
+      const opt = {
+        margin: 0,
+        filename: "Reporte.pdf",
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: null, // 🔥 evita que ponga todo negro
+        },
+        jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+      } as const;
+
+ 
+  await html2pdf(element, opt);
+  console.log("PDF generado correctamente");
+       
+    }
+  };
 
   return (
     <div className="">
-      <div className="flex flex-col lg:flex-row  gap-4 pb-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pb-4">
         <div className="flex gap-4">
           <select
             className="bg-red-500  w-40 h-12  border-0"
@@ -236,12 +247,15 @@ export default function ReportePorBanda() {
             )}
           </select>
         </div>
+        <button onClick={()=>generarPDF()}  className="border w-40 h-12 flex gap-2 justify-center items-center cursor-pointer">
+          <span>Descargar</span> <ArrowDownTrayIcon className="h-6 w-6 text-white" />
+        </button>
       </div>
       <div>
-        <div>
+        <div  >
           {bandaSelecionada && (
-            <div className="flex flex-col gap-4">
-              <section className="page-portada">
+            <div ref={hojaReferencia} className="conten-page">
+              <section className="page-portada  page">
                 <div className="page-portada__Titulos">
                   <h2 className="page-portada__titulo">{eventoSeleccionado?.LugarEvento.toUpperCase()}</h2>
                   <p className="page-portada__sub-titulo">{eventoSeleccionado?.fechaEvento}</p>
@@ -249,49 +263,40 @@ export default function ReportePorBanda() {
                 <div className="page-portada__detalles-banda">
                   <h3 className="page-portada__parrafo-detalle">{bandaSelecionada.nombreBanda}</h3>
                   <p className="page-portada__parrafo-detalle">{categoriaSelecionada?.nombreCategoria}</p>
-                  <p className="page-portada__parrafo-detalle">{totalGeneral}</p>
+                  <p className="page-portada__parrafo-detalle">{totalGeneral}%</p>
                 </div>
 
                 {}
               </section>
-              <section className="page-body">
-                 <h3 className="titulo-rubrica">Resumen</h3>
-                 <div className="">
+              <section className="page-body  page">
+                <h3 className="titulo-rubrica">Resumen</h3>
+                <div className="">
+                  <p className="caja-total__titulo">Total: </p>
+                  <span className="caja-total__total">{totalGeneral}%</span>
+                </div>
 
-                 <p className="caja-total__titulo">Total: </p>
-                 <span className="caja-total__total">{totalGeneral}%</span>
-                 </div>
-
-                 <div className="flex  flex-col gap-4">
-                  {
-                    rubricasList.map((rubrica) => (
-                      <div key={rubrica.idRubrica} className="page-body__resultados_fila flex ">
-                               <p className="resumen-rubrica__nombre">{rubrica.nombreRubrica}</p>
-                        <span className="resumen-rubrica__puntos">
-                          {puntosRubricas[rubrica.idRubrica]} / {rubrica.puntosRubrica <0?0:rubrica.puntosRubrica}
-                        </span>
-                 
-                      </div>
-                    ))
-                  }
-                 </div>
-
-
-
+                <div className="page_con">
+                  {rubricasList.map((rubrica) => (
+                    <div key={rubrica.idRubrica} className="page-body__resultados_fila  ">
+                      <p className="resumen-rubrica__nombre">{rubrica.nombreRubrica}</p>
+                      <span className="resumen-rubrica__puntos">
+                        {puntosRubricas[rubrica.idRubrica]} / {rubrica.puntosRubrica < 0 ? 0 : rubrica.puntosRubrica}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </section>
-              <section className="flex flex-col gap-4">
+              <section className="">
                 {rubricasList.map((rubrica) => (
-                  <div key={rubrica.idRubrica} className="page-body">
+                  <div key={rubrica.idRubrica} className="page-body page">
                     <h3 className="titulo-rubrica">
-                    {puntosRubricas[rubrica.idRubrica]} /{rubrica.puntosRubrica <0?0:rubrica.puntosRubrica} - {rubrica.nombreRubrica}  
+                      {puntosRubricas[rubrica.idRubrica]}% - {rubrica.nombreRubrica}
                     </h3>
                     <div>
                       {resultados.map((resultado) =>
                         resultado.idForaneaRubrica === rubrica.idRubrica ? (
                           <div key={resultado.idRegistroCumplimientoEvaluacion} className="page-body__criterios">
-                            <span className="page-criterio__puntos">
-                              {resultado.puntosObtenidos}/{puntosCriterios[resultado.idForaneaCriterio]}
-                            </span>
+                            <span className="page-criterio__puntos">{resultado.puntosObtenidos}</span>
                             <div className="page-criterio__conte">
                               <p className="page-criterio__name">{resultado.nombreCriterio} </p>
                               <p className="page-criterio__detalles">{resultado.detalleCumplimiento}</p>
