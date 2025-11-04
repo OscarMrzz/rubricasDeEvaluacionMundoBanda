@@ -44,29 +44,35 @@
 
 
 /* PDF */
+.conten-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+   
 
+    padding: 20px;
+}
   .page{
     width: 210mm;
-    min-height: 297mm;
+    height: 275mm;
     padding: 20mm;
+    margin-bottom: 20px;
+  
     background-color: white;
     color: black;
     font-size: 12pt;
     box-sizing: border-box as const;
   }
   .page-portada{
-   width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
-    background-color: white;
-    color: black;
+   
     font-size: 12pt;
     box-sizing: border-box as const;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 60px;
+    gap: 10px;
   }
 
   .page-portada__Titulos{
@@ -89,16 +95,18 @@
     font-weight: 500;
 
   }
+  .page-portada__detalles-banda{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
 
 
     .page-body{
-   width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
-    background-color: white;
-    color: black;
-    font-size: 12pt;
+  
+   
     box-sizing: border-box as const;
     display: flex;
     flex-direction: column;
@@ -175,3 +183,16 @@
     padding: 12px;
     border-bottom: #d4d4d4 1px solid;
   }
+
+  .page_con{
+
+
+    display: flex;
+    flex-direction: column;
+   
+  }
+
+  .solo-pdf * {
+  background-color: #fff !important;
+  color: #000 !important;
+}
