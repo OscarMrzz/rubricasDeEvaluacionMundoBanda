@@ -20,10 +20,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  // Proteger ReportesPage y reportePorBandaPage solo para admin y superadmin
-  if ((pathname.startsWith('/ReportesPage') || pathname.startsWith('/reportePorBandaPage')) && !['admin','superadmin',"fiscal"].includes(rol || '')) {
-    return NextResponse.redirect(new URL('/', req.url))
-  }
+ 
   if ((pathname.startsWith('/federacionesHomePage') ) && !['superadmin'].includes(rol || '')) {
     return NextResponse.redirect(new URL('/', req.url))
   }
@@ -37,8 +34,8 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/PanelControlPage/eventosHomePage') ||
   
     pathname.startsWith('/PanelControlPage/regionHomePage') ||
-    pathname.startsWith('/PanelControlPage/reportePorbadaHomePage') ||
-    pathname.startsWith('/PanelControlPage/resultadosGeneralesHomePege') ||
+    pathname.startsWith('/PanelControlPage/resutados-detallados-banda') ||
+    pathname.startsWith('/PanelControlPage/resultados-page-evento') ||
     pathname.startsWith('/PanelControlPage/rubricaHomePage') ||
     pathname.startsWith('/PanelControlPage/usuariosHomePage')
   ) {
@@ -56,6 +53,6 @@ export const config = {
     '/PanelControlPage/:path*',
     '/miPerfilPage/:path*',
     '/ReportesPage/:path*',
-    '/reportePorBandaPage/:path*'
+    '/resutados-detallados-banda/:path*'
   ]
 }
