@@ -43,7 +43,7 @@ const RegionHomePage = () => {
   };
 
   return (
-    <div className="px-20">
+    <div className="">
       <OverleyModalFormulario
         open={openFormularioAgregar}
         onClose={cerrarFormularioAgregar}
